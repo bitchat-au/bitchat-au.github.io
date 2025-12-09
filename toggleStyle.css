@@ -1,0 +1,89 @@
+:root {
+    --light-color: #74BF04;
+    --dark-color: #488C03; 
+  }
+
+.switch {
+    height: 20px;
+    width: 40px;
+    background-color: gray;
+    border: 4px solid gray;
+    cursor: pointer;
+    border-radius: 1000px;
+    margin: 1%;
+}
+
+.switchInner {
+    position: relative;
+    height: 100%;
+    width: 50%;
+    background-color: white;
+    border-radius: 100%;
+}
+
+.toggleText{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.toggleButton {
+    display: flex;
+}
+
+.hidden{
+    display: none;
+}
+
+#featureContainer, .featureButton, #featureInput{
+    font-family: "Momo Trust Display", sans-serif;
+}
+
+#featurePopUp {
+    background-color: RGB(100, 100, 100, 0.9);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+#featurePopUpAllignment {
+    display: flex;
+    justify-content: center;
+}
+#featurePopUpContent {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.featureButton {
+    margin-top: 3%;
+}
+
+#featureContainer {
+    background-color: var(--light-color);
+    width: 40%;
+    padding: 2%;
+    border-radius: 20px;
+}
+
+#featurePopUpText{
+    color: white;
+}
+
+.subToggle {
+    margin-left: 30px;
+}
+
+.toggleInnerActive {
+    float: right;
+}
+
+.toggleActive {
+    background-color: var(--dark-color);
+    border-color: var(--dark-color);
+}

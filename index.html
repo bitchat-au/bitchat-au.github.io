@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Micro:bit Serveren</title>
+        <link rel="stylesheet" href="stylesheet.css">
+        <link rel="stylesheet" href="toggleStyle.css">
+        <link rel="stylesheet" href="popupStyle.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&display=swap" rel="stylesheet">
+    </head>
+    <body>
+
+        <button id="inspectFeaturesButton" class="buttonStyle">Feature oversigt</button>  
+        <button id="inspectIdsButton" class="buttonStyle">Bruger navne og id</button>      
+        <div id="featureContainer" class="hidden">
+            <button id="includeNewFeature" class="buttonStyle">Tilføj feature</button>
+            <div id="featurePopUp" class="hidden">
+                <div id="featurePopUpAllignment">
+                    <div id="featurePopUpContent">
+                        <p id="featurePopUpText">Indtast featurekode</p>
+                        <input id="featureInput" type="text">
+                        <button id="addFeaturePopup" class="featureButton buttonStyle">Tilføj feature</button>
+                        <button id="closeFeaturePopup" class="featureButton buttonStyle">Fortryd input</button>
+                    </div>       
+                </div>        
+            </div>
+        </div>
+
+        <div id="tableContainer" class="hidden">
+            <table id="recipientTable">
+                <tr>
+                    <th>Navn</th>
+                    <th>Id</th>
+                </tr>
+            </table>
+        </div>
+
+        
+        <h1>Bit:Chat</h1>
+        <div class="flexEvenly">
+            <button id="startbutton" class="buttonStyle">Forbind micro:bit</button>
+        </div>
+        <div class="flexEvenly">
+            <button id="trafficButton" class="openingButton buttonStyle disabledButton hidden">Besked-trafikken</button>
+            <button id="imageButton" class="openingButton buttonStyle disabledButton hidden">Billede-byggeren</button>
+            <button id="exhaustButton" class="openingButton buttonStyle disabledButton hidden">Kode-knækkeren</button>
+        </div>
+        <main>
+            <div id="imageBuilderContent" class="hidden">
+                <div id="knownImages" class="flexCenter"></div>
+                <div id="inputArea" class="flexCenter"></div>
+                <div id="outputArea" class="flexCenter"></div>
+                <div id="buttonContainer" class="flexCenter">
+                    <button id="finishImageButton" class="buttonStyle">Gem billede</button>
+                </div>
+            </div>
+            
+            
+            <div id="trafficContent" class="hidden">
+                <div id="serverContainer" class="flexEvenly">
+                    <div id="translaterSpace" class="hidden">
+                        <div id="gridSpace">
+                            <div id="knownMicrobits" style="display: none;">
+                                <h2>Forbundet til serveren:</h2>
+                            </div>
+                    
+                            <div id="messageBoard" style="display: none;">
+                                <h2>Besked sendt:</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="serverSpace" class="hidden">
+                        <h2>Bit:Chat Server</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div id="exhaustContent" class="hidden">
+                <div id="exhaustContainer">
+                    <div id="buttonContainer" class="flexCenter">
+                        <button id="exhaustStart" class="buttonStyle">Lav et nyt krypteret billede</button>
+                    </div>
+                    <div class="flexCenter verticalDistance">
+                        <div class="flexColumn">
+                            <div style="display: flex;">
+                                <div id="exhaustInputArea"></div>
+                                <div class="flexColumnCenter">
+                                    <button id="exhaustCheck" class="buttonStyle verticalDistance hidden">Tjek kode</button>
+                                </div>
+                            </div>
+                            <div id="exhaustImageArea"></div>
+
+                        </div>
+                        
+                    </div>
+                    <div id="exhaustResults"></div>
+                </div>
+            </div>
+        </main>
+
+        <div id="hackingSpace" class="hidden">
+            <div id="hackingPopUp">
+                <h1>Hack beskeder</h1>
+                <p id="hackingDescription" class="popupDescription">Lav om i beskeden fra id[<span id="hackSender"></span>] til id[<span id="hachReciever"></span>]</p>
+                <div id="hacingContent">
+                    <div id="inputAreaHack"></div>
+                    <div id="outputAreaHack"></div>
+                </div>
+                <div class="centerallign">
+                    <button id="noUpdateHackButton" class="buttonStyle">Send videre uden ændringer</button>
+                    <button id="updateHackButton" class="buttonStyle">Gem ændringer</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="changeSpace" class="hidden">
+            <div id="changePopUp">
+                <h1>Besked oversigt</h1>
+                <div id="changeInformation" class="centerallign">
+                    <div id="changeSender"></div>
+                    <p class="popupDescription">vil sende</p>
+                    <div id="changeMessage"></div>
+                    <p class="popupDescription">til</p>
+                    <div id="changeRecipient"></div>
+                </div>
+                <div class="centerallign">
+                    <table id="changeRecipientTable">
+                        <tr>
+                            <th>Navn</th>
+                            <th>Id</th>
+                        </tr>
+                    </table>
+                </div>
+                <p class="popupDescription">Vælg modtager</p>
+                <div id="changeChooser" class="centerallign"></div>
+<!--
+                <div class="centerallign">
+                    <button id="noUpdateChangeButton"class="buttonStyle">Send videre uden ændringer</button>
+                    <button id="updateChangeButton" class="buttonStyle">Gem ændringer</button>
+                </div>
+-->
+            </div>
+        </div>
+
+        <script src="variables.js"></script>
+        <script src="exhaustExercise.js"></script>
+        <script src="serverActions.js"></script>
+        <script src="hackingEditor.js"></script>
+        <script src="recipientChanger.js"></script>
+        <script src="script.js"></script>
+        <script src="imageEditor.js"></script>
+        <script src="featureAddition.js"></script>
+    </body>
+</html>

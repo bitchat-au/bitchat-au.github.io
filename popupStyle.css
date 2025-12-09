@@ -1,0 +1,77 @@
+#hackingSpace {
+    background-color: RGB(107, 0, 0, 0.70);
+    position: absolute;
+    margin: 0px;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#hackingPopUp {
+    background-color: RGB(200, 130, 130);
+    border: 1vh solid var(--dark-color);
+    width: 70vw;
+    height: 70vh;
+    left: 15vw;
+    position: relative;
+    top: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#inputAreaHack, #outputAreaHack {
+    display: flex;
+    justify-content: center;
+}
+
+.popupDescription {
+    text-align: center;
+    font-size: 1.6em;
+    font-family: "Momo Trust Display", sans-serif;
+}
+
+#hackingButtonSpace {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.centerallign {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#changeSpace {
+    background-color: RGB(0, 107, 0, 0.70);
+    position: absolute;
+    margin: 0px;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#changePopUp {
+    background-color: white;
+    border: 1vh solid var(--dark-color);
+    width: 70vw;
+    height: 70vh;
+    left: 15vw;
+    position: relative;
+    top: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.addressChoice:hover {
+    border-color: var(--light-color);
+}
+.addressChoice {
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 20px;
+    font-size: 1.5em;
+    font-family: "Momo Trust Display", sans-serif;
+}
