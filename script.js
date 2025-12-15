@@ -19,7 +19,10 @@ document.getElementById("startbutton").addEventListener("click",event=>{
 let lastMessage = "";
 
 
-
+const filters = [
+  { usbVendorId: 0x0d28, usbProductId: 0x0204 },
+  { usbVendorId: 0x0d28, usbProductId: 0x0206 } // BBC micro:bit
+];
 
 /**
  * Send a string to the micro:bit a-b-b-a-a
@@ -30,7 +33,7 @@ async function writeToMB(message){
   //event.preventDefault();
   if (!port) {
     console.log("looking for port")
-    port = await navigator.serial.requestPort();
+    port = await navigator.serial.requestPort({filters});
     await port.open({ baudRate: 9600 });
     writer = port.writable.getWriter();
     reader = port.readable.getReader();
