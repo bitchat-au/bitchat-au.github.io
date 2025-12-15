@@ -93,6 +93,7 @@ while True:
                 updateState("encrypt", "1")
             if 'noEncrypt' in uartmessage:
                 encryptable = False
+                updateState("encrypt", "0")
             if 'yesAutoEncrypt' in uartmessage:
                 autoEncryptable = True
                 updateState("autoEncrypt", "1")

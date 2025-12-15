@@ -28,7 +28,7 @@
 
 .popupDescription {
     text-align: center;
-    font-size: 1.6em;
+    /*font-size: 1.6em;*/
     font-family: "Momo Trust Display", sans-serif;
 }
 
@@ -72,6 +72,6 @@
     cursor: pointer;
     border: 2px solid transparent;
     padding: 20px;
-    font-size: 1.5em;
+    /*font-size: 1.5em;*/
     font-family: "Momo Trust Display", sans-serif;
 }
