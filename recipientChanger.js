@@ -31,6 +31,7 @@ function setUpChanger(messageSender, messageReceiver, messageString){
         let addressName = document.createElement("p")
         addressName.innerText = "id[" + knownMicrobits[i][0] + "]"
         addressName.classList.add("addressChoice")
+        addressName.classList.add("buttonStyle")
         document.getElementById("changeChooser").appendChild(addressName)
 
         addressName.addEventListener("click", e=>{
