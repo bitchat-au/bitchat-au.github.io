@@ -119,6 +119,22 @@ function detectFeatureRequest(featureCode){
             document.querySelector(':root').style.setProperty('--dark-color', darkRedColor)
             document.body.style.backgroundColor = "RGB(120, 0, 0, 0.5)";
             lightColor = lightRedColor
+            break;
+        case "pakke1":
+            activatePackage1()
+    }
+}
+
+function activatePackage1(){
+    detectFeatureRequest("server")
+    detectFeatureRequest("oversæt")
+    detectFeatureRequest("byg")
+    detectFeatureRequest("modtager")
+    autoRecipient = true
+    document.getElementById("recipientButton").classList.toggle("toggleActive")
+    document.getElementById("recipientButtonInner").classList.toggle("toggleInnerActive")
+    if(!document.getElementById("featurePopUp").classList.contains("hidden")){
+        document.getElementById("featurePopUp").classList.toggle("hidden")
     }
 }
 
