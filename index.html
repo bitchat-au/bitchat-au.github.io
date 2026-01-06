@@ -15,7 +15,7 @@
 
         <button id="inspectFeaturesButton" class="buttonStyle">Feature oversigt</button>  
         <button id="inspectIdsButton" class="buttonStyle">Bruger navne og id</button>      
-        <div id="featureContainer" class="hidden">
+        <div id="featureContainer" class="hidden" style="margin-top: 1em">
             <button id="includeNewFeature" class="buttonStyle">Tilføj feature</button>
             <div id="featurePopUp" class="hidden">
                 <div id="featurePopUpAllignment">
@@ -44,9 +44,9 @@
             <button id="startbutton" class="buttonStyle">Forbind micro:bit</button>
         </div>
         <div class="flexEvenly">
-            <button id="trafficButton" class="openingButton buttonStyle disabledButton hidden">Besked-trafikken</button>
-            <button id="imageButton" class="openingButton buttonStyle disabledButton hidden">Billede-byggeren</button>
-            <button id="exhaustButton" class="openingButton buttonStyle disabledButton hidden">Kode-knækkeren</button>
+            <button id="trafficButton" class="openingButton buttonStyle hidden">Besked-trafikken</button>
+            <button id="imageButton" class="openingButton buttonStyle hidden">Billede-byggeren</button>
+            <button id="exhaustButton" class="openingButton buttonStyle hidden">Kode-knækkeren</button>
         </div>
         <main>
             <div id="imageBuilderContent" class="hidden">
@@ -73,16 +73,27 @@
                         </div>
                     </div>
                     <div id="serverSpace" class="hidden">
-                        <h2>Bit:Chat Server</h2>
+                        <h2>Bit:chat Server</h2>
                     </div>
                 </div>
             </div>
 
             <div id="exhaustContent" class="hidden">
-                <div id="exhaustContainer">
-                    <div id="buttonContainer" class="flexCenter">
+                <div id="exhaustContainer" style="margin-top: 1em">
+                    <div class="flexCenter">
+                        <div class="buttonStyle">
+                            <label for="exhaustOriginLocal" style="font-size: 1em; padding-right: 0.5em;">
+                                <input type="radio" id="exhaustOriginLocal" name="exhaustImageOrigin" value="local" checked>
+                                Egne billeder</label>
+                            <label for="exhaustOriginRandom" style="font-size: 1em; padding-right: 0.5em;">
+                                <input type="radio" id="exhaustOriginRandom" name="exhaustImageOrigin" value="random">
+                                Tilfældige billeder</label>
+                        </div>
+                    </div>
+                    <div class="flexCenter" style="margin-top: 0.5em">
                         <button id="exhaustStart" class="buttonStyle">Lav et nyt krypteret billede</button>
                     </div>
+
                     <div class="flexCenter verticalDistance">
                         <div class="flexColumn">
                             <div style="display: flex;">
