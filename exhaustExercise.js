@@ -47,7 +47,12 @@ document.getElementById("exhaustCheck").addEventListener("click", e=>{
 })
 
 function createEncryptedImage(){
-    imageToEncrypt = Math.floor(Math.random()*ledImages.length)
+    const getValue = () => document.querySelector('input[name="exhaustImageOrigin"]:checked').value;
+    if (getValue() === 'local') {
+        imageToEncrypt = localImages[Math.floor(Math.random()*localImages.length)]
+    } else {
+        imageToEncrypt = ledImages[Math.floor(Math.random()*ledImages.length)]
+    }
     encryptionCode = []
     attempts = 0;
     attemptCode = [0,0,0,0,0]
@@ -87,7 +92,7 @@ function createExhaustActivity(){
             let newField = document.createElement("td");
             newField.classList.add("exhaustField")
             newField.setAttribute("id", "exhaust" + "field" + i + "," + j)
-            if(ledImages[imageToEncrypt][i][j]>0){
+            if(imageToEncrypt[i][j]>0){
                 newField.classList.add("exhaustActive")
             }
             newRowEdge.appendChild(newField);
@@ -115,7 +120,7 @@ function flipColumn(columnNumber){
 function resetExhaustImage(){
     for(let i=0; i<5; i++){
         for(let j=0; j<5; j++){
-            if(ledImages[imageToEncrypt][i][j]>0){
+            if(imageToEncrypt[i][j]>0){
                 if(!document.getElementById("exhaust" + "field" + i + "," + j).classList.contains("exhaustActive")){
                     document.getElementById("exhaust" + "field" + i + "," + j).classList.toggle("exhaustActive")
                 }    
