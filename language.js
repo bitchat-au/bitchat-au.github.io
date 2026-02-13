@@ -125,10 +125,3 @@ const serverTextNewConnectionLnText = ["NyForbindelse","NewConnection"]
 const serverTextSenderLnText = ["s.id","s.id"]
 const serverTextRecipientLnText = ["m.id","r.id"]
 const serverTextHashLnText = ["hash","hash"]
-
-
-
-
-
-const LnText = ["", ""];
-document.getElementById("").innerText = LnText[language]
