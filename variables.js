@@ -62,7 +62,7 @@ if(language<1){
     features[5][1] = "Allow Encryption";
     features[6][1] = "Auto Encryption";
     features[7][1] = "Add Code breaker";
-    features[7][1] = "Allow Hacking";
+    features[8][1] = "Allow Hacking";
 }
 
 const localImages = [[[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[1,0,0,0,1],[0,1,1,1,0]], 

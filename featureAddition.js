@@ -70,51 +70,50 @@ document.getElementById("featureInput").addEventListener("keypress", e=>{
 function detectFeatureRequest(featureCode){
     document.getElementById("featurePopUp").classList.toggle("hidden")
     document.getElementById("featureInput").value = "";
-    switch(featureCode.toLowerCase()){
-        case "server":
-            document.getElementById(features[0][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById("serverSpace").classList.toggle("hidden")
-            document.getElementById("trafficButton").classList.toggle("hidden")
-            break;
-        case "oversæt" || "oversat" || "translate":
-            document.getElementById(features[1][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById("translaterSpace").classList.toggle("hidden")
-            break;
-        case "byg" || "build":
-            document.getElementById(features[2][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById("imageButton").classList.toggle("hidden")
-            break;
-        case "modtager" || "recipient":
-            allowRecipient = true;
-            writeToMB("yesRecipient")
-            document.getElementById(features[3][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById(features[4][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById(features[4][0]).classList.toggle("toggleActive");
-            document.getElementById(features[4][0] + "Inner").classList.toggle("toggleInnerActive");
-            break;
-        case "krypter" || "encrypt":
-            allowEncryption = true;
-            writeToMB("yesEncrypt")
-            document.getElementById(features[5][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById(features[6][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById(features[6][0]).classList.toggle("toggleActive");
-            document.getElementById(features[6][0] + "Inner").classList.toggle("toggleInnerActive");
-            break;
-        case "knæk" || "knak" || "break":
-            document.getElementById(features[7][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById("exhaustButton").classList.toggle("hidden")
-            break;
-        case "hack":
-            allowHacking = true;
-            document.getElementById(features[8][2] + "Toggle").classList.toggle("hidden");
-            document.querySelector(':root').style.setProperty('--light-color', lightRedColor)
-            document.querySelector(':root').style.setProperty('--dark-color', darkRedColor)
-            document.body.style.backgroundColor = "RGB(120, 0, 0, 0.5)";
-            lightColor = lightRedColor
-            break;
-        case "pakke1":
-            activatePackage1()
+    if(featureCode.toLowerCase() == "server"){
+        document.getElementById(features[0][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById("serverSpace").classList.toggle("hidden")
+        document.getElementById("trafficButton").classList.toggle("hidden")
     }
+    if(featureCode.toLowerCase() == "oversæt" || featureCode.toLowerCase() == "oversat" || featureCode.toLowerCase() == "translate"){
+        document.getElementById(features[1][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById("translaterSpace").classList.toggle("hidden")
+    }
+    if(featureCode.toLowerCase() == "byg" || featureCode.toLowerCase() == "build"){
+        document.getElementById(features[1][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById("translaterSpace").classList.toggle("hidden")
+    }
+    if(featureCode.toLowerCase() == "modtager" || featureCode.toLowerCase() == "recipient"){
+        allowRecipient = true;
+        writeToMB("yesRecipient")
+        document.getElementById(features[3][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById(features[4][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById(features[4][0]).classList.toggle("toggleActive");
+        document.getElementById(features[4][0] + "Inner").classList.toggle("toggleInnerActive");
+    }
+    if(featureCode.toLowerCase() == "krypter" || featureCode.toLowerCase() == "encrypt"){
+        allowEncryption = true;
+        writeToMB("yesEncrypt")
+        document.getElementById(features[5][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById(features[6][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById(features[6][0]).classList.toggle("toggleActive");
+        document.getElementById(features[6][0] + "Inner").classList.toggle("toggleInnerActive");
+    }
+    if(featureCode.toLowerCase() == "knæk" || featureCode.toLowerCase() == "knak" || featureCode.toLowerCase() == "break"){
+        document.getElementById(features[7][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById("exhaustButton").classList.toggle("hidden")
+    } 
+    if(featureCode.toLowerCase() == "hack"){
+        allowHacking = true;
+        document.getElementById(features[8][2] + "Toggle").classList.toggle("hidden");
+        document.querySelector(':root').style.setProperty('--light-color', lightRedColor)
+        document.querySelector(':root').style.setProperty('--dark-color', darkRedColor)
+        document.body.style.backgroundColor = "RGB(120, 0, 0, 0.5)";
+        lightColor = lightRedColor
+    }
+    if(featureCode.toLowerCase() == "pakke1"){
+        activatePackage1()
+    }  
 }
 
 function activatePackage1(){
