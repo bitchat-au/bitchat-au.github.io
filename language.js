@@ -51,10 +51,10 @@ const serverSpaceTitleLnText = ["Bit:chat Server", "Bit:chat Server"];
 document.getElementById("serverSpaceTitle").innerText = serverSpaceTitleLnText[language]
 
 const exhaustOriginLocalLnText = ["Brug egne billeder", "Use own images"];
-document.getElementById("exhaustOriginLocal").innerText = exhaustOriginLocalLnText[language]
+document.getElementById("exhaustOriginLocalLabel").innerText = exhaustOriginLocalLnText[language]
 
 const exhaustOriginRandomLnText = ["Brug tilfældige billeder", "Use random images"];
-document.getElementById("exhaustOriginRandom").innerText = exhaustOriginRandomLnText[language]
+document.getElementById("exhaustOriginRandomLabel").innerText = exhaustOriginRandomLnText[language]
 
 const exhaustStartLnText = ["Lav et nyt krypteret billede", "Create a new encrypted image"];
 document.getElementById("exhaustStart").innerText = exhaustStartLnText[language]
