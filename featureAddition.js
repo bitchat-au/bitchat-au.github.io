@@ -76,19 +76,15 @@ function detectFeatureRequest(featureCode){
             document.getElementById("serverSpace").classList.toggle("hidden")
             document.getElementById("trafficButton").classList.toggle("hidden")
             break;
-        case "oversæt":
+        case "oversæt" || "oversat" || "translate":
             document.getElementById(features[1][2] + "Toggle").classList.toggle("hidden");
             document.getElementById("translaterSpace").classList.toggle("hidden")
             break;
-        case "oversat":
-            document.getElementById(features[1][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById("imageButton").classList.toggle("hidden")
-            break;
-        case "byg":
+        case "byg" || "build":
             document.getElementById(features[2][2] + "Toggle").classList.toggle("hidden");
             document.getElementById("imageButton").classList.toggle("hidden")
             break;
-        case "modtager":
+        case "modtager" || "recipient":
             allowRecipient = true;
             writeToMB("yesRecipient")
             document.getElementById(features[3][2] + "Toggle").classList.toggle("hidden");
@@ -96,7 +92,7 @@ function detectFeatureRequest(featureCode){
             document.getElementById(features[4][0]).classList.toggle("toggleActive");
             document.getElementById(features[4][0] + "Inner").classList.toggle("toggleInnerActive");
             break;
-        case "krypter":
+        case "krypter" || "encrypt":
             allowEncryption = true;
             writeToMB("yesEncrypt")
             document.getElementById(features[5][2] + "Toggle").classList.toggle("hidden");
@@ -104,11 +100,7 @@ function detectFeatureRequest(featureCode){
             document.getElementById(features[6][0]).classList.toggle("toggleActive");
             document.getElementById(features[6][0] + "Inner").classList.toggle("toggleInnerActive");
             break;
-        case "knak":
-            document.getElementById(features[7][2] + "Toggle").classList.toggle("hidden");
-            document.getElementById("exhaustButton").classList.toggle("hidden")
-            break;
-        case "knæk":
+        case "knæk" || "knak" || "break":
             document.getElementById(features[7][2] + "Toggle").classList.toggle("hidden");
             document.getElementById("exhaustButton").classList.toggle("hidden")
             break;

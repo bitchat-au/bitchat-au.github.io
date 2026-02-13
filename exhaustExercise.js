@@ -33,15 +33,15 @@ document.getElementById("exhaustCheck").addEventListener("click", e=>{
         }        
     }
     if(correctCode){
-        outputMessage.innerText = "Koden er korrekt"
+        outputMessage.innerText = correctCodeBreakerLnText[language]
         outputMessage.style.backgroundColor = lightGreenColor
     } else {
-        outputMessage.innerText = "Koden er forkert"
+        outputMessage.innerText = wrongCodeBreakerLnText[language]
         outputMessage.style.backgroundColor = lightRedColor
 
     }
     let outputAttempts = document.createElement("p");
-    outputAttempts.innerText = attempts + " tjek";
+    outputAttempts.innerText = attempts + codeBreakerAttemptsLnText[language];
     document.getElementById("exhaustResults").appendChild(outputMessage);
     document.getElementById("exhaustResults").appendChild(outputAttempts);
 })

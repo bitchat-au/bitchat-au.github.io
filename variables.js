@@ -4,6 +4,8 @@ let lightRedColor = "#D90D0D"
 let darkRedColor = "#731212"
 let lightColor = lightGreenColor
 
+const language = 1 // 0 = Danish, 1 = English
+
 document.querySelector(':root').style.setProperty('--light-color', lightGreenColor)
 document.querySelector(':root').style.setProperty('--dark-color', darkGreenColor)
 
@@ -31,15 +33,15 @@ let lastMessageStats = ["", "", ""];
 
 let newImages = []
 
-const features = [  ["serverButton", "Se Server", "server"],                        //0
-                    ["translaterButton", "Se Oversætter", "translate"],             //1
-                    ["builderButton", "Tilføj Billede-byggeren", "build"],          //2
-                    ["changeRecipientButton", "Tilføj modtager", "changeReciever"], //3
-                    ["recipientButton", "Automatiser modtager", "receiver"],        //4
-                    ["encryptButton", "Tillad Kryptering", "encrypt"],              //5
-                    ["autoEncryptButton", "Automatiser Kryptering", "autoEncrypt"], //6
-                    ["breakButton", "Tilføj Kode-knækkeren", "break"],               //7
-                    ["hackingButton", "Tillad Hacking", "hack"]];                   //8
+var features = [  ["serverButton", "", "server"],                       //0
+                    ["translaterButton", "", "translate"],              //1
+                    ["builderButton", "", "build"],                     //2
+                    ["changeRecipientButton", "", "changeReciever"],    //3
+                    ["recipientButton", "", "receiver"],                //4
+                    ["encryptButton", "", "encrypt"],                   //5
+                    ["autoEncryptButton", "", "autoEncrypt"],           //6
+                    ["breakButton", "", "break"],                       //7
+                    ["hackingButton", "", "hack"]];                     //8
 
 const localImages = [[[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[1,0,0,0,1],[0,1,1,1,0]], 
                     [[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[0,1,1,1,0],[1,0,0,0,1]]];

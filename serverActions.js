@@ -79,12 +79,12 @@ function createBlockMessage(senderNumber, recipientNumber,content){
     messageBlock.setAttribute("id", "messageBlock" + messageIndex)
     createIcon(ledNumber[senderNumber], messageBlock);
     let firstTextElement = document.createElement("p");
-    firstTextElement.innerText = "Sendte";
+    firstTextElement.innerText = translatorTextPart1LnText[language];
     messageBlock.appendChild(firstTextElement);
     createIcon(content, messageBlock);
     if(allowRecipient){
         let secondtextElement = document.createElement("p");
-        secondtextElement.innerText = "Til";
+        secondtextElement.innerText = translatorTextPart2LnText[language];
         messageBlock.appendChild(secondtextElement);
         createIcon(ledNumber[recipientNumber], messageBlock);
     }
@@ -95,11 +95,11 @@ function createBlockMessage(senderNumber, recipientNumber,content){
     messagePrint.setAttribute("id", "messagePrint" + messageIndex);
     messagePrint.classList.add("terminalEntry");
     let messageTag = document.createElement("span");
-    messageTag.innerText = "NyBesked--"
+    messageTag.innerText = serverTextNewMessageLnText[language] + "--";
     let messageSender = document.createElement("span");
-    messageSender.innerText = "s.id[" + (knownMicrobits[senderNumber][0]) +"]--"
+    messageSender.innerText = serverTextSenderLnText[language] + "[" + (knownMicrobits[senderNumber][0]) +"]--"
     let messageRecipient = document.createElement("span");
-    messageRecipient.innerText = "m.id[" + (knownMicrobits[recipientNumber][0]) +"]--"
+    messageRecipient.innerText = serverTextRecipientLnText[language] + "[" + (knownMicrobits[recipientNumber][0]) +"]--"
     let messageContent = document.createElement("span");
     let contentString = "";
     for(let i=0; i<5;i++){
@@ -124,7 +124,7 @@ function createBlockMessage(senderNumber, recipientNumber,content){
     messagePrint.appendChild(messageContent);
     if(allowHacking){
         let hashcodeString = document.createElement("span");
-        hashcodeString.innerText = "--hash." + hashCode;
+        hashcodeString.innerText = "--" + serverTextHashLnText[language] + "." + hashCode;
         messagePrint.appendChild(hashcodeString);
     }
     messagePrint.addEventListener("mouseenter", e=>{
@@ -151,7 +151,7 @@ function createBlockId(idNumber){
     messagePrint.setAttribute("id", "messagePrint" + messageIndex);
     messagePrint.classList.add("terminalEntry");
     let messageTag = document.createElement("span");
-    messageTag.innerText = "NyForbindelse--";
+    messageTag.innerText = serverTextNewConnectionLnText[language] + "--";
     let messageId = document.createElement("span");
     messageId.innerText = "id[" + (knownMicrobits[idNumber][0]) +"]";
     messagePrint.appendChild(messageTag);

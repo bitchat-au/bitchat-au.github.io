@@ -4,7 +4,7 @@ displayKnownImages();
 
 document.getElementById("finishImageButton").addEventListener("click", e=>{
     if(!messageValid("IB")){
-        alert("Et eller flere af tallene er ikke 0 eller 1");
+        alert(imageBuilderAllertLnText[language]);
         return;
     }
     let outputArray = []

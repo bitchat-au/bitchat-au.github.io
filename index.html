@@ -13,14 +13,14 @@
     </head>
     <body>
 
-        <button id="inspectFeaturesButton" class="buttonStyle">Feature oversigt</button>  
-        <button id="inspectIdsButton" class="buttonStyle">Bruger navne og id</button>      
+        <button id="inspectFeaturesButton" class="buttonStyle"></button>  
+        <button id="inspectIdsButton" class="buttonStyle"></button>      
         <div id="featureContainer" class="hidden" style="margin-top: 1em">
-            <button id="includeNewFeature" class="buttonStyle">Tilføj feature</button>
+            <button id="includeNewFeature" class="buttonStyle"></button>
             <div id="featurePopUp" class="hidden">
                 <div id="featurePopUpAllignment">
                     <div id="featurePopUpContent">
-                        <p id="featurePopUpText">Indtast featurekode</p>
+                        <p id="featurePopUpText"></p>
                         <input id="featureInput" type="text">
                         <button id="addFeaturePopup" class="featureButton buttonStyle">Tilføj feature</button>
                         <button id="closeFeaturePopup" class="featureButton buttonStyle">Fortryd input</button>
@@ -32,8 +32,8 @@
         <div id="tableContainer" class="hidden">
             <table id="recipientTable">
                 <tr>
-                    <th>Navn</th>
-                    <th>Id</th>
+                    <th id="recipientTableName"></th>
+                    <th id="recipientTableId"></th>
                 </tr>
             </table>
         </div>
@@ -41,12 +41,12 @@
         
         <h1>Bit:Chat</h1>
         <div class="flexEvenly">
-            <button id="startbutton" class="buttonStyle">Forbind micro:bit</button>
+            <button id="startbutton" class="buttonStyle"></button>
         </div>
         <div class="flexEvenly">
-            <button id="trafficButton" class="openingButton buttonStyle hidden">Besked-trafikken</button>
-            <button id="imageButton" class="openingButton buttonStyle hidden">Billede-byggeren</button>
-            <button id="exhaustButton" class="openingButton buttonStyle hidden">Kode-knækkeren</button>
+            <button id="trafficButton" class="openingButton buttonStyle hidden"></button>
+            <button id="imageButton" class="openingButton buttonStyle hidden"></button>
+            <button id="exhaustButton" class="openingButton buttonStyle hidden"></button>
         </div>
         <main>
             <div id="imageBuilderContent" class="hidden">
@@ -54,7 +54,7 @@
                 <div id="inputArea" class="flexCenter"></div>
                 <div id="outputArea" class="flexCenter"></div>
                 <div id="buttonContainer" class="flexCenter">
-                    <button id="finishImageButton" class="buttonStyle">Gem billede</button>
+                    <button id="finishImageButton" class="buttonStyle"></button>
                 </div>
             </div>
             
@@ -64,16 +64,16 @@
                     <div id="translaterSpace" class="hidden">
                         <div id="gridSpace">
                             <div id="knownMicrobits" style="display: none;">
-                                <h2>Forbundet til serveren:</h2>
+                                <h2 id="knownMicrobitsTitle"></h2>
                             </div>
                     
                             <div id="messageBoard" style="display: none;">
-                                <h2>Besked sendt:</h2>
+                                <h2 id="messageBoardTitle"></h2>
                             </div>
                         </div>
                     </div>
                     <div id="serverSpace" class="hidden">
-                        <h2>Bit:chat Server</h2>
+                        <h id="serverSpaceTitle"></h2>
                     </div>
                 </div>
             </div>
@@ -84,14 +84,14 @@
                         <div class="buttonStyle">
                             <label for="exhaustOriginLocal" style="font-size: 1em; padding-right: 0.5em;">
                                 <input type="radio" id="exhaustOriginLocal" name="exhaustImageOrigin" value="local" checked>
-                                Egne billeder</label>
+                                </label>
                             <label for="exhaustOriginRandom" style="font-size: 1em; padding-right: 0.5em;">
                                 <input type="radio" id="exhaustOriginRandom" name="exhaustImageOrigin" value="random">
-                                Tilfældige billeder</label>
+                                </label>
                         </div>
                     </div>
                     <div class="flexCenter" style="margin-top: 0.5em">
-                        <button id="exhaustStart" class="buttonStyle">Lav et nyt krypteret billede</button>
+                        <button id="exhaustStart" class="buttonStyle"></button>
                     </div>
 
                     <div class="flexCenter verticalDistance">
@@ -99,7 +99,7 @@
                             <div style="display: flex;">
                                 <div id="exhaustInputArea"></div>
                                 <div class="flexColumnCenter">
-                                    <button id="exhaustCheck" class="buttonStyle verticalDistance hidden">Tjek kode</button>
+                                    <button id="exhaustCheck" class="buttonStyle verticalDistance hidden"></button>
                                 </div>
                             </div>
                             <div id="exhaustImageArea"></div>
@@ -114,38 +114,38 @@
 
         <div id="hackingSpace" class="hidden">
             <div id="hackingPopUp">
-                <h1>Hack beskeder</h1>
-                <p id="hackingDescription" class="popupDescription">Lav om i beskeden fra id[<span id="hackSender"></span>] til id[<span id="hachReciever"></span>]</p>
+                <h1 id="hackingPopUpTitle"></h1>
+                <p id="hackingDescription" class="popupDescription"><span id="hackingDescriptionPart1"></span> id[<span id="hackSender"></span>] <span id="hackingDescriptionPart2"></span> id[<span id="hachReciever"></span>]</p>
                 <div id="hacingContent">
                     <div id="inputAreaHack"></div>
                     <div id="outputAreaHack"></div>
                 </div>
                 <div class="centerallign">
-                    <button id="noUpdateHackButton" class="buttonStyle">Send videre uden ændringer</button>
-                    <button id="updateHackButton" class="buttonStyle">Gem ændringer</button>
+                    <button id="noUpdateHackButton" class="buttonStyle"></button>
+                    <button id="updateHackButton" class="buttonStyle"></button>
                 </div>
             </div>
         </div>
 
         <div id="changeSpace" class="hidden">
             <div id="changePopUp">
-                <h1>Besked oversigt</h1>
+                <h1 id="changePopUpTitle"></h1>
                 <div id="changeInformation" class="centerallign">
                     <div id="changeSender"></div>
-                    <p class="popupDescription">vil sende</p>
+                    <p id="changeInformationPart1" class="popupDescription"></p>
                     <div id="changeMessage"></div>
-                    <p class="popupDescription">til</p>
+                    <p id="changeInformationPart2" class="popupDescription"></p>
                     <div id="changeRecipient"></div>
                 </div>
                 <div class="centerallign">
                     <table id="changeRecipientTable">
                         <tr>
-                            <th>Navn</th>
-                            <th>Id</th>
+                            <th id="changeRecipientTableName"></th>
+                            <th id="changeRecipientTableId"></th>
                         </tr>
                     </table>
                 </div>
-                <p class="popupDescription">Vælg modtager</p>
+                <p  id="changeChooserText" class="popupDescription"></p>
                 <div id="changeChooser" class="centerallign"></div>
 <!--
                 <div class="centerallign">
@@ -157,6 +157,7 @@
         </div>
 
         <script src="variables.js"></script>
+        <script src="language.js"></script>
         <script src="exhaustExercise.js"></script>
         <script src="serverActions.js"></script>
         <script src="hackingEditor.js"></script>
