@@ -4,7 +4,7 @@ let lightRedColor = "#D90D0D"
 let darkRedColor = "#731212"
 let lightColor = lightGreenColor
 
-const language = 1 // 0 = Danish, 1 = English
+var language = 0 // 0 = Danish, 1 = English
 
 document.querySelector(':root').style.setProperty('--light-color', lightGreenColor)
 document.querySelector(':root').style.setProperty('--dark-color', darkGreenColor)
