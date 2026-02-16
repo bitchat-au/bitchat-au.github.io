@@ -80,8 +80,8 @@ function detectFeatureRequest(featureCode){
         document.getElementById("translaterSpace").classList.toggle("hidden")
     }
     if(featureCode.toLowerCase() == "byg" || featureCode.toLowerCase() == "build"){
-        document.getElementById(features[1][2] + "Toggle").classList.toggle("hidden");
-        document.getElementById("translaterSpace").classList.toggle("hidden")
+        document.getElementById(features[2][2] + "Toggle").classList.toggle("hidden");
+        document.getElementById("imageButton").classList.toggle("hidden")
     }
     if(featureCode.toLowerCase() == "modtager" || featureCode.toLowerCase() == "recipient"){
         allowRecipient = true;
