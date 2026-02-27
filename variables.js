@@ -66,6 +66,7 @@ function setFeatureLanguage(){
       features[8][1] = "Allow Hacking";
   }
 }
+setFeatureLanguage()
 
 const localImages = [[[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[1,0,0,0,1],[0,1,1,1,0]], 
                     [[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[0,1,1,1,0],[1,0,0,0,1]]];
