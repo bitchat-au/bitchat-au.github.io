@@ -78,8 +78,6 @@ function updateLanguage(){
     document.getElementById("changeInformationPart1").innerText = changeInformationPart1LnText[language]
     document.getElementById("changeInformationPart2").innerText = changeInformationPart2LnText[language]
     document.getElementById("changeChooserText").innerText = changeChooserTextLnText[language]
-    setFeatureLanguage()
-
 }
 
 updateLanguage()
@@ -91,5 +89,8 @@ document.getElementById("languageButton").addEventListener("click", e=>{
         language = 0;
     }
     setFeatureLanguage()
+    for(let i=0; i<features.length; i++){
+        document.getElementById(features[i][0] + "Name").innerText = features[i][1]
+    }
     updateLanguage()
 })

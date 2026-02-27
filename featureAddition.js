@@ -139,6 +139,7 @@ function addFeatureToggle(toggleId, toggleName, functionality){
     toggleContainer.setAttribute("id", functionality + "Toggle")
     let toggleText = document.createElement("p");
     toggleText.classList.add("toggleText");
+    toggleText.setAttribute("id", toggleId + "Name")
     toggleText.innerText = toggleName;
     let buttonOuter = document.createElement("div");
     buttonOuter.setAttribute("id", toggleId);
