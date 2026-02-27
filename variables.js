@@ -43,26 +43,28 @@ var features = [  ["serverButton", "", "server"],                       //0
                     ["breakButton", "", "break"],                       //7
                     ["hackingButton", "", "hack"]];                     //8
 
-if(language<1){
-    features[0][1] = "Se Server";
-    features[1][1] = "Se Oversætter";
-    features[2][1] = "Tilføj Billede-byggeren";
-    features[3][1] = "Tilføj modtager";
-    features[4][1] = "Automatiser modtager";
-    features[5][1] = "Tillad Kryptering";
-    features[6][1] = "Automatiser Kryptering";
-    features[7][1] = "Tilføj Kode-knækkeren";
-    features[8][1] = "Tillad Hacking";
-} else{
-    features[0][1] = "See Server";
-    features[1][1] = "See translator";
-    features[2][1] = "Add the Image builder";
-    features[3][1] = "Add recipient";
-    features[4][1] = "Auto recipient";
-    features[5][1] = "Allow Encryption";
-    features[6][1] = "Auto Encryption";
-    features[7][1] = "Add Code breaker";
-    features[8][1] = "Allow Hacking";
+function setFeatureLanguage(){
+  if(language<1){
+      features[0][1] = "Se Server";
+      features[1][1] = "Se Oversætter";
+      features[2][1] = "Tilføj Billede-byggeren";
+      features[3][1] = "Tilføj modtager";
+      features[4][1] = "Automatiser modtager";
+      features[5][1] = "Tillad Kryptering";
+      features[6][1] = "Automatiser Kryptering";
+      features[7][1] = "Tilføj Kode-knækkeren";
+      features[8][1] = "Tillad Hacking";
+  } else{
+      features[0][1] = "See Server";
+      features[1][1] = "See translator";
+      features[2][1] = "Add the Image builder";
+      features[3][1] = "Add recipient";
+      features[4][1] = "Auto recipient";
+      features[5][1] = "Allow Encryption";
+      features[6][1] = "Auto Encryption";
+      features[7][1] = "Add Code breaker";
+      features[8][1] = "Allow Hacking";
+  }
 }
 
 const localImages = [[[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[1,0,0,0,1],[0,1,1,1,0]], 
