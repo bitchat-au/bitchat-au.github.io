@@ -90,5 +90,6 @@ document.getElementById("languageButton").addEventListener("click", e=>{
     } else {
         language = 0;
     }
+    setFeatureLanguage()
     updateLanguage()
 })
