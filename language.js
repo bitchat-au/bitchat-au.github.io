@@ -78,6 +78,8 @@ function updateLanguage(){
     document.getElementById("changeInformationPart1").innerText = changeInformationPart1LnText[language]
     document.getElementById("changeInformationPart2").innerText = changeInformationPart2LnText[language]
     document.getElementById("changeChooserText").innerText = changeChooserTextLnText[language]
+    setFeatureLanguage()
+
 }
 
 updateLanguage()
