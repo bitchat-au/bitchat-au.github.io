@@ -9,7 +9,7 @@ let reader;
  * If a connection has been established, this button will simply ask for any information from the microbit
 */
 document.getElementById("startbutton").addEventListener("click",event=>{
-  document.getElementById("startbutton").classList.add("disabledButton");
+  //document.getElementById("startbutton").classList.add("disabledButton");
   document.getElementById("trafficButton").classList.remove("disabledButton");
   document.getElementById("imageButton").classList.remove("disabledButton");
   document.getElementById("exhaustButton").classList.remove("disabledButton");
