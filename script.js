@@ -18,6 +18,7 @@ document.getElementById("startbutton").addEventListener("click",event=>{
 
 document.getElementById("clearButton").addEventListener("click",event=>{
   localStorage.clear();
+  location.reload()
 });
 
 let lastMessage = "";
