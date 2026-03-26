@@ -16,6 +16,10 @@ document.getElementById("startbutton").addEventListener("click",event=>{
   writeToMB("start");
 });
 
+document.getElementById("clearButton").addEventListener("click",event=>{
+  localStorage.clear();
+});
+
 let lastMessage = "";
 
 
@@ -38,6 +42,9 @@ async function writeToMB(message){
     writer = port.writable.getWriter();
     reader = port.readable.getReader();
     readLoop();
+    if(alreadyKnown){
+      checkMessage("lc")
+    }
   }
   // All messages sent starts with "__" and ends with "_" to allow the micro:bit to decode the message along with relevant meta data
   const data = new TextEncoder().encode("__" + message + "_" + '\n');
@@ -136,7 +143,6 @@ function checkMessage(message){
       }
     }
 
-
     if(completedMessage){
       console.log("complete")
       let messageString = [];
@@ -173,6 +179,18 @@ function checkMessage(message){
         console.log(timeDifference)
         console.log("checking")
         lastMessageStats = [messageSender, messageReceiver, messageString];
+
+        messageAsString = "";
+        for(let i=0; i<messageString.length; i++){
+          if(i>0){
+            messageAsString += "-"
+          }
+          messageAsString += messageString[i]
+        }
+        messageForLog = messageSender + "_" + messageReceiver + "_" + messageAsString
+        messageLog.push(messageForLog)
+        localStorage.setItem("messageLog", JSON.stringify(messageLog));
+
         if(allowHacking){
           document.getElementById("hackingSpace").classList.toggle("hidden")
           writeToMB("nmComp");
@@ -203,22 +221,26 @@ function checkMessage(message){
     //console.log(knownMicrobits.length + " _ vs _ " + message.split("_")[1])
     console.log("Lost connection!")
     writeToMB("start");
-    for(let i=0; i<knownMicrobits.length; i++){
-      writeToMB("known_" + knownMicrobits[i][0])
-    }
-    if(newImages.length > 0){
-      for(let i=0; i<newImages.length; i++){
-        writeToMB("knownImg_" + newImages[i])
-        console.log(newImages[i])
-      }
-    }
-    if(allowEncryption){
-      writeToMB("yesEncrypt")
-    }
-    if(allowRecipient){
-      writeToMB("yesRecipient")
-    }
+    rebuildConnection()
 
+  }
+}
+
+function rebuildConnection(){
+  console.log("rebuilding")
+  for(let i=0; i<knownMicrobits.length; i++){
+    writeToMB("known_" + knownMicrobits[i][0])
+  }
+  if(newImages.length > 0){
+    for(let i=0; i<newImages.length; i++){
+      writeToMB("knownImg_" + newImages[i])
+    }
+  }
+  if(allowEncryption){
+    writeToMB("yesEncrypt")
+  }
+  if(allowRecipient){
+    writeToMB("yesRecipient")
   }
 }
 

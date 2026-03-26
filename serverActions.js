@@ -15,6 +15,8 @@ function checkForNewUser(newUser){
         let mbIndex = knownMicrobits.length
         messageIndex+=1;
         knownMicrobits.push([newUser,mbIndex]);
+        localStorage.setItem("knownMicrobits", JSON.stringify(knownMicrobits));
+
         createBlockId(mbIndex);
     }
     console.log(knownMicrobits)
@@ -40,9 +42,16 @@ function createIcon(imageContent, endLocation){
 }
 
 function printMessage(sender, recipient, message){
+    console.log("message")
+
+    console.log(message)
     let recipientNumber = getUserNumber(recipient);
     let senderNumber = getUserNumber(sender);
     let reconstructedMessage = reconstructMessage(message);
+    console.log(recipientNumber)
+    console.log(senderNumber)
+    console.log(reconstructedMessage)
+
     createBlockMessage(senderNumber, recipientNumber, reconstructedMessage)
     messageIndex+=1;
 }

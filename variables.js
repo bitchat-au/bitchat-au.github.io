@@ -9,11 +9,39 @@ var language = 0 // 0 = Danish, 1 = English
 document.querySelector(':root').style.setProperty('--light-color', lightGreenColor)
 document.querySelector(':root').style.setProperty('--dark-color', darkGreenColor)
 
+
+let seeingServer = false;
+if(JSON.parse(localStorage.getItem("seeingServer"))){
+  seeingServer = JSON.parse(localStorage.getItem("seeingServer"));
+}
+let seeingTranslater = false;
+if(JSON.parse(localStorage.getItem("seeingTranslater"))){
+  seeingTranslater = JSON.parse(localStorage.getItem("seeingTranslater"));
+}
 let allowRecipient = false;
+if(JSON.parse(localStorage.getItem("allowRecipient"))){
+  allowRecipient = JSON.parse(localStorage.getItem("allowRecipient"));
+}
 let autoRecipient = false
+if(JSON.parse(localStorage.getItem("autoRecipient"))){
+  autoRecipient = JSON.parse(localStorage.getItem("autoRecipient"));
+}
 let allowEncryption = false;
+if(JSON.parse(localStorage.getItem("allowEncryption"))){
+  allowEncryption = JSON.parse(localStorage.getItem("allowEncryption"));
+}
 let autoEncryption = false;
+if(JSON.parse(localStorage.getItem("autoEncryption"))){
+  autoEncryption = JSON.parse(localStorage.getItem("autoEncryption"));
+}
+let seeingBreaker = false;
+if(JSON.parse(localStorage.getItem("seeingBreaker"))){
+  seeingBreaker = JSON.parse(localStorage.getItem("seeingBreaker"));
+}
 let allowHacking = false;
+if(JSON.parse(localStorage.getItem("allowHacking"))){
+  allowHacking = JSON.parse(localStorage.getItem("allowHacking"));
+}
 
 let lastResetTime = new Date().getTime()/1000;
 
@@ -26,12 +54,26 @@ let hashCode = ""
 let messageConstruct = [];  // array to construct messages from the microbit
 
 // locally store any information received from the microbit
+var alreadyKnown = false
 let knownMicrobits = []; // [0] are the actual microbit names, [1] are the assigned numerical id's
+if(JSON.parse(localStorage.getItem("knownMicrobits"))){
+  knownMicrobits = JSON.parse(localStorage.getItem("knownMicrobits"));
+  alreadyKnown = true
+}
+
+var messageLog = []
+if(JSON.parse(localStorage.getItem("messageLog"))){
+  messageLog = JSON.parse(localStorage.getItem("messageLog"));
+}
+console.log(messageLog)
 
 let newMessageList = [[false, ""],[false, ""],[false, ""],[false, ""],[false, ""], ["", ""]];
 let lastMessageStats = ["", "", ""];
 
 let newImages = []
+if(JSON.parse(localStorage.getItem("newImages"))){
+  newImages = JSON.parse(localStorage.getItem("newImages"));
+}
 
 var features = [  ["serverButton", "", "server"],                       //0
                     ["translaterButton", "", "translate"],              //1
@@ -68,8 +110,17 @@ function setFeatureLanguage(){
 }
 setFeatureLanguage()
 
-const localImages = [[[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[1,0,0,0,1],[0,1,1,1,0]], 
+var localImages = [[[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[1,0,0,0,1],[0,1,1,1,0]], 
                     [[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[0,1,1,1,0],[1,0,0,0,1]]];
+
+if(JSON.parse(localStorage.getItem("localImages"))){
+  localImages = JSON.parse(localStorage.getItem("localImages"));
+}
+                    
+                    
+                    
+                    
+                    
 
 const ledNumber = [[[0,0,1,0,0],[0,1,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,1,1,1,0]], // 1
                   [[1,1,1,0,0],[0,0,0,1,0],[0,1,1,0,0],[1,0,0,0,0],[1,1,1,1,0]], // 2

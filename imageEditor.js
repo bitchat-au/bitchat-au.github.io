@@ -21,6 +21,8 @@ document.getElementById("finishImageButton").addEventListener("click", e=>{
         outputArray.push(rowarray);
     }
     localImages.push(outputArray);
+    localStorage.setItem("localImages", JSON.stringify(localImages));
+
     createIcon(outputArray,document.getElementById("knownImages"));
     console.log(outputArray);
     let messageString = "";
@@ -35,6 +37,8 @@ document.getElementById("finishImageButton").addEventListener("click", e=>{
     console.log(messageString);
 
     newImages.push(messageString)
+    localStorage.setItem("newImages", JSON.stringify(newImages));
+
     console.log(newImages)
     writeToMB("newImg_" + messageString)
 })

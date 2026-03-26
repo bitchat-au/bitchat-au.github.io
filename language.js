@@ -2,6 +2,7 @@
 const inspectFeaturesButtonLnText = ["Feature oversigt", "Feature overview"];
 const inspectIdsButtonLnText = ["Bruger navne og id", "User names and id"];
 const languageButtonLnText = ["🇬🇧", "🇩🇰"];
+const clearButtonLnText = ["Slet alt", "Delete all"];
 const includeNewFeatureLnText = ["Tilføj feature", "Add feature"];
 const featurePopUpTextLnText = ["Indtast featurekode", "Input feature code"];
 const addFeaturePopupLnText = ["Tilføj feature", "Add feature"];
@@ -49,6 +50,7 @@ function updateLanguage(){
     document.getElementById("inspectFeaturesButton").innerText = inspectFeaturesButtonLnText[language]
     document.getElementById("inspectIdsButton").innerText = inspectIdsButtonLnText[language]
     document.getElementById("languageButton").innerText = languageButtonLnText[language]
+    document.getElementById("clearButton").innerText = clearButtonLnText[language]
     document.getElementById("includeNewFeature").innerText = includeNewFeatureLnText[language]
     document.getElementById("featurePopUpText").innerText = featurePopUpTextLnText[language]
     document.getElementById("addFeaturePopup").innerText = addFeaturePopupLnText[language]

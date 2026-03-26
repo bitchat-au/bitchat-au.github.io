@@ -2,6 +2,52 @@ for(let i=0; i<features.length;i++){
     addFeatureToggle(features[i][0], features[i][1], features[i][2])
 }
 
+if(knownMicrobits.length>0){
+    for(let i=0; i<knownMicrobits.length;i++){
+        createBlockId(i);
+    }
+}
+if(newImages.length>0){
+    detectFeatureRequest("byg")
+}
+if(messageLog.length>0){
+    for(let i=0; i<messageLog.length; i++){
+        let sender = messageLog[i].split("_")[0]
+        let recipient = messageLog[i].split("_")[1]
+        let tempMessage = messageLog[i].split("_")[2].split("-");
+        printMessage(sender, recipient, tempMessage);
+    }
+    
+}
+if(seeingServer){
+    detectFeatureRequest("server")
+}
+if(seeingTranslater){
+    detectFeatureRequest("oversæt")
+}
+if(allowRecipient){
+    detectFeatureRequest("modtager")
+}
+if(autoRecipient){
+    document.getElementById(features[4][0]).classList.toggle("toggleActive")
+    document.getElementById(features[4][0] + "Inner").classList.toggle("toggleInnerActive") 
+}
+if(allowRecipient){
+    detectFeatureRequest("krypter")
+}
+if(autoEncryption){
+    document.getElementById(features[6][0]).classList.toggle("toggleActive")
+    document.getElementById(features[6][0] + "Inner").classList.toggle("toggleInnerActive") 
+}
+if(seeingBreaker){
+    detectFeatureRequest("knæk")
+}
+if(allowHacking){
+    detectFeatureRequest("hack")
+}
+
+closePopUp()
+
 document.getElementById("trafficButton").addEventListener("click", e=>{
     document.getElementById("trafficContent").classList.toggle("hidden")
     if(!document.getElementById("imageBuilderContent").classList.contains("hidden")){
@@ -44,8 +90,7 @@ document.getElementById("includeNewFeature").addEventListener("click", e=>{
 })
 
 document.getElementById("closeFeaturePopup").addEventListener("click", e=>{
-    document.getElementById("featureInput").value = "";
-    document.getElementById("featurePopUp").classList.toggle("hidden")
+    closePopUp()
 })
 
 document.getElementById("inspectIdsButton").addEventListener("click", e=>{
@@ -67,15 +112,26 @@ document.getElementById("featureInput").addEventListener("keypress", e=>{
     }
 })
 
+function closePopUp(){
+    document.getElementById("featureInput").value = "";
+    if(!document.getElementById("featurePopUp").classList.contains("hidden")){
+        document.getElementById("featurePopUp").classList.toggle("hidden")
+    }
+}
+
 function detectFeatureRequest(featureCode){
     document.getElementById("featurePopUp").classList.toggle("hidden")
     document.getElementById("featureInput").value = "";
     if(featureCode.toLowerCase() == "server"){
+        seeingServer = true
+        localStorage.setItem("seeingServer", JSON.stringify(seeingServer));
         document.getElementById(features[0][2] + "Toggle").classList.toggle("hidden");
         document.getElementById("serverSpace").classList.toggle("hidden")
         document.getElementById("trafficButton").classList.toggle("hidden")
     }
     if(featureCode.toLowerCase() == "oversæt" || featureCode.toLowerCase() == "oversat" || featureCode.toLowerCase() == "translate"){
+        seeingTranslater = true
+        localStorage.setItem("seeingTranslater", JSON.stringify(seeingTranslater));
         document.getElementById(features[1][2] + "Toggle").classList.toggle("hidden");
         document.getElementById("translaterSpace").classList.toggle("hidden")
     }
@@ -85,6 +141,7 @@ function detectFeatureRequest(featureCode){
     }
     if(featureCode.toLowerCase() == "modtager" || featureCode.toLowerCase() == "recipient"){
         allowRecipient = true;
+        localStorage.setItem("newImages", JSON.stringify(newImages));
         writeToMB("yesRecipient")
         document.getElementById(features[3][2] + "Toggle").classList.toggle("hidden");
         document.getElementById(features[4][2] + "Toggle").classList.toggle("hidden");
@@ -93,6 +150,7 @@ function detectFeatureRequest(featureCode){
     }
     if(featureCode.toLowerCase() == "krypter" || featureCode.toLowerCase() == "encrypt"){
         allowEncryption = true;
+        localStorage.setItem("allowEncryption", JSON.stringify(allowEncryption));
         writeToMB("yesEncrypt")
         document.getElementById(features[5][2] + "Toggle").classList.toggle("hidden");
         document.getElementById(features[6][2] + "Toggle").classList.toggle("hidden");
@@ -100,11 +158,14 @@ function detectFeatureRequest(featureCode){
         document.getElementById(features[6][0] + "Inner").classList.toggle("toggleInnerActive");
     }
     if(featureCode.toLowerCase() == "knæk" || featureCode.toLowerCase() == "knak" || featureCode.toLowerCase() == "break"){
+        seeingBreaker = true
+        localStorage.setItem("seeingBreaker", JSON.stringify(seeingBreaker));
         document.getElementById(features[7][2] + "Toggle").classList.toggle("hidden");
         document.getElementById("exhaustButton").classList.toggle("hidden")
     } 
     if(featureCode.toLowerCase() == "hack"){
         allowHacking = true;
+        localStorage.setItem("allowHacking", JSON.stringify(allowHacking));
         document.getElementById(features[8][2] + "Toggle").classList.toggle("hidden");
         document.querySelector(':root').style.setProperty('--light-color', lightRedColor)
         document.querySelector(':root').style.setProperty('--dark-color', darkRedColor)
@@ -177,6 +238,7 @@ function addFeatureToggle(toggleId, toggleName, functionality){
                     allowRecipient = true
                     writeToMB("yesRecipient")
                 }
+                localStorage.setItem("allowRecipient", JSON.stringify(allowRecipient));
                 break;
             case features[4][2]:    // Autorecipient button
                 if(allowRecipient){
@@ -189,6 +251,7 @@ function addFeatureToggle(toggleId, toggleName, functionality){
                     buttonOuter.classList.toggle("toggleActive")
                     buttonInner.classList.toggle("toggleInnerActive")
                 }
+                localStorage.setItem("autoRecipient", JSON.stringify(autoRecipient));
                 break;
             case features[5][2]:    // Encrypt button
                 if(allowEncryption){
@@ -213,6 +276,7 @@ function addFeatureToggle(toggleId, toggleName, functionality){
                     allowEncryption = true
                     writeToMB("yesEncrypt")
                 }
+                localStorage.setItem("allowHacking", JSON.stringify(allowHacking));
                 break;
             case features[6][2]:    // Autoencrypt button
                 if(allowEncryption){
@@ -227,6 +291,7 @@ function addFeatureToggle(toggleId, toggleName, functionality){
                     buttonOuter.classList.toggle("toggleActive")
                     buttonInner.classList.toggle("toggleInnerActive")
                 }
+                localStorage.setItem("autoEncryption", JSON.stringify(autoEncryption));
                 break;
             case features[7][2]:    // breaker button
                 document.getElementById("exhaustButton").classList.toggle("hidden")
@@ -253,7 +318,7 @@ function addFeatureToggle(toggleId, toggleName, functionality){
                     document.body.style.backgroundColor = "RGB(120, 0, 0, 0.5)";
                     lightColor = lightRedColor
                 }
-            
+                localStorage.setItem("allowHacking", JSON.stringify(allowHacking));
             }
     })
 
