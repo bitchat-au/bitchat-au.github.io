@@ -32,7 +32,7 @@ if(autoRecipient){
     document.getElementById(features[4][0]).classList.toggle("toggleActive")
     document.getElementById(features[4][0] + "Inner").classList.toggle("toggleInnerActive") 
 }
-if(allowRecipient){
+if(allowEncryption){
     detectFeatureRequest("krypter")
 }
 if(autoEncryption){
@@ -141,7 +141,7 @@ function detectFeatureRequest(featureCode){
     }
     if(featureCode.toLowerCase() == "modtager" || featureCode.toLowerCase() == "recipient"){
         allowRecipient = true;
-        localStorage.setItem("newImages", JSON.stringify(newImages));
+        localStorage.setItem("allowRecipient", JSON.stringify(allowRecipient));
         writeToMB("yesRecipient")
         document.getElementById(features[3][2] + "Toggle").classList.toggle("hidden");
         document.getElementById(features[4][2] + "Toggle").classList.toggle("hidden");
