@@ -1,0 +1,36 @@
+.input-container {
+    display: flex;
+    background-color: var(--bg);
+    color: var(--white);
+    font-size: 1.1em;
+    
+    input {
+        background-color: transparent;
+        border: 1px solid var(--muted-grey);
+        color: currentColor;
+        padding: 0.25rem 0.5rem;
+        min-width: 0;
+        flex-grow: 1;
+        font-size: inherit;
+        outline: none;
+
+        &:focus {
+            border-color: var(--white);
+        }
+    }
+
+    &:has(button) input {
+        border-right: 0;
+    }
+}
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .field-error {
+        color: var(--danger);
+        font: 0.8em/1 var(--sans);
+    }
+}

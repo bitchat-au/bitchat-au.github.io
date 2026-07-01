@@ -1,22 +1,39 @@
 <script>
+    import { Features, features } from "../../services/features.svelte";
+    import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
     import Icon from "../components/Icon.svelte";
 </script>
 
 <main>
     <section class="content">
-        <nav class="feature-navigation">
-            <ul>
-                <li class="active">
-                    <button><Icon name="code-block" /> Besked trafik</button>
-                </li>
-                <li>
-                    <button><Icon name="face-grin" /> Billed byggeren</button>
-                </li>
-                <li>
-                    <button><Icon name="lock-open" /> Kode knækkeren</button>
-                </li>
-            </ul>
-        </nav>
+        <header>
+            <nav class="feature-navigation">
+                <ul>
+                    {#if features.isActive(Features.Server)}
+                        <li class="active">
+                            <button class="no-style"
+                                ><Icon name="code-block" /> Besked trafik</button
+                            >
+                        </li>
+                    {/if}
+                    {#if features.isActive(Features.ImageBuilder)}
+                        <li>
+                            <button class="no-style"
+                                ><Icon name="face-grin" /> Billed byggeren</button
+                            >
+                        </li>
+                    {/if}
+                    {#if features.isActive(Features.KodeKnækkeren)}
+                        <li>
+                            <button class="no-style"
+                                ><Icon name="lock-open" /> Kode knækkeren</button
+                            >
+                        </li>
+                    {/if}
+                </ul>
+            </nav>
+            <FeaturesDropdown />
+        </header>
         <!-- Default feature content -->
     </section>
 
@@ -47,6 +64,13 @@
     .devices {
         border-left: 1px solid var(--muted-grey);
         padding-left: 24px;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
     }
 
     .feature-navigation ul {

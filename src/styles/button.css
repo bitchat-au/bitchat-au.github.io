@@ -1,0 +1,43 @@
+/* Button colors */
+button:not(.transparent),
+button.default {
+    --button-bg: var(--accent);
+    --button-color: var(--bg);
+    --button-hover-bg: hsl(from var(--accent) h s calc(l * 0.8));
+    --button-active-bg: hsl(from var(--accent) h s calc(l * 0.6));
+}
+
+button.transparent {
+    --button-bg: var(--bg);
+    --button-color: var(--white);
+    --button-hover-bg: hsl(from var(--bg) h s calc(l * 0.8));
+    --button-active-bg: hsl(from var(--bg) h s calc(l * 0.6));
+}
+
+button:not(.no-style) {
+
+    display: flex;
+    align-items: center;
+    background-color: var(--button-bg);
+    color: var(--button-color);
+    border: none;
+    padding: 0.25rem 0.5rem;
+    font-size: inherit;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+        background-color: hsl(from var(--button-bg) h s calc(l * 0.8));
+    }
+    
+    &:active:not(:disabled) {
+        background-color: hsl(from var(--button-bg) h s calc(l * 0.6));
+    }
+}
