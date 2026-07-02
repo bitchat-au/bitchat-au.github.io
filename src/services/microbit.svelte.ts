@@ -117,6 +117,11 @@ class MicrobitService {
     public checkMessage(message: string) {
         //console.log("nm = " + message.toString())
         //console.log("lm = " + lastMessage.toString())
+        if (message.startsWith("debug") || message.startsWith("echo")) {
+            console.log(message);
+            
+        }
+
         if (this.lastMessage != "" && message.toString().match(this.lastMessage.toString()) && this.lastMessage != "lc") {
             console.log("Damn")
             return;
@@ -124,6 +129,9 @@ class MicrobitService {
         }
         this.lastMessage = message;
         let messageCode = message.split("_")[0];
+
+        
+
         if (messageCode == "nu") { // new user
             let mbID = message.split("_")[2]
             if (mbID.length == 5) {
@@ -132,109 +140,55 @@ class MicrobitService {
             }
         }
         if (messageCode == "nm") { // new message
-            let messageSender = message.split("_")[1]
-            let messageReceiver = message.split("_")[2]
-            let messageIndex = Number(message.split("_")[3])
-            let messageBit = message.split("_")[4]
-            // Check if message is under construction, and if this message is similar
-            if (this.newMessageList[5][0] == "") {
-                console.log("starting")
-                this.newMessageList[5][0] = messageSender;
-                this.newMessageList[5][1] = messageReceiver;
-                if (!this.newMessageList[messageIndex][0]) {
-                    this.newMessageList[messageIndex][0] = true;
-                    this.newMessageList[messageIndex][1] = messageBit;
-                }
-            }
-            if (features.isActive(Features.Router)) {
-                if (this.newMessageList[5][0] == messageSender) {
-                    if (!this.newMessageList[messageIndex][0]) {
-                        this.newMessageList[messageIndex][0] = true;
-                        this.newMessageList[messageIndex][1] = messageBit;
-                    }
-                }
-            } else {
-                if (this.newMessageList[5][0] == messageSender || this.newMessageList[5][0] == messageReceiver) {
-                    if (!this.newMessageList[messageIndex][0]) {
-                        //console.log("Wohoo!! _ " + messageIndex)
-                        this.newMessageList[messageIndex][0] = true;
-                        this.newMessageList[messageIndex][1] = messageBit;
-                    }
-                }
-            }
+            // "nm_" + senderId + "_" + str(recipientName) + "_" + packedImage + ("_" + encryptionCode if encryptable else "")
+            const messageParts = message.split("_");
+            
+            let messageSender = messageParts[1];
+            let messageReceiver = messageParts[2];
+            let messageImage = unpackImage(messageParts[3]);
 
-            let completedMessage = true;
-            for (let i = 0; i < 5; i++) {
-                if (!this.newMessageList[i][0]) {
-                    completedMessage = false;
-                }
-            }
+            console.log("New message received", messageImage);
+            console.log("complete")
+    
+            let messageString = messageImage.map(row => row.join(''));
 
-            if (completedMessage) {
-                console.log("complete")
-                let messageString = [];
-                for (let i = 0; i < 5; i++) {
-                    messageString.push(this.newMessageList[i][1]);
-                    this.newMessageList[i][0] = false;
-                    this.newMessageList[i][1] = "";
-                }
-                this.newMessageList[5][0] = "";
-                this.newMessageList[5][1] = "";
-                let correctCounter = 0;
-                if (messageSender == this.lastMessageStats.sender) {
-                    correctCounter += 1;
-                    //console.log(correctCounter + " sender error")
-                }
-                if (messageReceiver == this.lastMessageStats.receiver) {
-                    correctCounter += 1;
-                    //console.log(correctCounter + " receiver error")
+            let timeDifference = new Date().getTime() / 1000 - this.lastResetTime
+            //console.log(timeDifference)
 
-                }
+
+            if (timeDifference > 12) {
+                this.lastResetTime = new Date().getTime() / 1000;
+                console.log(timeDifference)
+                console.log("checking")
+                this.lastMessageStats = { receiver: messageReceiver, sender: messageSender, message: messageString };
+
+                let messageAsString = "";
                 for (let i = 0; i < messageString.length; i++) {
-                    if (messageString[i] == this.lastMessageStats.message[i]) {
-                        correctCounter += 1
-                        //console.log(correctCounter + " message error")
+                    if (i > 0) {
+                        messageAsString += "-"
                     }
+                    messageAsString += messageString[i]
                 }
+                let messageForLog = messageSender + "_" + messageReceiver + "_" + messageAsString
+                this.messageLog.push(messageForLog)
+                localStorage.setItem("messageLog", JSON.stringify(this.messageLog));
 
-                let timeDifference = new Date().getTime() / 1000 - this.lastResetTime
-                //console.log(timeDifference)
+                console.log({messageSender, messageReceiver, messageString});
+                
 
-
-                if (timeDifference > 12) {
-                    this.lastResetTime = new Date().getTime() / 1000;
-                    console.log(timeDifference)
-                    console.log("checking")
-                    this.lastMessageStats = { receiver: messageReceiver, sender: messageSender, message: messageString };
-
-                    let messageAsString = "";
-                    for (let i = 0; i < messageString.length; i++) {
-                        if (i > 0) {
-                            messageAsString += "-"
-                        }
-                        messageAsString += messageString[i]
-                    }
-                    let messageForLog = messageSender + "_" + messageReceiver + "_" + messageAsString
-                    this.messageLog.push(messageForLog)
-                    localStorage.setItem("messageLog", JSON.stringify(this.messageLog));
-
-                    console.log({messageSender, messageReceiver, messageString});
-                    
-
-                    if (features.isActive(Features.Hacker)) {
-                        console.log("Show hacking menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        this.writeToMB("nmComp");
-                        // setUpHacking(messageSender, messageReceiver, messageString)
-                    } else if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
-                        console.log("let it start!")
-                        this.writeToMB("nmComp");
-                        console.log("Show routing menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        // setUpChanger(messageSender, messageReceiver, messageString)
-                    } else {
-                        console.log("Show message in log!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        this.writeToMB("ready");
-                        setTimeout(() => this.resetValues(), 2000);
-                    }
+                if (features.isActive(Features.Hacker)) {
+                    console.log("Show hacking menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    this.writeToMB("nmComp");
+                    // setUpHacking(messageSender, messageReceiver, messageString)
+                } else if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
+                    console.log("let it start!")
+                    this.writeToMB("nmComp");
+                    console.log("Show routing menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    // setUpChanger(messageSender, messageReceiver, messageString)
+                } else {
+                    console.log("Show message in log!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    this.writeToMB("ready");
+                    setTimeout(() => this.resetValues(), 2000);
                 }
             }
         }
@@ -263,7 +217,7 @@ class MicrobitService {
         }
         if (newImages.length > 0) {
             for (let i = 0; i < newImages.length; i++) {
-                this.writeToMB("knownImg_" + newImages[i])
+                this.writeToMB("knownImg_" + packImageString(newImages[i]))
             }
         }
         if (features.isActive(Features.Encryption)) {
@@ -306,36 +260,26 @@ class MicrobitService {
      * @param image Image string e.g. "1000101010001000101010001" (10001  01010  00100  01010  10001)
      */
     async writeImageToMB(image: string) {
-
+        this.writeToMB("newImg_" + packImageString(image));
     }
 }
 
 export const microbitService = MicrobitService.instance;
 (window as any).microbitService = microbitService;
 
+const packImageString = (imgString: string): string => packImage(imgString.split(":").map(row => row.split("").map(Number)))
 
-/**
- * Should convert a binary string to a string. Should pad the string if needed
- * 011001100110111101101111 -> "foo"
- * @param {string} binaryString   A string of 0s and 1s to convert to a string
- * @returns {string}   The converted string
- */
-const bin2String = (binaryString: string) => {
-    let result = '';
-    for (let i = 0; i < binaryString.length; i += 8) {
-        const byte = binaryString.substr(i, 8).padEnd(8, '0'); // Pad the byte to ensure it's 8 bits
-        result += String.fromCharCode(parseInt(byte, 2));
-    }
-    return result;
-};
+function packImage(matrix: number[][]): string {
+    return matrix.map(row => {
+        const val = parseInt(row.join(''), 2);
+        return val <= 25 ? String.fromCharCode(val + 65) : (val - 26).toString();
+    }).join('');
+}
 
-const string2Bin = (str: string) => {
-    let result = '';
-    for (let i = 0; i < str.length; i++) {
-        const bin = str.charCodeAt(i).toString(2);
-        result += bin.padStart(8, '0');
-    }
-    return result;
-};
-
-console.log(string2Bin(bin2String("1000101010001000101010001")));
+function unpackImage(payload: string): number[][] {
+    return payload.split('').map(char => {
+        const val = /[0-5]/.test(char) ? parseInt(char, 10) + 26 : char.charCodeAt(0) - 65;
+        const binaryString = val.toString(2).padStart(5, '0');
+        return binaryString.split('').map(bit => parseInt(bit, 10));
+    });
+}

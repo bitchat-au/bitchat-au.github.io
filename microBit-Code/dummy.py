@@ -45,11 +45,13 @@ messageComplete = False
 messageSender = 0
 messageRecipient = ""
 codeString = ""
+packedReceivedImage = ""
 
 ###################################################
 ## micro:bit states:
 ###################################################
 known = False
+lastKnownPing = 0
 constructingMessage = False
 choosingContent = False
 choosingRecipient = False
@@ -61,7 +63,7 @@ code = []
 ###################################################
 ## Setup for the radio:
 ###################################################
-radio.config(group=radioChannel)
+radio.config(group=radioChannel, data_rate=radio.RATE_1MBIT, queue=10, channel=42)
 radio.on()
 
 ###################################################
@@ -108,6 +110,10 @@ def setImage(imageIndex, imageList):
             imageString = imageString + ":"
     return imageString
 
+def matrixToImage(matrix):
+    rows = ["".join(str(int(x) * 9) for x in row) for row in matrix]
+    return ":".join(rows)
+
 def setRecipients():
     knownRecipientList = []
     for i in range(knownRecipients):
@@ -144,6 +150,20 @@ def encryptImage(imageList):
             display.set_pixel(j,k,ledStrength)
         sleep(500)
 
+def packImage(matrix):
+    """Converts a 5x5 matrix into a 5-char alphanumeric string (A-Z, 0-5)."""
+    return "".join(
+        chr(v + 65) if v <= 25 else str(v - 26) 
+        for v in (int("".join(map(str, row)), 2) for row in matrix)
+    )
+
+def unpackImage(payload):
+    """Converts a 5-char alphanumeric string back into a 5x5 matrix."""
+    return [
+        [int(bit) for bit in "{:05b}".format(int(c) + 26 if c.isdigit() else ord(c) - 65)] 
+        for c in payload
+    ]
+
 ###################################################
 ## Loop
 ###################################################
@@ -159,22 +179,14 @@ while True:
                 knownRecipients = int(message.split("_")[3])
                 display.show(int(idNumber)+1)
             if "receive" in message:
-                messageIndex = int(message.split("_")[2])
-                messageSender = int(message.split("_")[4])
+                messageComponents = message.split("_")
+
+                packedReceivedImage = str(messageComponents[2])
+                messageSender = int(messageComponents[3])
                 if encryptable:
-                    codeString = message.split("_")[5]
-                if time.ticks_ms()-lastRecordedMessage>3000:
-                    for i in range(5):
-                        messageConstructIndex[i] = False
-                        messageConstruct[i] = ""
-                    lastRecordedMessage = time.ticks_ms()
-                if not messageConstruct[messageIndex] == str(message.split("_")[3]):
-                    messageConstructIndex[messageIndex] = True
-                    messageConstruct[messageIndex] = str(message.split("_")[3])
-                messageComplete = True                
-                for i in range(5):
-                    if not messageConstructIndex[i]:
-                        messageComplete = False
+                    codeString = messageComponents[4]
+
+                messageComplete = True
             if "repeat" in message:
                 repeatIndex = int(message.split("_")[2])
                 if encryptable:
@@ -186,14 +198,12 @@ while True:
         if "known" in message:
             knownRecipients = int(message.split("_")[1])
         if "newImg" in message:
-            messageIndex = int(message.split("_")[1])+2
-            imageIndex = int(message.split("_")[2])
-            imagebit = message.split("_")[3]
-            if messageIndex == len(ledImages) or messageIndex > len(ledImages):
-                ledImages.append([[],[],[],[],[]]) 
-            imagebitAsList = list(imagebit)
-            for i in range(5):
-                ledImages[messageIndex][imageIndex].append(int(imagebitAsList[i]))
+
+
+            imageIndex = int(message.split("_")[1]) + 2 # +2 is the offset for the two default images
+            packedNewImage = message.split("_")[2]
+
+            ledImages.append(unpackImage(packedNewImage))
         if "encrypt" in message:
             if int(message.split("_")[1])>0:
                 encryptable = True
@@ -213,46 +223,32 @@ while True:
             outputMessage = [[],[],[],[],[]]
         if not allowRecipient:
             if "receive" in message:
-                messageIndex = int(message.split("_")[2])
-                messageSender = int(message.split("_")[4])
+                messageComponents = message.split("_")
+
+                packedReceivedImage = str(messageComponents[2])
+                messageSender = int(messageComponents[3])
                 if encryptable:
-                    codeString = message.split("_")[5]
-                if time.ticks_ms()-lastRecordedMessage>3000:
-                    lastRecordedMessage = time.ticks_ms()
-                    for i in range(5):
-                        messageConstructIndex[i] = False
-                        messageConstruct[i] = ""
-                if not messageConstructIndex[messageIndex] or not messageConstruct[messageIndex] == str(message.split("_")[3]):
-                    messageConstructIndex[messageIndex] = True
-                    messageConstruct[messageIndex] = str(message.split("_")[3])
-                messageComplete = True                
-                for i in range(5):
-                    if not messageConstructIndex[i]:
-                        messageComplete = False
+                    codeString = messageComponents[4]
+
+                messageComplete = True
+
 
     # When a full message has been received
     if messageComplete:
-        for i in range(len(pitchList)):
-            if wrongMessage:
-                music.pitch(pitchList[(len(pitchList)-1)-i]*100)
-            else:
-                music.pitch(pitchList[i]*100)
-            sleep(150)
-        music.stop()
-            
-        outputMessage = [[],[],[],[],[]]
+        # for i in range(len(pitchList)):
+        #     if wrongMessage:
+        #         music.pitch(pitchList[(len(pitchList)-1)-i]*100)
+        #     else:
+        #         music.pitch(pitchList[i]*100)
+        #     sleep(150)
+        # music.stop()
+        
+        outputMessage = unpackImage(packedReceivedImage)
         code = list(codeString)
         for i in range(3):
             sendMessage("complete")
-        messageString = ""
-        for i in range(5):
-            messageString += messageConstruct[i]
-            imagebitAsList = list(messageConstruct[i])
-            for j in range(5):
-                outputMessage[i].append(int(imagebitAsList[j]))
-            if i<4:
-                messageString += ":"
-        display.show(Image(messageString))
+
+        display.show(Image(matrixToImage(outputMessage)))
         if encryptable:
             inputPress = 0
             analysisInProgress = True
@@ -321,15 +317,14 @@ while True:
         wrongMessage = False
         codeString = ""
         messageSender = 0
+        packedReceivedImage = []
         messageComplete = False
-        for i in range(5):
-            messageConstructIndex[i] = False
-            messageConstruct[i] = ""
         lastRecordedMessage = time.ticks_ms()
         resetMicrobitTime = False
     
-    if not known:
+    if not known and time.ticks_ms() - lastKnownPing > 1000:
         sendMessage("hello")
+        lastKnownPing = time.ticks_ms()
 
     # When starting a new message
     if pin_logo.is_touched():
@@ -409,8 +404,8 @@ while True:
             sleep(500)
             display.clear()
             code.append("0")
-            for i in range(len(code)):
-                if int(code[i])>0:
+            for i, char in enumerate(code):
+                if int(char)>0:
                     for j in range(5):
                         display.set_pixel(i,j,9)
                 else:
@@ -424,8 +419,8 @@ while True:
             sleep(500)
             display.clear()
             code.append("1")
-            for i in range(len(code)):
-                if int(code[i])>0:
+            for i, char in enumerate(code):
+                if int(char)>0:
                     for j in range(5):
                         display.set_pixel(i,j,9)
                 else:
@@ -515,17 +510,10 @@ while True:
     while sendingMessage:
         sendAnimation()
         sleep(500)
-        messageString = setImage(0, outputMessage)
-        if allowRecipient:
-            messageRecipient = str(knownRecipientList[recipientIndex])
-        else:
-            messageRecipient = "0"
-        for i in range(5):
-            tempMessage = str(messageString.split(":")[i])
-            if encryptable:
-                sendMessage("send_" + messageRecipient + "_" + str(i) + "_" + tempMessage + "_" + codeString)
-            else:
-                sendMessage("send_" + messageRecipient + "_" + str(i) + "_" + tempMessage)
+
+        messageRecipient = str(knownRecipientList[recipientIndex]) if allowRecipient else "0"
+        sendMessage("send_" + messageRecipient + "_" + str(packImage(outputMessage)) + ("_" + codeString if encryptable else ""))
+
         recipientIndex = 0
         messageNumber = 0
         display.show(int(idNumber)+1)
