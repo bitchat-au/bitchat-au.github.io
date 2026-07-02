@@ -59,6 +59,7 @@ encryptingMessage = False
 sendingMessage = False
 readyToSend = False
 code = []
+shouldBeep = False
 
 ###################################################
 ## Setup for the radio:
@@ -183,16 +184,12 @@ while True:
 
                 packedReceivedImage = str(messageComponents[2])
                 messageSender = int(messageComponents[3])
-                if encryptable:
-                    codeString = messageComponents[4]
+                codeString = messageComponents[4] if encryptable else ""
 
                 messageComplete = True
             if "repeat" in message:
                 repeatIndex = int(message.split("_")[2])
-                if encryptable:
-                    sendMessage("send_" + messageRecipient + "_" + str(repeatIndex) + "_" + messageConstruct[repeatIndex] + "_" + codeString)
-                else:
-                    sendMessage("send_" + messageRecipient + "_" + str(repeatIndex) + "_" + messageConstruct[repeatIndex])
+                sendMessage("send_" + messageRecipient + "_" + str(repeatIndex) + "_" + messageConstruct[repeatIndex] + ("_" + codeString if encryptable else ""))
             if "wrong" in message:
                 wrongMessage = True
         if "known" in message:
@@ -205,43 +202,34 @@ while True:
 
             ledImages.append(unpackImage(packedNewImage))
         if "encrypt" in message:
-            if int(message.split("_")[1])>0:
-                encryptable = True
-            else:
-                encryptable = False
+            encryptable = int(message.split("_")[1]) > 0
         if "autoEncrypt" in message:
-            if int(message.split("_")[1])>0:
-                autoEncryptable = True
-            else:
-                autoEncryptable = False
+            autoEncryptable = int(message.split("_")[1]) > 0
         if "recipient" in message:
-            if int(message.split("_")[1])>0:
-                allowRecipient = True
-            else:
-                allowRecipient = False
+            allowRecipient = int(message.split("_")[1]) > 0
         if "complete" in message:
             outputMessage = [[],[],[],[],[]]
-        if not allowRecipient:
-            if "receive" in message:
-                messageComponents = message.split("_")
+        if "receive" in message and not allowRecipient:
+            messageComponents = message.split("_")
 
-                packedReceivedImage = str(messageComponents[2])
-                messageSender = int(messageComponents[3])
-                if encryptable:
-                    codeString = messageComponents[4]
+            packedReceivedImage = str(messageComponents[2])
+            messageSender = int(messageComponents[3])
+            if encryptable:
+                codeString = messageComponents[4]
 
-                messageComplete = True
+            messageComplete = True
 
 
     # When a full message has been received
     if messageComplete:
-        # for i in range(len(pitchList)):
-        #     if wrongMessage:
-        #         music.pitch(pitchList[(len(pitchList)-1)-i]*100)
-        #     else:
-        #         music.pitch(pitchList[i]*100)
-        #     sleep(150)
-        # music.stop()
+        if shouldBeep:
+            for i, pitch in enumerate(pitchList):
+                if wrongMessage:
+                    music.pitch(pitchList[(len(pitchList)-1)-i]*100)
+                else:
+                    music.pitch(pitch*100)
+                sleep(150)
+            music.stop()
         
         outputMessage = unpackImage(packedReceivedImage)
         code = list(codeString)
@@ -253,30 +241,26 @@ while True:
             inputPress = 0
             analysisInProgress = True
             if autoEncryptable:
-                    analysisInProgress = False
+                analysisInProgress = False
             correctInput = True
             while analysisInProgress:
                 if button_a.was_pressed():
                     display.show("A")
                     sleep(500)
                     display.clear()
-                    if int(code[inputPress])>1:
+                    if int(code[inputPress]) > 1:
                         correctInput = False
                         analysisInProgress = False
-                    inputPress +=1
-                    for i in range(inputPress):
-                        if int(code[i])>0:
-                            for j in range(5):
-                                display.set_pixel(i,j,9)
-                        else:
-                            display.set_pixel(i,2,9)
+
                 if button_b.was_pressed():
                     display.show("B")
                     sleep(500)
                     display.clear()
-                    if int(code[inputPress])<1:
+                    if int(code[inputPress]) < 1:
                         correctInput = False
                         analysisInProgress = False
+
+                if button_a.is_pressed() or button_b.is_pressed():
                     inputPress +=1
                     for i in range(inputPress):
                         if int(code[i])>0:
@@ -284,8 +268,10 @@ while True:
                                 display.set_pixel(i,j,9)
                         else:
                             display.set_pixel(i,2,9)
+                
                 if inputPress > 4:
                     analysisInProgress = False
+
             if correctInput:
                 outputMessage = createEncryption(outputMessage)
                 encryptImage(outputMessage)
@@ -294,13 +280,11 @@ while True:
                 sleep(1000)
                 display.show(int(messageSender)+1)
                 resetMicrobitTime = True
-                
             else:
                 display.clear()
                 display.show(Image.NO)
                 sleep(2000)
                 resetMicrobitTime = True
-                
         else:
             sleep(4000)
             display.show(Image.ARROW_W)

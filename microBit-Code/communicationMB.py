@@ -125,11 +125,13 @@ while True:
             if 'replaceM' in uartmessage:
                 for i in range(5):
                     messageConstruct[i] = uartmessage.split("_")[3].split(":")[i]
+                ######################################################## TODO ########################################################
                 sendOnPermitted = True
                 for i in range(3):
                     sendRadioMessage(recipientName + "_wrong")
             if 'replaceR' in uartmessage:
                 recipientName = uartmessage.split("_")[3]
+                ######################################################## TODO ########################################################
                 sendOnPermitted = True
             
         # Listen for radio input
@@ -159,18 +161,10 @@ while True:
                 for i, generatedImage in enumerate(generatedImages):
                     sendRadioMessage("newImg_" + str(i) + "_" + generatedImage)
 
-                if encryptable:
-                    sendRadioMessage("encrypt_1")
-                else:
-                    sendRadioMessage("encrypt_0")
-                if autoEncryptable:
-                    sendRadioMessage("autoEncrypt_1")
-                else:
-                    sendRadioMessage("autoEncrypt_0")
-                if allowRecipient:
-                    sendRadioMessage("recipient_1")
-                else:
-                    sendRadioMessage("recipient_0")
+                sendRadioMessage("encrypt_" + ("1" if encryptable else "0"))
+                sendRadioMessage("autoEncrypt_" + ("1" if autoEncryptable else "0"))
+                sendRadioMessage("recipient_" + ("1" if allowRecipient else "0"))
+
             if "send" in message:
                 messageComponents = message.split("_")
 
