@@ -120,6 +120,7 @@ class MicrobitService {
         if (message.startsWith("debug") || message.startsWith("echo")) {
             console.log(message);
             
+            return;
         }
 
         if (this.lastMessage != "" && message.toString().match(this.lastMessage.toString()) && this.lastMessage != "lc") {
@@ -187,7 +188,7 @@ class MicrobitService {
                     // setUpChanger(messageSender, messageReceiver, messageString)
                 } else {
                     console.log("Show message in log!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    this.writeToMB("ready");
+                    this.writeToMB(`sendMessage_${messageSender}_${messageReceiver}_${packImage(messageImage)}`);
                     setTimeout(() => this.resetValues(), 2000);
                 }
             }

@@ -58,8 +58,11 @@ def unpackImage(payload):
     ]
 
 def sendRadioMessage(message):
-    writeToComputer("debugSm_" + message) # sm: send message
+    log("sm_" + message) # sm: send message
     radio.send(message)
+
+def log(message):
+    writeToComputer("debug_" + message) # debug: log message
 
 writeToComputer("lc") # Lost connection
 ###################################################
@@ -86,12 +89,11 @@ while True:
                     writeToComputer("nu_" + str(i) + "_" + str(known).split("'")[1])
             if 'nmComp' in uartmessage:      # If all of the message has been received
                 uartOver = True
-            if 'ready' in uartmessage:
+            if 'sendMessage' in uartmessage:
+                senderName = uartmessage.split("_")[3]
+                recipientName = uartmessage.split("_")[4]
+                packedImage = uartmessage.split("_")[5]
                 sendOnPermitted = True
-                if not allowRecipient:
-                    receiveFromKnown = []
-                    for i, known in enumerate(knownMicrobits):
-                        receiveFromKnown.append([known, False])
                 uartOver = True
             if 'newImg' in uartmessage:
                 imageIndex = len(generatedImages)
@@ -122,22 +124,11 @@ while True:
             if 'noRecipient' in uartmessage:
                 allowRecipient = False
                 updateState("recipient", "0")
-            if 'replaceM' in uartmessage:
-                for i in range(5):
-                    messageConstruct[i] = uartmessage.split("_")[3].split(":")[i]
-                ######################################################## TODO ########################################################
-                sendOnPermitted = True
-                for i in range(3):
-                    sendRadioMessage(recipientName + "_wrong")
-            if 'replaceR' in uartmessage:
-                recipientName = uartmessage.split("_")[3]
-                ######################################################## TODO ########################################################
-                sendOnPermitted = True
             
         # Listen for radio input
         message = radio.receive()
         if message:
-            writeToComputer("debugRm_" + message) # rm: received message
+            log("rm_" + message) # rm: received message
 
             if "hello" in message:
                 microbitID = str(message.split("_")[0])     # get the id of the microbit
@@ -173,7 +164,7 @@ while True:
                 senderId = str(messageComponents[0])
                 senderName = senderId
                 recipientId = int(messageComponents[2])
-                recipientName = str(knownMicrobits[recipientId]).split("'")[1]
+                recipientName = str(knownMicrobits[recipientId]).split("'")[1] if recipientId != -1 else "ALL"
                 packedImage = str(messageComponents[3])
                 receivedImage = unpackImage(str(messageComponents[3]))
 

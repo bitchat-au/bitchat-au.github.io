@@ -214,10 +214,12 @@ while True:
 
             packedReceivedImage = str(messageComponents[2])
             messageSender = int(messageComponents[3])
+
             if encryptable:
                 codeString = messageComponents[4]
 
-            messageComplete = True
+            if messageSender != int(idNumber):
+                messageComplete = True
 
 
     # When a full message has been received
@@ -495,7 +497,7 @@ while True:
         sendAnimation()
         sleep(500)
 
-        messageRecipient = str(knownRecipientList[recipientIndex]) if allowRecipient else "0"
+        messageRecipient = str(knownRecipientList[recipientIndex]) if allowRecipient else "-1"
         sendMessage("send_" + messageRecipient + "_" + str(packImage(outputMessage)) + ("_" + codeString if encryptable else ""))
 
         recipientIndex = 0
