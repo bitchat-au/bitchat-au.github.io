@@ -21,6 +21,7 @@ sendOnPermitted = False
 encryptable = False
 autoEncryptable = False
 allowRecipient = False
+shouldBeep = False
 encryptionCode = ""
 receiveFromKnown = []
 packedImage = ""
@@ -40,8 +41,15 @@ radiostart = False
 def writeToComputer(message):
     print("#" + str(message) + "&")
 
-def updateState(code, state):
-    sendRadioMessage(code + "_" + state)
+def broadcastSettings():
+    # settings_| isEncryptable |_| autoEncrypt |_| allowRecipient |_| shouldBeep |
+    sendRadioMessage(
+        "settings_" +
+        ("1" if encryptable else "0") + "_" +
+        ("1" if autoEncryptable else "0") + "_" +
+        ("1" if allowRecipient else "0") + "_" +
+        ("1" if shouldBeep else "0")
+    )
 
 def packImage(matrix):
     """Converts a 5x5 matrix into a 5-char alphanumeric string (A-Z, 0-5)."""
@@ -106,24 +114,18 @@ while True:
             if 'knownImg' in uartmessage:
                 imageIndex = len(generatedImages)
                 generatedImages.append(uartmessage.split("_")[3])
-            if 'yesEncrypt' in uartmessage:
-                encryptable = True
-                updateState("encrypt", "1")
-            if 'noEncrypt' in uartmessage:
-                encryptable = False
-                updateState("encrypt", "0")
-            if 'yesAutoEncrypt' in uartmessage:
-                autoEncryptable = True
-                updateState("autoEncrypt", "1")
-            if 'noAutoEncrypt' in uartmessage:
-                autoEncryptable = False
-                updateState("autoEncrypt", "0")
-            if 'yesRecipient' in uartmessage:
-                allowRecipient = True
-                updateState("recipient", "1")
-            if 'noRecipient' in uartmessage:
-                allowRecipient = False
-                updateState("recipient", "0")
+            if 'settings' in uartmessage:
+                encryptable = uartmessage.split("_")[3] == "1"
+                autoEncryptable = uartmessage.split("_")[4] == "1"
+                allowRecipient = uartmessage.split("_")[5] == "1"
+                shouldBeep = uartmessage.split("_")[6] == "1"
+                broadcastSettings()
+
+            if 'forgetAll' in uartmessage:
+                knownMicrobits = []
+                generatedImages = []
+                sendRadioMessage("reintroduce")
+                writeToComputer("mbc_0")   # mbc: micro:bit count
             
         # Listen for radio input
         message = radio.receive()
@@ -152,9 +154,7 @@ while True:
                 for i, generatedImage in enumerate(generatedImages):
                     sendRadioMessage("newImg_" + str(i) + "_" + generatedImage)
 
-                sendRadioMessage("encrypt_" + ("1" if encryptable else "0"))
-                sendRadioMessage("autoEncrypt_" + ("1" if autoEncryptable else "0"))
-                sendRadioMessage("recipient_" + ("1" if allowRecipient else "0"))
+                broadcastSettings()
 
             if "send" in message:
                 messageComponents = message.split("_")
@@ -201,11 +201,6 @@ while True:
                     messageUnderConstruction = False
                     sendOnPermitted = False
                 uartOver = False
-            if "lostImg" in message:
-                senderId = str(message.split("_")[0])
-                imageIndex = int(message.split("_")[2])
-                for j in range(5):
-                    sendRadioMessage("newImg_" + str(imageIndex) + "_" + str(j) + "_" + generatedImages[imageIndex][j])
 
         if sendOnPermitted:
             senderNumber = 0

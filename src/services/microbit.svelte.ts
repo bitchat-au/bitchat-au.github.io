@@ -7,6 +7,19 @@ const filters = [
 
 const newImages: string[] = [];
 
+type BooleanInt = 0 | 1;
+interface MessagesToMicrobit {
+    nmComp: [],
+    sendMessage: [senderName: string, recipientName: string, packedImage: string],
+    newImg: [packedImage: string],
+    known: [microbitName: string],
+    knownImg: [packedImage: string],
+    settings: [encryptable: BooleanInt, autoEncryptable: BooleanInt, allowRecipient: BooleanInt, shouldBeep: BooleanInt],
+    forgetAll: [],
+    start: [],
+    count: []
+}
+
 class MicrobitService {
     private static _instance: MicrobitService;
     public static get instance(): MicrobitService {
@@ -24,12 +37,7 @@ class MicrobitService {
     private knownMicrobits: Array<{ name: string, index: number }> = [];
     private messageConstruct: string[] = [];
 
-    private newMessageList: [[boolean, string], [boolean, string], [boolean, string], [boolean, string], [boolean, string], [string, string]] = [[false, ""], [false, ""], [false, ""], [false, ""], [false, ""], ["", ""]];
-    // private lastMessageStats: string[] = ["", "", ""];
-    private lastMessageStats: { receiver: string, sender: string, message: string[] } = { receiver: "", sender: "", message: ["", "", "", "", ""] };
     private lastMessage: string = "";
-    private lastResetTime: number = new Date().getTime() / 1000;
-    private messageIndex: number = 0;
     private messageLog: string[] = [];
 
     private constructor() { }
@@ -93,33 +101,24 @@ class MicrobitService {
     }
 
     private checkForNewUser(newUser: string) {
-        console.log("checking " + newUser)
-        let isNew = true;
+        let exists = !!this.knownMicrobits.find(mb => mb.name === newUser);
+        if (exists) return;
 
-        for (let i = 0; i < this.knownMicrobits.length; i++) {
-            if (this.knownMicrobits[i].name == newUser) {
-                isNew = false;
-            }
-        }
+        let mbIndex = this.knownMicrobits.length
+        this.knownMicrobits.push({ name: newUser, index: mbIndex });
+        localStorage.setItem("knownMicrobits", JSON.stringify(this.knownMicrobits));
 
-        if (isNew) {
-            let mbIndex = this.knownMicrobits.length
-            this.messageIndex += 1;
-            this.knownMicrobits.push({ name: newUser, index: mbIndex });
-            localStorage.setItem("knownMicrobits", JSON.stringify(this.knownMicrobits));
-
-            console.log("Show image icon!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            // createBlockId(mbIndex);
-        }
-        console.log(this.knownMicrobits)
+        console.error("Show image icon!!!!!!!!!!!!!!!!!!!!");
+        // createBlockId(mbIndex);
+        console.log("Known microbits:", this.knownMicrobits)
     }
 
     public checkMessage(message: string) {
         //console.log("nm = " + message.toString())
         //console.log("lm = " + lastMessage.toString())
         if (message.startsWith("debug") || message.startsWith("echo")) {
-            console.log(message);
-            
+            console.debug(message);
+
             return;
         }
 
@@ -128,128 +127,114 @@ class MicrobitService {
             return;
 
         }
+
         this.lastMessage = message;
         let messageCode = message.split("_")[0];
 
-        
-
-        if (messageCode == "nu") { // new user
-            let mbID = message.split("_")[2]
-            if (mbID.length == 5) {
-
+        switch (messageCode) {
+            case "nu":
+                let mbID = message.split("_")[2]
                 this.checkForNewUser(mbID);
-            }
-        }
-        if (messageCode == "nm") { // new message
-            // "nm_" + senderId + "_" + str(recipientName) + "_" + packedImage + ("_" + encryptionCode if encryptable else "")
-            const messageParts = message.split("_");
-            
-            let messageSender = messageParts[1];
-            let messageReceiver = messageParts[2];
-            let messageImage = unpackImage(messageParts[3]);
-
-            console.log("New message received", messageImage);
-            console.log("complete")
-    
-            let messageString = messageImage.map(row => row.join(''));
-
-            let timeDifference = new Date().getTime() / 1000 - this.lastResetTime
-            //console.log(timeDifference)
-
-
-            if (timeDifference > 12) {
-                this.lastResetTime = new Date().getTime() / 1000;
-                console.log(timeDifference)
-                console.log("checking")
-                this.lastMessageStats = { receiver: messageReceiver, sender: messageSender, message: messageString };
-
-                let messageAsString = "";
-                for (let i = 0; i < messageString.length; i++) {
-                    if (i > 0) {
-                        messageAsString += "-"
-                    }
-                    messageAsString += messageString[i]
+                break;
+            case "nm":
+                this.handleNewMessage(message);
+                break;
+            case "mbc":
+                if (this.knownMicrobits.length != Number(message.split("_")[1])) {
+                    console.log("microbit count mismatch, rebuilding connection")
+                    this.writeToMB("count");
                 }
-                let messageForLog = messageSender + "_" + messageReceiver + "_" + messageAsString
-                this.messageLog.push(messageForLog)
-                localStorage.setItem("messageLog", JSON.stringify(this.messageLog));
-
-                console.log({messageSender, messageReceiver, messageString});
-                
-
-                if (features.isActive(Features.Hacker)) {
-                    console.log("Show hacking menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    this.writeToMB("nmComp");
-                    // setUpHacking(messageSender, messageReceiver, messageString)
-                } else if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
-                    console.log("let it start!")
-                    this.writeToMB("nmComp");
-                    console.log("Show routing menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    // setUpChanger(messageSender, messageReceiver, messageString)
-                } else {
-                    console.log("Show message in log!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    this.writeToMB(`sendMessage_${messageSender}_${messageReceiver}_${packImage(messageImage)}`);
-                    setTimeout(() => this.resetValues(), 2000);
-                }
-            }
+                break;
+            case "lc":
+                console.log("Lost connection!")
+                this.writeToMB("start");
+                this.rebuildConnection();
+                break;
+            default:
+                console.log("Unknown message: " + message);
+                break;
         }
-        if (messageCode == "mbc") { // microBit count
-            //console.log(knownMicrobits.length + " _ vs _ " + message.split("_")[1])
-            if (this.knownMicrobits.length != Number(message.split("_")[1])) {
-                console.log("something went wrong")
-                this.writeToMB("count");
-            }
+    }
 
-        }
+    private handleNewMessage(message: string) {
+        // "nm_" + senderId + "_" + str(recipientName) + "_" + packedImage + ("_" + encryptionCode if encryptable else "")
+        const messageParts = message.split("_");
 
-        if (messageCode == "lc") { // microBit count
-            //console.log(this.knownMicrobits.length + " _ vs _ " + message.split("_")[1])
-            console.log("Lost connection!")
-            this.writeToMB("start");
-            this.rebuildConnection()
+        let messageSender = messageParts[1];
+        let messageReceiver = messageParts[2];
+        let messageImage = unpackImage(messageParts[3]);
 
+        console.log("New message received", messageImage);
+
+        let messageAsString = messageImage.map(row => row.join('')).join("-");
+        let messageForLog = messageSender + "_" + messageReceiver + "_" + messageAsString
+        this.messageLog.push(messageForLog)
+        localStorage.setItem("messageLog", JSON.stringify(this.messageLog));
+
+        console.log({ messageSender, messageReceiver, messageImage });
+
+
+        if (features.isActive(Features.Hacker)) {
+            console.log("Show hacking menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            this.writeToMB("nmComp");
+            // setUpHacking(messageSender, messageReceiver, messageString)
+        } else if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
+            console.log("let it start!")
+            this.writeToMB("nmComp");
+            console.log("Show routing menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            // setUpChanger(messageSender, messageReceiver, messageString)
+        } else {
+            console.log("Show message in log!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            this.writeToMB("sendMessage", messageSender, messageReceiver, packImage(messageImage));
         }
     }
 
     public rebuildConnection() {
         console.log("rebuilding")
-        for (let i = 0; i < this.knownMicrobits.length; i++) {
-            this.writeToMB("known_" + this.knownMicrobits[i].name)
-        }
-        if (newImages.length > 0) {
-            for (let i = 0; i < newImages.length; i++) {
-                this.writeToMB("knownImg_" + packImageString(newImages[i]))
-            }
-        }
-        if (features.isActive(Features.Encryption)) {
-            this.writeToMB("yesEncrypt")
-        }
-        if (features.isActive(Features.Router)) {
-            this.writeToMB("yesRecipient")
-        }
-    }
 
-    public resetValues() {
-        for (let i = 0; i < 5; i++) {
-            this.newMessageList[i][0] = false;
-            this.newMessageList[i][1] = "";
+        console.log({
+            knownMicrobits: this.knownMicrobits,
+            knownImages: newImages,
+            encryption: features.isActive(Features.Encryption),
+            router: features.isActive(Features.Router)
+        });
+
+
+        for (let i = 0; i < this.knownMicrobits.length; i++) {
+            this.writeToMB("known", this.knownMicrobits[i].name)
         }
-        this.newMessageList[5][0] = "";
-        this.newMessageList[5][1] = "";
-        this.lastResetTime = new Date().getTime() / 1000;
+        if (this.knownMicrobits.length == 0) {
+            this.writeToMB("forgetAll");
+        }
+
+        for (let i = 0; i < newImages.length; i++) {
+            this.writeToMB("knownImg", packImageString(newImages[i]))
+        }
+
+        this.writeToMB(
+            "settings",
+            features.isActive(Features.Encryption) ? 1 : 0,
+            features.isActive(Features.AutoEncryption) ? 1 : 0,
+            features.isActive(Features.Router) ? 1 : 0,
+            1
+        );
     }
 
     /**
-     * Send a string to the micro:bit a-b-b-a-a
-     * If the connection has not been established by the start of the program, we establish it here.
-     * @param {str} message   The message to transfer to the microbit
+     * Send a string to the micro:bit
+     * If the connection has not been established yet, it will log an error and return.
+     * @param type The type of message to send, e.g. "newImg"
+     * @param args The arguments to send with the message, e.g. the image string
      */
-    async writeToMB(message: string) {
+    async writeToMB<T extends keyof MessagesToMicrobit>(type: T, ...args: MessagesToMicrobit[T]) {
         //event.preventDefault();
         if (!this.port || !this.writer) {
             console.error("Port is not initialized");
             return;
         }
+
+        const message = type + "_" + args.join("_");
+
         // All messages sent starts with "__" and ends with "_" to allow the micro:bit to decode the message along with relevant meta data
         const data = new TextEncoder().encode("__" + message + "_" + '\n');
         await this.writer.write(data);
@@ -261,7 +246,7 @@ class MicrobitService {
      * @param image Image string e.g. "1000101010001000101010001" (10001  01010  00100  01010  10001)
      */
     async writeImageToMB(image: string) {
-        this.writeToMB("newImg_" + packImageString(image));
+        this.writeToMB("newImg", packImageString(image));
     }
 }
 

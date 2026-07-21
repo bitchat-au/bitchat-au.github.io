@@ -165,6 +165,25 @@ def unpackImage(payload):
         for c in payload
     ]
 
+def checkRadio():
+    global outputMessage, codeString, readyToSend, encryptingMessage, choosingContent
+
+    radioMessage = radio.receive()
+    if radioMessage:
+        if id in radioMessage:
+            display.clear()
+            display.show(int(idNumber)+1)
+            outputMessage = []
+            codeString = ""
+
+            # Reset states
+            readyToSend = False
+            encryptingMessage = False
+            choosingContent = False
+
+        if "settings" in radioMessage or "known" in radioMessage or "newImg" in radioMessage:
+            machine.reset()
+
 ###################################################
 ## Loop
 ###################################################
@@ -192,6 +211,11 @@ while True:
                 sendMessage("send_" + messageRecipient + "_" + str(repeatIndex) + "_" + messageConstruct[repeatIndex] + ("_" + codeString if encryptable else ""))
             if "wrong" in message:
                 wrongMessage = True
+        if "reintroduce" in message:
+            known = False
+            lastKnownPing = time.ticks_ms() - ((10 - int(idNumber)) * 100) # Offset the time so that the micro:bits don't all respond at once, and so that the micro:bits with the lowest id respond first
+            idNumber = "0"
+            display.clear()
         if "known" in message:
             knownRecipients = int(message.split("_")[1])
         if "newImg" in message:
@@ -201,12 +225,12 @@ while True:
             packedNewImage = message.split("_")[2]
 
             ledImages.append(unpackImage(packedNewImage))
-        if "encrypt" in message:
-            encryptable = int(message.split("_")[1]) > 0
-        if "autoEncrypt" in message:
-            autoEncryptable = int(message.split("_")[1]) > 0
-        if "recipient" in message:
-            allowRecipient = int(message.split("_")[1]) > 0
+        if "settings" in message:
+            encryptable = message.split("_")[1] == "1"
+            autoEncryptable = message.split("_")[2] == "1"
+            allowRecipient = message.split("_")[3] == "1"
+            shouldBeep = message.split("_")[4] == "1"
+
         if "complete" in message:
             outputMessage = [[],[],[],[],[]]
         if "receive" in message and not allowRecipient:
@@ -235,10 +259,12 @@ while True:
         
         outputMessage = unpackImage(packedReceivedImage)
         code = list(codeString)
-        for i in range(3):
-            sendMessage("complete")
 
         display.show(Image(matrixToImage(outputMessage)))
+
+        sleep(int(idNumber) * 50) # Offset the time so that the micro:bits don't all respond at once, and so that the micro:bits with the lowest id respond first
+        sendMessage("complete")
+        
         if encryptable:
             inputPress = 0
             analysisInProgress = True
@@ -246,23 +272,22 @@ while True:
                 analysisInProgress = False
             correctInput = True
             while analysisInProgress:
-                if button_a.was_pressed():
-                    display.show("A")
+                a_pressed = button_a.was_pressed()
+                b_pressed = button_b.was_pressed()
+
+                if a_pressed and int(code[inputPress]) > 1:
+                    correctInput = False
+                    analysisInProgress = False
+
+                if b_pressed and int(code[inputPress]) < 1:
+                    correctInput = False
+                    analysisInProgress = False
+
+                if a_pressed or b_pressed:
+                    display.show("A" if a_pressed else "B")
                     sleep(500)
                     display.clear()
-                    if int(code[inputPress]) > 1:
-                        correctInput = False
-                        analysisInProgress = False
 
-                if button_b.was_pressed():
-                    display.show("B")
-                    sleep(500)
-                    display.clear()
-                    if int(code[inputPress]) < 1:
-                        correctInput = False
-                        analysisInProgress = False
-
-                if button_a.is_pressed() or button_b.is_pressed():
                     inputPress +=1
                     for i in range(inputPress):
                         if int(code[i])>0:
@@ -322,14 +347,7 @@ while True:
         choosingContent = True;
 
     while choosingContent:
-        message = radio.receive()
-        if message:
-            if id in message:
-                display.clear()
-                display.show(int(idNumber)+1)
-                choosingContent = False
-            if "encrypt" in message or "known" in message or "newImg" in message:
-                machine.reset()
+        checkRadio()
                 
         if button_a.was_pressed():
             messageNumber -= 1
@@ -371,16 +389,7 @@ while True:
                 choosingContent = False
 
     while encryptingMessage:
-        message = radio.receive()
-        if message:
-            if id in message:
-                display.clear()
-                display.show(int(idNumber)+1)
-                outputMessage = []
-                code = []
-                encryptingMessage = False
-            if "encrypt" in message or "known" in message or "newImg" in message:
-                machine.reset()
+        checkRadio()
             
         if button_a.was_pressed():
             if len(code)<1:
@@ -437,17 +446,7 @@ while True:
             readyToSend = True
     
             while readyToSend:
-                message = radio.receive()
-                if message:
-                    if id in message:
-                        display.clear()
-                        display.show(int(idNumber)+1)
-                        outputMessage = []
-                        codeString = ""
-                        readyToSend = False
-                        encryptingMessage = False
-                    if "encrypt" in message or "known" in message or "newImg" in message:
-                        machine.reset()
+                checkRadio()
                         
                 if pin_logo.is_touched():
                     display.show(Image.ARROW_E)
@@ -462,17 +461,7 @@ while True:
                     readyToSend = False
                         
     while choosingRecipient:
-        message = radio.receive()
-        if message:
-            if id in message:
-                display.clear()
-                display.show(int(idNumber)+1)
-                outputMessage = []
-                codeString = ""
-                readyToSend = False
-                encryptingMessage = False
-            if "encrypt" in message or "known" in message or "newImg" in message:
-                machine.reset()
+        checkRadio()
                 
         if button_a.was_pressed():
             recipientIndex -= 1
