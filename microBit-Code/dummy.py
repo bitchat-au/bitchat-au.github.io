@@ -1,4 +1,4 @@
-radioChannel = 1        # all microbits in a group should be on the same radio channel
+radioChannel = 1  # all microbits in a group should be on the same radio channel
 
 # Imports go at the top
 from microbit import *
@@ -9,57 +9,127 @@ import random
 import music
 import time
 
-idNumber = "0"
-messageNumber = 0
-recipientIndex = 0
-knownRecipients = 0
-knownRecipientList = []
+id_number = "0"
+device_name = ""
+message_number = 0
+recipient_index = 0
+known_recipients = 0
+known_recipient_list = []
 encryptable = False
-autoEncryptable = False
-allowRecipient = False
-outputMessage = []
-wrongMessage = False
-pitchList = [6,8,10,12]
-lastRecordedMessage = 0
-resetMicrobitTime = False
+auto_encryptable = False
+allow_recipient = False
+output_message = []
+wrong_message = False
+pitch_list = [6, 8, 10, 12]
+last_recorded_message = 0
+reset_microbit_time = False
 
-ledImages = [[[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[1,0,0,0,1],[0,1,1,1,0]], 
-            [[0,0,0,0,0],[0,1,0,1,0],[0,0,0,0,0],[0,1,1,1,0],[1,0,0,0,1]]];
+led_images = [
+    [
+        [0, 0, 0, 0, 0],
+        [0, 1, 0, 1, 0],
+        [0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1],
+        [0, 1, 1, 1, 0],
+    ],
+    [
+        [0, 0, 0, 0, 0],
+        [0, 1, 0, 1, 0],
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [1, 0, 0, 0, 1],
+    ],
+]
 
-sendImages = [[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,1,0,0]],
-             [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,1,0,0],[0,1,1,1,0]],
-             [[0,0,0,0,0],[0,0,0,0,0],[0,0,1,0,0],[0,1,1,1,0],[1,0,1,0,1]],
-             [[0,0,0,0,0],[0,0,1,0,0],[0,1,1,1,0],[1,0,1,0,1],[0,0,1,0,0]],
-             [[0,0,1,0,0],[0,1,1,1,0],[1,0,1,0,1],[0,0,1,0,0],[0,0,1,0,0]],
-             [[0,1,1,1,0],[1,0,1,0,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,0,0,0]],
-             [[1,0,1,0,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,0,0,0],[0,0,0,0,0]],
-             [[0,0,1,0,0],[0,0,1,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]],
-             [[0,0,1,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]]
+send_images = [
+    [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+    ],
+    [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+    ],
+    [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+        [1, 0, 1, 0, 1],
+    ],
+    [
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+        [1, 0, 1, 0, 1],
+        [0, 0, 1, 0, 0],
+    ],
+    [
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+        [1, 0, 1, 0, 1],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+    ],
+    [
+        [0, 1, 1, 1, 0],
+        [1, 0, 1, 0, 1],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+    ],
+    [
+        [1, 0, 1, 0, 1],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ],
+    [
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ],
+    [
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ],
+]
 
 ###################################################
 ## Received message structure
 ###################################################
-messageConstructIndex = [False, False, False, False, False]
-messageConstruct = ["", "", "", "", ""]
-messageComplete = False
-messageSender = 0
-messageRecipient = ""
-codeString = ""
-packedReceivedImage = ""
+message_construct_index = [False, False, False, False, False]
+message_construct = ["", "", "", "", ""]
+message_complete = False
+message_sender = 0
+message_recipient = ""
+code_string = ""
+packed_received_image = ""
 
 ###################################################
 ## micro:bit states:
 ###################################################
 known = False
-lastKnownPing = 0
-constructingMessage = False
-choosingContent = False
-choosingRecipient = False
-encryptingMessage = False
-sendingMessage = False
-readyToSend = False
+last_known_ping = 0
+choosing_content = False
+choosing_recipient = False
+encrypting_message = False
+sending_message = False
+ready_to_send = False
 code = []
-shouldBeep = False
+should_beep = False
 
 ###################################################
 ## Setup for the radio:
@@ -67,122 +137,159 @@ shouldBeep = False
 radio.config(group=radioChannel, data_rate=radio.RATE_1MBIT, queue=10, channel=42)
 radio.on()
 
+
 ###################################################
 ## Setup for actual ID
 ###################################################
 def microbit_friendly_name():
+    """Generates a friendly name for the micro:bit based on its unique ID."""
     length = 5
     letters = 5
-    codebook = [['z', 'v', 'g', 'p', 't'],['u', 'o', 'i', 'e', 'a'],['z', 'v', 'g', 'p', 't'],['u', 'o', 'i', 'e', 'a'],['z', 'v', 'g', 'p', 't']]
+    codebook = [
+        ["z", "v", "g", "p", "t"],
+        ["u", "o", "i", "e", "a"],
+        ["z", "v", "g", "p", "t"],
+        ["u", "o", "i", "e", "a"],
+        ["z", "v", "g", "p", "t"],
+    ]
     name = []
 
     # Derive our name from the nrf51822's unique ID
     _, n = struct.unpack("II", machine.unique_id())
-    ld = 1;
-    d = letters;
+    ld = 1
+    d = letters
 
     for i in range(0, length):
-        h = (n % d) // ld;
-        n -= h;
-        d *= letters;
-        ld *= letters;
-        name.insert(0, codebook[i][h]);
+        h = (n % d) // ld
+        n -= h
+        d *= letters
+        ld *= letters
+        name.insert(0, codebook[i][h])
 
-    return "".join(name);
-id = str(microbit_friendly_name())
+    return "".join(name)
+
+
+device_name = str(microbit_friendly_name())
 
 ###################################################
 ## Assisting functions
 ###################################################
 
-# Function to produce the correct message format with id
-def sendMessage(message):
-    radio.send(id + "_" + str(message))
 
-def setImage(imageIndex, imageList):
-    imageString = ""
+# Function to produce the correct message format with id
+def send_message(message_to_send):
+    """Sends a message over the radio with the micro:bit's ID prepended."""
+    radio.send(device_name + "_" + str(message_to_send))
+
+
+def set_image(image_index, image_list):
+    """Returns the image at the specified index from the provided list of images."""
+    image_string = ""
     for i in range(5):
         for j in range(5):
-            if imageList == outputMessage:
-                imageString = imageString + str(imageList[i][j]*9)
+            if image_list == output_message:
+                image_string = image_string + str(image_list[i][j] * 9)
             else:
-                imageString = imageString + str(imageList[imageIndex][i][j]*9)
+                image_string = image_string + str(image_list[image_index][i][j] * 9)
         if i is not 4:
-            imageString = imageString + ":"
-    return imageString
+            image_string = image_string + ":"
+    return image_string
 
-def matrixToImage(matrix):
+
+def matrix_to_image(matrix):
+    """Converts a 5x5 matrix into a string format suitable for display."""
     rows = ["".join(str(int(x) * 9) for x in row) for row in matrix]
     return ":".join(rows)
 
-def setRecipients():
-    knownRecipientList = []
-    for i in range(knownRecipients):
-        if i is not int(idNumber):
-            knownRecipientList.append(i)
-    return knownRecipientList
 
-def sendAnimation():
-    for i in range(len(sendImages)):
-        display.show(Image(setImage(i, sendImages)))
+def set_recipients():
+    """Generates a list of known recipient IDs, excluding the micro:bit's own ID."""
+    global known_recipient_list
+
+    known_recipient_list = []
+    for i in range(known_recipients):
+        if i is not int(id_number):
+            known_recipient_list.append(i)
+    return known_recipient_list
+
+
+def send_animation():
+    """Displays a sending animation on the micro:bit's LED matrix."""
+    for i in range(len(send_images)):
+        display.show(Image(set_image(i, send_images)))
         sleep(100)
     display.clear()
     sleep(100)
 
-def createEncryption(messageList):
-    for j in range(5): # Kolonne
-        if int(code[j])>0: # hvis koden siger jeg skal flippe
-            for k in range(5): # række
-                if messageList[k][j] > 0:
-                    messageList[k][j] = 0
+
+def create_encryption(message_list):
+    """Applies the encryption code to the message list, flipping bits as specified."""
+    for j in range(5):  # Kolonne
+        if int(code[j]) > 0:  # hvis koden siger jeg skal flippe
+            for k in range(5):  # række
+                if message_list[k][j] > 0:
+                    message_list[k][j] = 0
                 else:
-                    messageList[k][j] = 1
-    return messageList
-                    
-def encryptImage(imageList):
+                    message_list[k][j] = 1
+    return message_list
+
+
+def encrypt_image(image_list):
+    """Displays the encrypted image on the micro:bit's LED matrix."""
     sleep(500)
-    for j in range(5): # Kolonne
+    for j in range(5):  # Kolonne
         for l in range(5):
-            display.set_pixel(j,l,0)
-        for k in range(5): # række
-            ledStrength = int(imageList[k][j])
-            if ledStrength<9:
-                ledStrength = ledStrength*9
-            display.set_pixel(j,k,ledStrength)
+            display.set_pixel(j, l, 0)
+        for k in range(5):  # række
+            led_strength = int(image_list[k][j])
+            if led_strength < 9:
+                led_strength = led_strength * 9
+            display.set_pixel(j, k, led_strength)
         sleep(500)
 
-def packImage(matrix):
+
+def pack_image(matrix):
     """Converts a 5x5 matrix into a 5-char alphanumeric string (A-Z, 0-5)."""
     return "".join(
-        chr(v + 65) if v <= 25 else str(v - 26) 
+        chr(v + 65) if v <= 25 else str(v - 26)
         for v in (int("".join(map(str, row)), 2) for row in matrix)
     )
 
-def unpackImage(payload):
+
+def unpack_image(payload):
     """Converts a 5-char alphanumeric string back into a 5x5 matrix."""
     return [
-        [int(bit) for bit in "{:05b}".format(int(c) + 26 if c.isdigit() else ord(c) - 65)] 
+        [
+            int(bit)
+            for bit in "{:05b}".format(int(c) + 26 if c.isdigit() else ord(c) - 65)
+        ]
         for c in payload
     ]
 
-def checkRadio():
-    global outputMessage, codeString, readyToSend, encryptingMessage, choosingContent
 
-    radioMessage = radio.receive()
-    if radioMessage:
-        if id in radioMessage:
+def check_radio():
+    global output_message, code_string, ready_to_send, encrypting_message, choosing_content
+
+    radio_message = radio.receive()
+    if radio_message:
+        if device_name in radio_message:
             display.clear()
-            display.show(int(idNumber)+1)
-            outputMessage = []
-            codeString = ""
+            display.show(int(id_number) + 1)
+            output_message = []
+            code_string = ""
 
             # Reset states
-            readyToSend = False
-            encryptingMessage = False
-            choosingContent = False
+            ready_to_send = False
+            encrypting_message = False
+            choosing_content = False
 
-        if "settings" in radioMessage or "known" in radioMessage or "newImg" in radioMessage:
+        if (
+            "settings" in radio_message
+            or "known" in radio_message
+            or "newImg" in radio_message
+        ):
             machine.reset()
+
 
 ###################################################
 ## Loop
@@ -192,83 +299,95 @@ while True:
     # Listen for radio input
     message = radio.receive()
     if message:
-        if id in message:
+        if device_name in message:
             known = True
             if "number" in message:
-                idNumber = message.split("_")[2]
-                knownRecipients = int(message.split("_")[3])
-                display.show(int(idNumber)+1)
+                id_number = message.split("_")[2]
+                known_recipients = int(message.split("_")[3])
+                display.show(int(id_number) + 1)
             if "receive" in message:
                 messageComponents = message.split("_")
 
-                packedReceivedImage = str(messageComponents[2])
-                messageSender = int(messageComponents[3])
-                codeString = messageComponents[4] if encryptable else ""
+                packed_received_image = str(messageComponents[2])
+                message_sender = int(messageComponents[3])
+                code_string = messageComponents[4] if encryptable else ""
 
-                messageComplete = True
+                message_complete = True
             if "repeat" in message:
-                repeatIndex = int(message.split("_")[2])
-                sendMessage("send_" + messageRecipient + "_" + str(repeatIndex) + "_" + messageConstruct[repeatIndex] + ("_" + codeString if encryptable else ""))
+                repeat_index = int(message.split("_")[2])
+                send_message(
+                    "send_"
+                    + message_recipient
+                    + "_"
+                    + str(repeat_index)
+                    + "_"
+                    + message_construct[repeat_index]
+                    + ("_" + code_string if encryptable else "")
+                )
             if "wrong" in message:
-                wrongMessage = True
+                wrong_message = True
         if "reintroduce" in message:
             known = False
-            lastKnownPing = time.ticks_ms() - ((10 - int(idNumber)) * 100) # Offset the time so that the micro:bits don't all respond at once, and so that the micro:bits with the lowest id respond first
-            idNumber = "0"
+            last_known_ping = time.ticks_ms() - (
+                (10 - int(id_number)) * 100
+            )  # Offset the time so that the micro:bits don't all respond at once, and so that the micro:bits with the lowest id respond first
+            id_number = "0"
             display.clear()
         if "known" in message:
-            knownRecipients = int(message.split("_")[1])
+            known_recipients = int(message.split("_")[1])
         if "newImg" in message:
 
-
-            imageIndex = int(message.split("_")[1]) + 2 # +2 is the offset for the two default images
+            imageIndex = (
+                int(message.split("_")[1]) + 2
+            )  # +2 is the offset for the two default images
             packedNewImage = message.split("_")[2]
 
-            ledImages.append(unpackImage(packedNewImage))
+            led_images.append(unpack_image(packedNewImage))
         if "settings" in message:
             encryptable = message.split("_")[1] == "1"
-            autoEncryptable = message.split("_")[2] == "1"
-            allowRecipient = message.split("_")[3] == "1"
-            shouldBeep = message.split("_")[4] == "1"
+            auto_encryptable = message.split("_")[2] == "1"
+            allow_recipient = message.split("_")[3] == "1"
+            should_beep = message.split("_")[4] == "1"
 
         if "complete" in message:
-            outputMessage = [[],[],[],[],[]]
-        if "receive" in message and not allowRecipient:
+            output_message = [[], [], [], [], []]
+        if "receive" in message and not allow_recipient:
             messageComponents = message.split("_")
 
-            packedReceivedImage = str(messageComponents[2])
-            messageSender = int(messageComponents[3])
+            packed_received_image = str(messageComponents[2])
+            message_sender = int(messageComponents[3])
 
             if encryptable:
-                codeString = messageComponents[4]
+                code_string = messageComponents[4]
 
-            if messageSender != int(idNumber):
-                messageComplete = True
-
+            if message_sender != int(id_number):
+                message_complete = True
 
     # When a full message has been received
-    if messageComplete:
-        if shouldBeep:
-            for i, pitch in enumerate(pitchList):
-                if wrongMessage:
-                    music.pitch(pitchList[(len(pitchList)-1)-i]*100)
+    if message_complete:
+        if should_beep:
+            for i, pitch in enumerate(pitch_list):
+                if wrong_message:
+                    music.pitch(pitch_list[(len(pitch_list) - 1) - i] * 100)
                 else:
-                    music.pitch(pitch*100)
+                    music.pitch(pitch * 100)
                 sleep(150)
             music.stop()
-        
-        outputMessage = unpackImage(packedReceivedImage)
-        code = list(codeString)
 
-        display.show(Image(matrixToImage(outputMessage)))
+        output_message = unpack_image(packed_received_image)
+        code = list(code_string)
 
-        sleep(int(idNumber) * 50) # Offset the time so that the micro:bits don't all respond at once, and so that the micro:bits with the lowest id respond first
-        sendMessage("complete")
-        
+        display.show(Image(matrix_to_image(output_message)))
+
+        sleep(
+            int(id_number) * 50
+        )  # Offset the time so that the micro:bits don't all respond at once, and so that the micro:bits with the lowest id respond first
+        send_message("complete")
+
         if encryptable:
             inputPress = 0
             analysisInProgress = True
-            if autoEncryptable:
+            if auto_encryptable:
                 analysisInProgress = False
             correctInput = True
             while analysisInProgress:
@@ -288,111 +407,113 @@ while True:
                     sleep(500)
                     display.clear()
 
-                    inputPress +=1
+                    inputPress += 1
                     for i in range(inputPress):
-                        if int(code[i])>0:
+                        if int(code[i]) > 0:
                             for j in range(5):
-                                display.set_pixel(i,j,9)
+                                display.set_pixel(i, j, 9)
                         else:
-                            display.set_pixel(i,2,9)
-                
+                            display.set_pixel(i, 2, 9)
+
                 if inputPress > 4:
                     analysisInProgress = False
 
             if correctInput:
-                outputMessage = createEncryption(outputMessage)
-                encryptImage(outputMessage)
+                output_message = create_encryption(output_message)
+                encrypt_image(output_message)
                 sleep(4000)
                 display.show(Image.ARROW_W)
                 sleep(1000)
-                display.show(int(messageSender)+1)
-                resetMicrobitTime = True
+                display.show(int(message_sender) + 1)
+                reset_microbit_time = True
             else:
                 display.clear()
                 display.show(Image.NO)
                 sleep(2000)
-                resetMicrobitTime = True
+                reset_microbit_time = True
         else:
             sleep(4000)
             display.show(Image.ARROW_W)
             sleep(1000)
-            display.show(int(messageSender)+1)
-            resetMicrobitTime = True
+            display.show(int(message_sender) + 1)
+            reset_microbit_time = True
 
-    if resetMicrobitTime:
+    if reset_microbit_time:
         sleep(2000)
         display.clear()
-        display.show(int(idNumber)+1)
-        outputMessage = []
+        display.show(int(id_number) + 1)
+        output_message = []
         code = []
-        wrongMessage = False
-        codeString = ""
-        messageSender = 0
-        packedReceivedImage = []
-        messageComplete = False
-        lastRecordedMessage = time.ticks_ms()
-        resetMicrobitTime = False
-    
-    if not known and time.ticks_ms() - lastKnownPing > 1000:
-        sendMessage("hello")
-        lastKnownPing = time.ticks_ms()
+        wrong_message = False
+        code_string = ""
+        message_sender = 0
+        packed_received_image = []
+        message_complete = False
+        last_recorded_message = time.ticks_ms()
+        reset_microbit_time = False
+
+    if not known and time.ticks_ms() - last_known_ping > 1000:
+        send_message("hello")
+        last_known_ping = time.ticks_ms()
 
     # When starting a new message
     if pin_logo.is_touched():
-        outputMessage = []
+        output_message = []
         code = []
-        display.show(Image('99999:''99099:''90909:''90009:''99999'))   # show envelope image
+        display.show(
+            Image("99999:" "99099:" "90909:" "90009:" "99999")
+        )  # show envelope image
         sleep(1000)
-        display.show(Image(setImage(0, ledImages)))
-        choosingContent = True;
+        display.show(Image(set_image(0, led_images)))
+        choosing_content = True
 
-    while choosingContent:
-        checkRadio()
-                
+    while choosing_content:
+        check_radio()
+
         if button_a.was_pressed():
-            messageNumber -= 1
+            message_number -= 1
 
-            if messageNumber < 0:
-                messageNumber = len(ledImages)-1
+            if message_number < 0:
+                message_number = len(led_images) - 1
 
-            display.show(Image(setImage(messageNumber, ledImages)))
-            print(messageNumber)
+            display.show(Image(set_image(message_number, led_images)))
+            print(message_number)
 
         if button_b.was_pressed():
-            messageNumber += 1
-            if messageNumber > len(ledImages)-1:
-                messageNumber = 0
+            message_number += 1
+            if message_number > len(led_images) - 1:
+                message_number = 0
 
-            display.show(Image(setImage(messageNumber, ledImages)))
-            print(messageNumber)
+            display.show(Image(set_image(message_number, led_images)))
+            print(message_number)
 
         if pin_logo.is_touched():
-            outputMessage = [[],[],[],[],[]]
+            output_message = [[], [], [], [], []]
             for i in range(5):
                 for j in range(5):
-                    outputMessage[i].append(ledImages[messageNumber][i][j])
+                    output_message[i].append(led_images[message_number][i][j])
             if encryptable:
-                display.show(Image('00000:''09000:''90999:''09009:''00000'))
+                display.show(Image("00000:" "09000:" "90999:" "09009:" "00000"))
                 sleep(1000)
                 display.clear()
-                encryptingMessage = True
-                choosingContent = False
-            elif allowRecipient:
+                encrypting_message = True
+                choosing_content = False
+            elif allow_recipient:
                 display.show(Image.ARROW_E)
                 sleep(1000)
-                knownRecipientList = setRecipients()
-                display.show(knownRecipientList[0]+1)
-                choosingRecipient = True
-                choosingContent = False
+                known_recipient_list = set_recipients()
+                display.show(known_recipient_list[0] + 1)
+                choosing_recipient = True
+                choosing_content = False
             else:
-                sendingMessage = True
-                choosingContent = False
+                sending_message = True
+                choosing_content = False
 
-    while encryptingMessage:
-        checkRadio()
-            
+    while encrypting_message:
+        check_radio()
+
         if button_a.was_pressed():
-            if len(code)<1:
+            if len(code) < 1:
                 display.clear()
             display.clear()
             display.show("A")
@@ -400,14 +521,14 @@ while True:
             display.clear()
             code.append("0")
             for i, char in enumerate(code):
-                if int(char)>0:
+                if int(char) > 0:
                     for j in range(5):
-                        display.set_pixel(i,j,9)
+                        display.set_pixel(i, j, 9)
                 else:
-                    display.set_pixel(i,2,9)
-        
+                    display.set_pixel(i, 2, 9)
+
         if button_b.was_pressed():
-            if len(code)<1:
+            if len(code) < 1:
                 display.clear()
             display.clear()
             display.show("B")
@@ -415,81 +536,89 @@ while True:
             display.clear()
             code.append("1")
             for i, char in enumerate(code):
-                if int(char)>0:
+                if int(char) > 0:
                     for j in range(5):
-                        display.set_pixel(i,j,9)
+                        display.set_pixel(i, j, 9)
                 else:
-                    display.set_pixel(i,2,9)
+                    display.set_pixel(i, 2, 9)
 
-        if autoEncryptable:
+        if auto_encryptable:
             for i in range(5):
-                code.append(str(random.randint(0,1)))
+                code.append(str(random.randint(0, 1)))
 
-        if len(code)>4:
+        if len(code) > 4:
             display.clear()
             for i in range(3):
                 for j in range(5):
                     for k in range(5):
-                        if random.randint(0,1)>0:
-                            display.set_pixel(k,j,9)
+                        if random.randint(0, 1) > 0:
+                            display.set_pixel(k, j, 9)
                         else:
-                            display.set_pixel(k,j,0)
+                            display.set_pixel(k, j, 0)
                 sleep(500)
-            outputMessage = createEncryption(outputMessage)
+            output_message = create_encryption(output_message)
             display.clear()
-            display.show(Image(setImage(messageNumber, ledImages)))
-            encryptImage(outputMessage)
-            codeString = ""
+            display.show(Image(set_image(message_number, led_images)))
+            encrypt_image(output_message)
+            code_string = ""
             for i in range(5):
-                codeString += code[i]
+                code_string += code[i]
             code = []
-            readyToSend = True
-    
-            while readyToSend:
-                checkRadio()
-                        
+            ready_to_send = True
+
+            while ready_to_send:
+                check_radio()
+
                 if pin_logo.is_touched():
                     display.show(Image.ARROW_E)
                     sleep(1000)
-                    if allowRecipient:
-                        knownRecipientList = setRecipients()
-                        display.show(knownRecipientList[0]+1)
-                        choosingRecipient = True
+                    if allow_recipient:
+                        known_recipient_list = set_recipients()
+                        display.show(known_recipient_list[0] + 1)
+                        choosing_recipient = True
                     else:
-                        sendingMessage = True
-                    encryptingMessage = False
-                    readyToSend = False
-                        
-    while choosingRecipient:
-        checkRadio()
-                
+                        sending_message = True
+                    encrypting_message = False
+                    ready_to_send = False
+
+    while choosing_recipient:
+        check_radio()
+
         if button_a.was_pressed():
-            recipientIndex -= 1
+            recipient_index -= 1
 
-            if recipientIndex < 0:
-                recipientIndex = len(knownRecipientList)-1
+            if recipient_index < 0:
+                recipient_index = len(known_recipient_list) - 1
 
-            display.show(knownRecipientList[recipientIndex]+1)
+            display.show(known_recipient_list[recipient_index] + 1)
 
         if button_b.was_pressed():
-            recipientIndex += 1
-            if recipientIndex > len(knownRecipientList)-1:
-                recipientIndex = 0
+            recipient_index += 1
+            if recipient_index > len(known_recipient_list) - 1:
+                recipient_index = 0
 
-            display.show(knownRecipientList[recipientIndex]+1)
+            display.show(known_recipient_list[recipient_index] + 1)
 
         if pin_logo.is_touched():
-            sendingMessage = True
-            choosingRecipient = False
+            sending_message = True
+            choosing_recipient = False
 
-    while sendingMessage:
-        sendAnimation()
+    while sending_message:
+        send_animation()
         sleep(500)
 
-        messageRecipient = str(knownRecipientList[recipientIndex]) if allowRecipient else "-1"
-        sendMessage("send_" + messageRecipient + "_" + str(packImage(outputMessage)) + ("_" + codeString if encryptable else ""))
+        message_recipient = (
+            str(known_recipient_list[recipient_index]) if allow_recipient else "-1"
+        )
+        send_message(
+            "send_"
+            + message_recipient
+            + "_"
+            + str(pack_image(output_message))
+            + ("_" + code_string if encryptable else "")
+        )
 
-        recipientIndex = 0
-        messageNumber = 0
-        display.show(int(idNumber)+1)
-        sendingMessage = False
+        recipient_index = 0
+        message_number = 0
+        display.show(int(id_number) + 1)
+        sending_message = False
