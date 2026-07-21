@@ -3,6 +3,7 @@
     import { microbitService } from "../../services/microbit.svelte";
     import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
     import Icon from "../components/Icon.svelte";
+    import MessageLog from "../pages/MessageLog.svelte";
 </script>
 
 <main>
@@ -36,6 +37,7 @@
             <FeaturesDropdown />
         </header>
         <!-- Default feature content -->
+         <MessageLog />
         <button onclick={() => microbitService.connect().then(() => microbitService.writeToMB("start"))}>Connect to device</button>
     </section>
 

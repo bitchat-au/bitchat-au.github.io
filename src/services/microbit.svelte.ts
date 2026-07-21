@@ -1,4 +1,5 @@
 import { Features, features } from "./features.svelte";
+import { friendlyLogService, LogType } from "./friendly_log.svelte";
 
 const filters = [
     { usbVendorId: 0x0d28, usbProductId: 0x0204 },
@@ -19,6 +20,7 @@ interface MessagesToMicrobit {
     start: [],
     count: []
 }
+export type ImageMatrix = [[number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number]];
 
 class MicrobitService {
     private static _instance: MicrobitService;
@@ -39,6 +41,7 @@ class MicrobitService {
 
     private lastMessage: string = "";
     private messageLog: string[] = [];
+    private logService = friendlyLogService;
 
     private constructor() { }
 
@@ -135,6 +138,7 @@ class MicrobitService {
             case "nu":
                 let mbID = message.split("_")[2]
                 this.checkForNewUser(mbID);
+                this.logService.addLog(LogType.Device, mbID, 'join');
                 break;
             case "nm":
                 this.handleNewMessage(message);
@@ -163,16 +167,12 @@ class MicrobitService {
         let messageSender = messageParts[1];
         let messageReceiver = messageParts[2];
         let messageImage = unpackImage(messageParts[3]);
+        let encryptionCode = messageParts[4] || null;
 
         console.log("New message received", messageImage);
 
-        let messageAsString = messageImage.map(row => row.join('')).join("-");
-        let messageForLog = messageSender + "_" + messageReceiver + "_" + messageAsString
-        this.messageLog.push(messageForLog)
-        localStorage.setItem("messageLog", JSON.stringify(this.messageLog));
-
+        this.logService.addLog(LogType.Message, messageSender, messageReceiver, messageImage, !!encryptionCode);
         console.log({ messageSender, messageReceiver, messageImage });
-
 
         if (features.isActive(Features.Hacker)) {
             console.log("Show hacking menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -253,19 +253,40 @@ class MicrobitService {
 export const microbitService = MicrobitService.instance;
 (window as any).microbitService = microbitService;
 
-const packImageString = (imgString: string): string => packImage(imgString.split(":").map(row => row.split("").map(Number)))
+const packImageString = (imgString: string): string => {
+    const rows = imgString.split(":");
+    if (rows.length !== 5) {
+        throw new Error("Invalid image string. Must have 5 rows.");
+    }
 
-function packImage(matrix: number[][]): string {
+    // Validate each row to ensure it has exactly 5 characters and only contains '0' or '1'
+    if (rows.some(row => row.length !== 5 || !/^[01]{5}$/.test(row))) {
+        throw new Error("Invalid image string. Each row must have 5 characters of 0s and 1s.");
+    }
+
+    const matrix = imgString.split(":").map(row => row.split("").map(Number)) as ImageMatrix;
+    return packImage(matrix);
+}
+
+function packImage(matrix: ImageMatrix): string {
     return matrix.map(row => {
         const val = parseInt(row.join(''), 2);
         return val <= 25 ? String.fromCharCode(val + 65) : (val - 26).toString();
     }).join('');
 }
 
-function unpackImage(payload: string): number[][] {
+function unpackImage(payload: string): ImageMatrix {
+    if (payload.length !== 5) {
+        throw new Error("Invalid payload length. Must be 5 characters.");
+    }
+
+    if (!/^[A-Z0-5]{5}$/.test(payload)) {
+        throw new Error("Invalid payload characters. Must be A-Z or 0-5.");
+    }
+
     return payload.split('').map(char => {
         const val = /[0-5]/.test(char) ? parseInt(char, 10) + 26 : char.charCodeAt(0) - 65;
         const binaryString = val.toString(2).padStart(5, '0');
         return binaryString.split('').map(bit => parseInt(bit, 10));
-    });
+    }) as ImageMatrix;
 }
