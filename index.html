@@ -1,16 +1,39 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Momo+Trust+Display&family=Momo+Trust+Sans:wght@200..800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Momo+Trust+Display&family=Momo+Trust+Sans:wght@200..800&display=swap"
+        rel="stylesheet">
     <title>Bit:Chat</title>
-  </head>
-  <body>
+</head>
+
+<body>
+    <svg style="position: absolute; top: -100px; left: -100px; overflow: hidden; width: 0; height: 0;" width="0"
+        height="0" aria-hidden="true">
+        <defs>
+            <filter id="glow" x="-200%" y="-200%" width="600%" height="600%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur1" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur2" />S
+                <feMerge>
+                    <feMergeNode in="blur2" />
+                    <feMergeNode in="blur1" />
+                    <feMergeNode in="SourceGraphic" />
+                </feMerge>
+            </filter>
+
+            <rect id="led-on" width="6" height="10" fill="#ff2222" filter="url(#glow)" />
+            <rect id="led-off" width="6" height="10" fill="#917a47" />
+        </defs>
+    </svg>
+
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
-  </body>
+</body>
+
 </html>

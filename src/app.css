@@ -63,7 +63,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
-pre {
+pre, samp, code {
   font-family: var(--mono);
   font-size: 16px;
   line-height: 1.5;
@@ -84,4 +84,8 @@ pre {
 
 *:focus-visible {
   outline: 2px solid var(--accent);
+}
+
+[popover] {
+  border: none;
 }

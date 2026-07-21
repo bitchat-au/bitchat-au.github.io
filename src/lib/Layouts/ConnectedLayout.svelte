@@ -37,12 +37,18 @@
             <FeaturesDropdown />
         </header>
         <!-- Default feature content -->
-         <MessageLog />
-        <button onclick={() => microbitService.connect().then(() => microbitService.writeToMB("start"))}>Connect to device</button>
+        <MessageLog />
     </section>
 
     <section class="devices">
         <h2>Enheder</h2>
+        <button
+            onclick={() =>
+                microbitService
+                    .connect()
+                    .then(() => microbitService.writeToMB("start"))}
+            >Connect to device</button
+        >
         <!-- List of devices -->
     </section>
 </main>
@@ -63,6 +69,8 @@
 
     .content {
         padding-right: 24px;
+        display: flex;
+        flex-direction: column;
     }
 
     .devices {
@@ -73,8 +81,8 @@
     header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
+        align-items: flex-start;
+        margin-bottom: 12px;
     }
 
     .feature-navigation ul {
