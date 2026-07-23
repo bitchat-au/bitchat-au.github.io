@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { DialogProps } from "../../services/dialog_manager.svelte";
-    import type { ImageMatrix } from "../../services/microbit.svelte";
+    import type { ImageMatrix } from "../../helpers/images";
     import Dialog from "./Dialog.svelte";
     import Icon from "./Icon.svelte";
 

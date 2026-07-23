@@ -1,4 +1,4 @@
-import type { ImageMatrix } from "./microbit.svelte";
+import type { ImageMatrix } from "../helpers/images";
 
 export enum LogType {
     Device,

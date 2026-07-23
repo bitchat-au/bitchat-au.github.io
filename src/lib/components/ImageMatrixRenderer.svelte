@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { ImageMatrix } from "../../services/microbit.svelte";
+    import type { ImageMatrix } from "../../helpers/images";
 
     interface Props {
         matrix: ImageMatrix;
