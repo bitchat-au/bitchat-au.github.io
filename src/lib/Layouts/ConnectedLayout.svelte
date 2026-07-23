@@ -3,6 +3,7 @@
     import { microbitService } from "../../services/microbit.svelte";
     import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
     import Icon from "../components/Icon.svelte";
+    import RouterModal from "../components/RouterModal.svelte";
     import MessageLog from "../pages/MessageLog.svelte";
 </script>
 
