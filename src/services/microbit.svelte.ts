@@ -1,10 +1,6 @@
 import { Features, features } from "./features.svelte";
 import { friendlyLogService, LogType } from "./friendly_log.svelte";
-
-const filters = [
-    { usbVendorId: 0x0d28, usbProductId: 0x0204 },
-    { usbVendorId: 0x0d28, usbProductId: 0x0206 } // BBC micro:bit
-];
+import { MicrobitSerialConnection } from "./serial_connection";
 
 const newImages: string[] = [];
 
@@ -31,75 +27,21 @@ class MicrobitService {
         return MicrobitService._instance;
     }
 
-    private port?: SerialPort;
-    private writer?: WritableStreamDefaultWriter;
-    private reader?: ReadableStreamDefaultReader;
+    private microbitSerial: MicrobitSerialConnection = new MicrobitSerialConnection();
 
     private alreadyKnown: boolean = false;
     private knownMicrobits: Array<{ name: string, index: number }> = [];
-    private messageConstruct: string[] = [];
 
     private lastMessage: string = "";
-    private messageLog: string[] = [];
     private logService = friendlyLogService;
 
     private constructor() { }
 
     public async connect() {
-        console.log("looking for port")
-        this.port = await navigator.serial.requestPort({ filters });
-
-        if (!this.port) {
-            console.error("No port selected");
-            return;
-        }
-
-        await this.port.open({ baudRate: 9600 });
-
-        if (!this.port.readable || !this.port.writable) {
-            console.error("Port is not readable or writable");
-            return;
-        }
-
-        this.writer = this.port.writable.getWriter();
-        this.reader = this.port.readable.getReader();
-        this.readLoop();
+        await this.microbitSerial.connect();
+        this.microbitSerial.subscribe(this.checkMessage);
         if (this.alreadyKnown) {
             this.checkMessage("lc")
-        }
-    }
-
-    async readLoop() {
-        if (!this.reader) {
-            console.error("Reader is not initialized");
-            return;
-        }
-
-        while (true) {
-            const { value, done } = await this.reader.read();
-            if (value) {
-                let collectedInput = new TextDecoder().decode(value);
-                if (collectedInput == "#") {
-                    // Clean list of collected characters
-                    while (this.messageConstruct.length > 0) {
-                        this.messageConstruct.pop();
-                    }
-                }
-                else if (collectedInput == "&") {
-                    // Construct a message from the list of collected characters
-                    let output = this.messageConstruct.toString().split(",").join("")
-                    // Now we check what is in the message we have constructed
-                    this.checkMessage(output)
-                }
-                else {
-                    // Add to list of collected characters
-                    this.messageConstruct.push(collectedInput)
-                }
-            }
-            if (done) {
-                this.reader.releaseLock();
-                break;
-            }
         }
     }
 
@@ -227,17 +169,8 @@ class MicrobitService {
      * @param args The arguments to send with the message, e.g. the image string
      */
     async writeToMB<T extends keyof MessagesToMicrobit>(type: T, ...args: MessagesToMicrobit[T]) {
-        //event.preventDefault();
-        if (!this.port || !this.writer) {
-            console.error("Port is not initialized");
-            return;
-        }
-
         const message = type + "_" + args.join("_");
-
-        // All messages sent starts with "__" and ends with "_" to allow the micro:bit to decode the message along with relevant meta data
-        const data = new TextEncoder().encode("__" + message + "_" + '\n');
-        await this.writer.write(data);
+        await this.microbitSerial.write(message);
     }
 
     /**
