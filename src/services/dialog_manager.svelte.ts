@@ -6,11 +6,11 @@ type DialogResult<T extends unknown> =
     { type: "success", data: T } |
     { type: "closed" }
 
-export interface DialogProps<T extends unknown, R extends unknown> {
-    data: T;
+export interface DialogProps<Data extends unknown, Return extends unknown> {
+    data: Data;
     dialogRef: string;
     onError: (err: string) => void;
-    onResult: (res: R) => void;
+    onResult: (res: Return) => void;
     onClose: () => void
 }
 
@@ -24,8 +24,16 @@ interface OpenDialog<K extends AvailableDialogs = AvailableDialogs> {
 
 type RegisteredDialogs = typeof DialogManager.registeredDialogs;
 type AvailableDialogs = keyof RegisteredDialogs;
-type InferDialogData<K extends AvailableDialogs> = RegisteredDialogs[K] extends Component<DialogProps<infer Data, unknown>> ? Data : never;
-type InferDialogReturn<K extends AvailableDialogs> = RegisteredDialogs[K] extends Component<DialogProps<unknown, infer Return>> ? Return : never;
+type InferDialogData<K extends AvailableDialogs> = DialogPropsOf<K>["data"];
+type InferDialogReturn<K extends AvailableDialogs> = DialogPropsOf<K>["return"];
+
+type DialogPropsOf<K extends AvailableDialogs> =
+    RegisteredDialogs[K] extends Component<DialogProps<infer Data, infer Return>>
+        ? { data: Data; return: Return }
+        : never;
+
+type TData = InferDialogData<"RouterModal">;
+type TReturn = InferDialogReturn<"RouterModal">;
 
 export class DialogManager {
     private static _instance: DialogManager;

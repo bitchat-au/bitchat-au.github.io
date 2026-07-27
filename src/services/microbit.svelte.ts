@@ -1,4 +1,5 @@
-import { packImage, packImageString, unpackImage } from "../helpers/images";
+import { COMMON_IMAGES, packImage, packImageString, unpackImage, type ImageMatrix } from "../helpers/images";
+import { dialogManager } from "./dialog_manager.svelte";
 import { Features, features } from "./features.svelte";
 import { friendlyLogService, LogType } from "./friendly_log.svelte";
 import { MicrobitSerialConnection } from "./serial_connection";
@@ -30,7 +31,7 @@ class MicrobitService {
     private microbitSerial: MicrobitSerialConnection = new MicrobitSerialConnection();
 
     private alreadyKnown: boolean = false;
-    private knownMicrobits: Array<{ name: string, index: number }> = [];
+    public knownMicrobits: Array<{ name: string, index: number, image: ImageMatrix }> = $state([]);
 
     private lastMessage: string = "";
     private logService = friendlyLogService;
@@ -39,7 +40,7 @@ class MicrobitService {
 
     public async connect() {
         await this.microbitSerial.connect();
-        this.microbitSerial.subscribe(this.checkMessage);
+        this.microbitSerial.subscribe(this.checkMessage.bind(this));
         if (this.alreadyKnown) {
             this.checkMessage("lc")
         }
@@ -50,7 +51,7 @@ class MicrobitService {
         if (exists) return;
 
         let mbIndex = this.knownMicrobits.length
-        this.knownMicrobits.push({ name: newUser, index: mbIndex });
+        this.knownMicrobits.push({ name: newUser, index: mbIndex, image: COMMON_IMAGES[mbIndex + 1 as unknown as keyof typeof COMMON_IMAGES] });
         localStorage.setItem("knownMicrobits", JSON.stringify(this.knownMicrobits));
 
         console.error("Show image icon!!!!!!!!!!!!!!!!!!!!");
@@ -102,33 +103,44 @@ class MicrobitService {
         }
     }
 
-    private handleNewMessage(message: string) {
+    private async handleNewMessage(message: string) {
         // "nm_" + senderId + "_" + str(recipientName) + "_" + packedImage + ("_" + encryptionCode if encryptable else "")
         const messageParts = message.split("_");
 
-        let messageSender = messageParts[1];
-        let messageReceiver = messageParts[2];
+        let sender = messageParts[1];
+        let receiver = messageParts[2];
         let messageImage = unpackImage(messageParts[3]);
         let encryptionCode = messageParts[4] || null;
 
         console.log("New message received", messageImage);
 
-        this.logService.addLog(LogType.Message, messageSender, messageReceiver, messageImage, !!encryptionCode);
-        console.log({ messageSender, messageReceiver, messageImage });
+        this.logService.addLog(LogType.Message, sender, receiver, messageImage, !!encryptionCode);
+        console.log({ sender, receiver, messageImage });
 
         if (features.isActive(Features.Hacker)) {
             console.log("Show hacking menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             this.writeToMB("nmComp");
             // setUpHacking(messageSender, messageReceiver, messageString)
         } else if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
-            console.log("let it start!")
             this.writeToMB("nmComp");
-            console.log("Show routing menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            // setUpChanger(messageSender, messageReceiver, messageString)
-        } else {
-            console.log("Show message in log!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            this.writeToMB("sendMessage", messageSender, messageReceiver, packImage(messageImage));
+            const result = await dialogManager.showPrompt("RouterModal", {
+                sender,
+                requestedReceiver: receiver,
+                message: messageImage
+            });
+
+            if (result.type != "success") {
+                console.log("Router modal closed without sending message");
+                return;
+            }
+
+            // Update the receiver to the new receiver selected in the router modal
+            receiver = result.data.newReceiver;
+
+            console.log("Router modal result:", result);
         }
+
+        this.writeToMB("sendMessage", sender, receiver, packImage(messageImage));
     }
 
     public rebuildConnection() {
@@ -153,13 +165,7 @@ class MicrobitService {
             this.writeToMB("knownImg", packImageString(newImages[i]))
         }
 
-        this.writeToMB(
-            "settings",
-            features.isActive(Features.Encryption) ? 1 : 0,
-            features.isActive(Features.AutoEncryption) ? 1 : 0,
-            features.isActive(Features.Router) ? 1 : 0,
-            1
-        );
+        this.broadcastSettings();
     }
 
     /**
@@ -180,6 +186,16 @@ class MicrobitService {
      */
     async writeImageToMB(image: string) {
         this.writeToMB("newImg", packImageString(image));
+    }
+
+    public broadcastSettings() {
+        this.writeToMB(
+            "settings",
+            features.enabledFeatures.has(Features.Encryption) ? 1 : 0,
+            features.enabledFeatures.has(Features.AutoEncryption) ? 1 : 0,
+            features.enabledFeatures.has(Features.Router) ? 1 : 0,
+            features.enabledFeatures.has(Features.Beep) ? 1 : 0
+        );
     }
 }
 

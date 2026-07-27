@@ -1,4 +1,5 @@
 import { SvelteSet } from "svelte/reactivity";
+import { microbitService } from "./microbit.svelte";
 
 ////////////////////////////////////////////////////////////////////////////
 /////// Helper shenanigans for creating a strongly type feature enum ///////
@@ -47,6 +48,7 @@ export const featureMap = [
     { key: "Router", children: [{ key: "AutoRouter" }] },
     { key: "Encryption", children: [{ key: "AutoEncryption" }] },
     { key: "Hacker" },
+    { key: "Beep" }
 ] as const satisfies readonly FeatItem[];
 
 // Generate the features enum from the feature map. This will create a type-safe enum.
@@ -64,6 +66,7 @@ const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
     { features: [Features.Encryption], passwords: ["krypter", "encrypt"] },
     { features: [Features.AutoEncryption, Features.Encryption], passwords: ["auto-krypter", "auto-encrypt"] },
     { features: [Features.Hacker], passwords: ["hack"] },
+    { features: [Features.Beep], passwords: ["beep"] },
     { features: Object.values(Features), passwords: ["meget hemmelig kode"] },
 ]
 
@@ -126,6 +129,7 @@ class FeaturesService {
     public enable(feature: Features): void {
         this.enabledFeatures.add(feature);
         this.saveState();
+        microbitService.broadcastSettings();
     }
 
     /**
@@ -135,6 +139,7 @@ class FeaturesService {
     public disable(feature: Features): void {
         this.enabledFeatures.delete(feature);
         this.saveState();
+        microbitService.broadcastSettings();
     }
 
     /**

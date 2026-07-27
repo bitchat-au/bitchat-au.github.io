@@ -17,18 +17,24 @@
     <svg style="position: absolute; top: -100px; left: -100px; overflow: hidden; width: 0; height: 0;" width="0"
         height="0" aria-hidden="true">
         <defs>
-            <filter id="glow" x="-200%" y="-200%" width="600%" height="600%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur1" />
-                <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur2" />S
+            <filter id="ledglow" x="-75%" y="-75%" width="300%" height="300%">
+                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken"></feMorphology>
+                <feGaussianBlur stdDeviation="5" in="thicken" result="blurred"></feGaussianBlur>
+                <feFlood flood-color="rgb(255, 17, 77)" result="glowColor"></feFlood>
+                <feComposite in="glowColor" in2="blurred" operator="in" result="ledglow_colored"></feComposite>
                 <feMerge>
-                    <feMergeNode in="blur2" />
-                    <feMergeNode in="blur1" />
-                    <feMergeNode in="SourceGraphic" />
+                    <feMergeNode in="ledglow_colored"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
                 </feMerge>
             </filter>
-
-            <rect id="led-on" width="6" height="10" fill="#ff2222" filter="url(#glow)" />
-            <rect id="led-off" width="6" height="10" fill="#917a47" />
+            <filter id="filterglow" x="-5%" y="-5%" width="120%" height="120%">
+                <feGaussianBlur stdDeviation="5" result="glow"></feGaussianBlur>
+                <feMerge>
+                    <feMergeNode in="glow"></feMergeNode>
+                    <feMergeNode in="glow"></feMergeNode>
+                    <feMergeNode in="glow"></feMergeNode>
+                </feMerge>
+            </filter>
         </defs>
     </svg>
 
