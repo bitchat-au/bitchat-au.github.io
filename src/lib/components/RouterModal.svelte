@@ -26,7 +26,7 @@
     let selectedReceiver: string | null = $state(null);
 </script>
 
-<Dialog open {onClose}>
+<Dialog open {onClose} ariaLabel="Router modal">
     <h2><Icon name="sitemap" /> <span>Router</span></h2>
 
     <div class="message-preview">

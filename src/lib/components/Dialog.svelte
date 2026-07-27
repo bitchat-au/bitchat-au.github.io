@@ -6,9 +6,10 @@
         children?: Snippet;
         open: boolean;
         onClose?: () => void;
+        ariaLabel: string;
     }
 
-    const { children, open, onClose }: Props = $props();
+    const { children, open, onClose, ariaLabel }: Props = $props();
 
     let dialog: HTMLDialogElement;
 
@@ -18,11 +19,16 @@
         } else {
             dialog.close();
         }
-    })
+    });
 </script>
 
-<dialog bind:this={dialog} onclose={onClose}>
-    <button class="no-style close" onclick={onClose}>
+<dialog
+    bind:this={dialog}
+    onclose={onClose}
+    aria-label={ariaLabel}
+    tabindex="-1"
+>
+    <button class="no-style close" onclick={onClose} aria-label="Close dialog" autofocus>
         <Icon name="times" />
     </button>
     {@render children?.()}
