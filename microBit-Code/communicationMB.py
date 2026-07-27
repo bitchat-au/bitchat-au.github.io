@@ -179,6 +179,13 @@ while True:
                     write_to_computer(
                         "mbc_" + str(len(known_microbits))
                     )  # mbc: micro:bit count
+                    send_radio_message(
+                        str(microbit_id)
+                        + "_number_"
+                        + str(microbit_index)
+                        + "_"
+                        + str(len(known_microbits))
+                    )
                     send_radio_message("known_" + str(len(known_microbits)))
 
                 for i, generatedImage in enumerate(generated_images):
