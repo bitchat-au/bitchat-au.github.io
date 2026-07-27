@@ -33,7 +33,6 @@ class MicrobitService {
     private alreadyKnown: boolean = false;
     public knownMicrobits: Array<{ name: string, index: number, image: ImageMatrix }> = $state([]);
 
-    private lastMessage: string = "";
     private logService = friendlyLogService;
 
     private constructor() { }
@@ -68,13 +67,6 @@ class MicrobitService {
             return;
         }
 
-        if (this.lastMessage != "" && message.toString().match(this.lastMessage.toString()) && this.lastMessage != "lc") {
-            console.log("Damn")
-            return;
-
-        }
-
-        this.lastMessage = message;
         let messageCode = message.split("_")[0];
 
         switch (messageCode) {
