@@ -1,6 +1,7 @@
 <script>
     import { Features, features } from "../../services/features.svelte";
     import { microbitService } from "../../services/microbit.svelte";
+    import Devices from "../components/Devices.svelte";
     import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
     import Icon from "../components/Icon.svelte";
     import RouterModal from "../components/RouterModal.svelte";
@@ -43,6 +44,9 @@
 
     <section class="devices">
         <h2>Enheder</h2>
+
+        <Devices />
+        
         <button
             onclick={() =>
                 microbitService
@@ -57,7 +61,7 @@
 <style>
     main {
         display: grid;
-        grid-template-columns: auto 350px;
+        grid-template-columns: auto 300px;
         padding: 24px;
         height: 100vh;
         box-sizing: border-box;

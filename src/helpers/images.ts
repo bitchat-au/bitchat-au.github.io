@@ -155,12 +155,12 @@ export function getMBImage(mbName: string): ImageMatrix {
     }
 }
 
-function createImageWithCaption(matrix: ImageMatrix, caption: string): ImageMatrixWithCaption {
+export function createImageWithCaption(matrix: ImageMatrix, caption: string): ImageMatrixWithCaption {
     Object.defineProperty(matrix, CAPTION_KEY, {
         value: caption,
         writable: false,
         enumerable: false,
-        configurable: false
+        configurable: true
     });
     return matrix as ImageMatrixWithCaption;
 }

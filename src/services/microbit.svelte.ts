@@ -1,4 +1,4 @@
-import { COMMON_IMAGES, packImage, packImageString, unpackImage, type ImageMatrix } from "../helpers/images";
+import { COMMON_IMAGES, createImageWithCaption, packImage, packImageString, unpackImage, type ImageMatrix } from "../helpers/images";
 import { dialogManager } from "./dialog_manager.svelte";
 import { Features, features } from "./features.svelte";
 import { friendlyLogService, LogType } from "./friendly_log.svelte";
@@ -49,13 +49,15 @@ class MicrobitService {
         let exists = !!this.knownMicrobits.find(mb => mb.name === newUser);
         if (exists) return;
 
-        let mbIndex = this.knownMicrobits.length
-        this.knownMicrobits.push({ name: newUser, index: mbIndex, image: COMMON_IMAGES[mbIndex + 1 as unknown as keyof typeof COMMON_IMAGES] });
-        localStorage.setItem("knownMicrobits", JSON.stringify(this.knownMicrobits));
-
-        console.error("Show image icon!!!!!!!!!!!!!!!!!!!!");
-        // createBlockId(mbIndex);
-        console.log("Known microbits:", this.knownMicrobits)
+        let mbIndex = this.knownMicrobits.length + 1;
+        this.knownMicrobits.push({
+            name: newUser,
+            index: mbIndex,
+            image: createImageWithCaption(
+                COMMON_IMAGES[mbIndex as unknown as keyof typeof COMMON_IMAGES],
+                `Microbit ${mbIndex}`
+            )
+        });
     }
 
     public checkMessage(message: string) {

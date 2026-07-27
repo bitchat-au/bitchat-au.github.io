@@ -1,0 +1,47 @@
+<script lang="ts">
+    import { microbitService } from "../../services/microbit.svelte";
+    import ImageMatrixRenderer from "./ImageMatrixRenderer.svelte";
+
+    const devices = microbitService.knownMicrobits;
+</script>
+
+<ul>
+    {#each devices as device}
+        <li>
+            <ImageMatrixRenderer matrix={device.image} />
+            <span class="name">{device.name}</span>
+        </li>
+    {/each}
+</ul>
+
+<style>
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+
+        border-top: 1px solid rgb(from var(--muted-grey) r g b / 0.5);
+
+        &:first-child {
+            border-top: none;
+        }
+
+        :global(.image-matrix) {
+            max-width: 50px;
+        }
+
+        .name {
+            font-family: var(--sans-display);
+            color: var(--white);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+    }
+</style>
