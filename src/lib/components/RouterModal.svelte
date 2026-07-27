@@ -5,6 +5,7 @@
     import Icon from "./Icon.svelte";
     import ImageMatrixRenderer from "./ImageMatrixRenderer.svelte";
     import { microbitService } from "../../services/microbit.svelte";
+    import CodeMarquee from "./CodeMarquee.svelte";
 
     type Props = DialogProps<
         { sender: string; requestedReceiver: string; message: ImageMatrix },
@@ -31,9 +32,9 @@
 
     <div class="message-preview">
         <ImageMatrixRenderer matrix={sender?.image} class="sender" />
-        <span class="code-effect-marquee" data-value="110010110001"></span>
+        <CodeMarquee />
         <ImageMatrixRenderer matrix={data.message} class="message" />
-        <span class="code-effect-marquee" data-value="110010110001"></span>
+        <CodeMarquee />
         <ImageMatrixRenderer
             matrix={requestedReceiver?.image}
             class="receiver"
@@ -109,33 +110,6 @@
         align-items: center;
         gap: 1rem;
         margin-block: 1rem;
-
-        .code-effect-marquee {
-            width: 100%;
-            height: 1.5rem;
-            font-family: monospace;
-            color: var(--muted-grey);
-            opacity: 0.6;
-            font-size: 0.6rem;
-
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-
-            &::before {
-                content: attr(data-value) attr(data-value) attr(data-value)
-                    attr(data-value);
-                position: absolute;
-                left: 0;
-                width: max-content;
-                will-change: transform;
-                animation: marquee 10s linear infinite;
-
-                @media (prefers-reduced-motion: reduce) {
-                    animation: none;
-                }
-            }
-        }
     }
 
     .text {
@@ -156,7 +130,7 @@
             gap: 0.25rem;
             padding: 0.75rem;
             justify-content: center;
-            align-self: center;
+            align-items: center;
             flex-direction: column;
             font-family: var(--sans-display);
             color: var(--white);
@@ -195,15 +169,6 @@
 
         &.message {
             max-width: 50px;
-        }
-    }
-
-    @keyframes marquee {
-        0% {
-            transform: translateX(-50%);
-        }
-        100% {
-            transform: translateX(0);
         }
     }
 </style>

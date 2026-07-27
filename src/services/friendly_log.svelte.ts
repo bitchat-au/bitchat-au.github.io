@@ -24,7 +24,9 @@ class FriendlyLogService {
         return FriendlyLogService._instance;
     }
 
-    private _logs: LogEntry[] = $state([]);
+    private static LOG_STORAGE_KEY = "friendlyLogs";
+
+    private _logs: LogEntry[] = $state(this.loadLogsFromLocalStorage());
     public get logs() {
         return this._logs;
     }
@@ -33,6 +35,30 @@ class FriendlyLogService {
 
     public addLog<K extends keyof FriendLogs>(type: K, ...args: FriendLogs[K]): void {
         this._logs.push({ type, message: args });
+        this.saveLogsToLocalStorage();
+    }
+
+    private saveLogsToLocalStorage(): void {
+        localStorage.setItem(FriendlyLogService.LOG_STORAGE_KEY, JSON.stringify(this._logs));
+    }
+
+    private loadLogsFromLocalStorage(): LogEntry[] {
+        const logsJson = localStorage.getItem(FriendlyLogService.LOG_STORAGE_KEY);
+        if (logsJson) {
+            try {
+                const parsedLogs: LogEntry[] = JSON.parse(logsJson);
+                return parsedLogs;
+            } catch (error) {
+                console.error("Failed to parse logs from local storage:", error);
+            }
+        }
+
+        return [];
+    }
+
+    public clearLogs(): void {
+        this._logs.length = 0;
+        localStorage.removeItem(FriendlyLogService.LOG_STORAGE_KEY);
     }
 }
 

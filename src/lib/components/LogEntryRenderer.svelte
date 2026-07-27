@@ -1,10 +1,12 @@
 <script lang="ts">
+    import { getMBImage } from "../../helpers/images";
     import { Features, features } from "../../services/features.svelte";
     import {
         LogType,
         type FriendLogs,
         type LogEntry,
     } from "../../services/friendly_log.svelte";
+    import CodeMarquee from "./CodeMarquee.svelte";
     import ImageMatrixRenderer from "./ImageMatrixRenderer.svelte";
 
     interface Props {
@@ -24,16 +26,23 @@
             entry.message as FriendLogs[LogType.Message]}
         {@const messageAsString = message.map((row) => row.join("")).join(":")}
 
-        [{senderName}] ---&#8203;&gt; [{recipientName}] ---
         <button
+            role={showTranslator ? "button" : "presentation"}
             class="no-style image-string"
             disabled={!showTranslator}
             popovertarget="translator-{entryId}"
-        >{messageAsString}</button>
-        {#if encrypted}🔑{/if}
+        >
+            [{senderName}] ---&#8203;&gt; [{recipientName}] ---
+            {messageAsString}
+            {#if encrypted}🔑{/if}
+        </button>
 
         <div popover="auto" class="translated-image" id="translator-{entryId}">
+            <ImageMatrixRenderer matrix={getMBImage(senderName)} />
+            <CodeMarquee />
             <ImageMatrixRenderer matrix={message} />
+            <CodeMarquee />
+            <ImageMatrixRenderer matrix={getMBImage(recipientName)} />
         </div>
     {/if}
 </code>
@@ -49,17 +58,18 @@
         &:not([disabled]) {
             text-decoration: underline;
         }
-    
+
         &:disabled {
             cursor: unset;
         }
     }
 
     .translated-image {
-        width: 175px;
-        height: 175px;
+        align-items: center;
+        gap: 0.5rem;
         padding: 8px;
         overflow: hidden;
+        width: 400px;
 
         position: absolute;
         position-anchor: --image-string;
@@ -67,5 +77,13 @@
 
         background-color: var(--bg);
         border: 1px solid var(--muted-grey);
+
+        &:popover-open {
+            display: flex;
+        }
+
+        :global(.image-matrix) {
+            max-width: 60px;
+        }
     }
 </style>

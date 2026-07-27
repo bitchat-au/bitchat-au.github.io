@@ -1,17 +1,9 @@
+import { microbitService } from "../services/microbit.svelte";
+
 export type ImageMatrix = [[number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number]];
 export type ImageMatrixWithCaption = ImageMatrix & { [CAPTION_KEY]: string };
 
 const CAPTION_KEY = "__a11y_caption__";
-
-const createImageWithCaption = (matrix: ImageMatrix, caption: string): ImageMatrixWithCaption => {
-    Object.defineProperty(matrix, CAPTION_KEY, {
-        value: caption,
-        writable: false,
-        enumerable: false,
-        configurable: false
-    });
-    return matrix as ImageMatrixWithCaption;
-}
 
 // Common images
 export const COMMON_IMAGES = Object.freeze({
@@ -153,7 +145,27 @@ export function unpackImage(payload: string): ImageMatrix {
     }) as ImageMatrix;
 }
 
-export const getImageCaption = (matrix: ImageMatrix | undefined | null): string | undefined => {
+export function getMBImage(mbName: string): ImageMatrix {
+    const mb = microbitService.knownMicrobits.find(mb => mb.name === mbName);
+    if (mb) {
+        return mb.image;
+    } else {
+        console.warn(`Microbit with name ${mbName} not found. Returning empty image.`);
+        return COMMON_IMAGES.EMPTY;
+    }
+}
+
+function createImageWithCaption(matrix: ImageMatrix, caption: string): ImageMatrixWithCaption {
+    Object.defineProperty(matrix, CAPTION_KEY, {
+        value: caption,
+        writable: false,
+        enumerable: false,
+        configurable: false
+    });
+    return matrix as ImageMatrixWithCaption;
+}
+
+export function getImageCaption(matrix: ImageMatrix | undefined | null): string | undefined {
     if (matrix && matrix.hasOwnProperty(CAPTION_KEY)) {
         return (matrix as ImageMatrixWithCaption)[CAPTION_KEY];
     }
