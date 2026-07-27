@@ -64,23 +64,27 @@ export class MicrobitSerialConnection {
             if (!value) {
                 continue;
             }
-            
+
             const messageChunk = new TextDecoder().decode(value);
-            if (messageChunk === "#") {
-                // This signifies the start of a new message, therefore clean the partial message
-                this.partialMessage = "";
-                continue;
-            }
-
-            if (messageChunk === "&") {
-                // This signifies the ned of the message, emit the collected message
-                this.emitMessage(this.partialMessage);
-                continue;
-            }
-
-            // If the message wasnt either the start or end characters, push the message to the partialMessage
-            this.partialMessage += messageChunk;
+            messageChunk.split("").forEach(character => this.handleCharacter(character));
         }
+    }
+
+    private handleCharacter(character: string) {
+        if (character === "#") {
+            // This signifies the start of a new message, therefore clean the partial message
+            this.partialMessage = "";
+            return;
+        }
+
+        if (character === "&") {
+            // This signifies the ned of the message, emit the collected message
+            this.emitMessage(this.partialMessage);
+            return;
+        }
+
+        // If the message wasnt either the start or end characters, push the message to the partialMessage
+        this.partialMessage += character;
     }
 
     public async write(message: string) {
@@ -91,6 +95,6 @@ export class MicrobitSerialConnection {
 
         // All messages sent starts with "__" and ends with "_" to allow the micro:bit to decode the message along with relevant meta data
         const data = new TextEncoder().encode("__" + message + "_" + '\n');
-        await this.writer.write(data); 
-    } 
+        await this.writer.write(data);
+    }
 }
