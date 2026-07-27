@@ -24,6 +24,22 @@ pitch_list = [6, 8, 10, 12]
 last_recorded_message = 0
 reset_microbit_time = False
 
+
+def show_inner_dot_animation():
+    frames = [
+        "00000:09000:00000:00000:00000",
+        "00000:00900:00000:00000:00000",
+        "00000:00090:00000:00000:00000",
+        "00000:00000:00090:00000:00000",
+        "00000:00000:00000:00090:00000",
+        "00000:00000:00000:00900:00000",
+        "00000:00000:00000:09000:00000",
+        "00000:00000:09000:00000:00000",
+    ]
+
+    frame = time.ticks_ms() // 120 % len(frames)
+    display.show(Image(frames[frame]))
+
 led_images = [
     [
         [0, 0, 0, 0, 0],
@@ -455,6 +471,10 @@ while True:
     if not known and time.ticks_ms() - last_known_ping > 1000:
         send_message("hello")
         last_known_ping = time.ticks_ms()
+
+    if not known:
+        show_inner_dot_animation()
+        continue;
 
     # When starting a new message
     if pin_logo.is_touched():
