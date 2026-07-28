@@ -29,6 +29,7 @@
         height: 100%;
         overflow: hidden;
         position: relative;
+        background: black;
     }
 
     samp {
@@ -38,7 +39,9 @@
         padding: 0.5rem;
         width: 100%;
         flex-grow: 1;
-        overflow: scroll;
+        overflow: auto;
+        scrollbar-color: var(--muted-grey) black;
+        scrollbar-width: thin;
     }
 
     footer {
