@@ -1,4 +1,12 @@
-export class MicrobitSerialConnection {
+import EventEmitter, { type EventMap } from "../helpers/event_emitter";
+
+type Events = EventMap & {
+    message: (msg: string) => void;
+    connected: () => void;
+    disconnected: () => void;
+}
+
+export class MicrobitSerialConnection extends EventEmitter<Events> {
     private static BAUD_RATE = 9600;
     private static USB_FILTERS = [
         { usbVendorId: 0x0d28, usbProductId: 0x0204 },
@@ -9,25 +17,26 @@ export class MicrobitSerialConnection {
     private writer?: WritableStreamDefaultWriter;
     private reader?: ReadableStreamDefaultReader;
 
-    private messageListeners: Array<(msg: string) => void> = [];
-
     private partialMessage = "";
 
     constructor() {
-
-    }
-
-    public subscribe(callback: (msg: string) => void) {
-        this.messageListeners.push(callback);
-    }
-
-    private emitMessage(message: string) {
-        this.messageListeners.forEach(cur => cur(message));
+        super();
     }
 
     public async connect() {
         this.port = await navigator.serial.requestPort({ filters: MicrobitSerialConnection.USB_FILTERS });
+        this.port.addEventListener("disconnect", () => this.emit("disconnected"));
+        this.port.addEventListener("connect", () => {
+            // The connect event is not fired the first time we connect to the port
+            // But only on subsequent connections, such as when the micro:bit is unplugged and plugged back in.
+            this.openPort();
+            console.log("Micro:bit reconnected");
+        });
 
+        await this.openPort();
+    }
+
+    private async openPort() {
         if (!this.port) {
             throw new Error("No port selected");
         }
@@ -45,12 +54,12 @@ export class MicrobitSerialConnection {
         this.writer = this.port.writable.getWriter();
         this.reader = this.port.readable.getReader();
 
+        this.emit("connected");
         this.readLoop();
     }
 
     public async readLoop() {
         if (!this.reader) {
-            console.error("Reader is not initialized");
             return;
         }
 
@@ -58,6 +67,7 @@ export class MicrobitSerialConnection {
             const { value, done } = await this.reader.read();
             if (done) {
                 this.reader.releaseLock();
+                this.reader = undefined;
                 break;
             }
 
@@ -79,7 +89,7 @@ export class MicrobitSerialConnection {
 
         if (character === "&") {
             // This signifies the ned of the message, emit the collected message
-            this.emitMessage(this.partialMessage);
+            this.emit("message", this.partialMessage);
             return;
         }
 

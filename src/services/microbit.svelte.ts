@@ -29,20 +29,20 @@ class MicrobitService {
     }
 
     private microbitSerial: MicrobitSerialConnection = new MicrobitSerialConnection();
-
-    private alreadyKnown: boolean = false;
-    public knownMicrobits: Array<{ name: string, index: number, image: ImageMatrix }> = $state([]);
-
     private logService = friendlyLogService;
 
-    private constructor() { }
+    public knownMicrobits: Array<{ name: string, index: number, image: ImageMatrix }> = $state([]);
+    public connected: boolean = $state(false);
+
+    private constructor() {
+        this.microbitSerial
+            .addEventListener("message", this.checkMessage.bind(this))
+            .addEventListener("connected", () => this.connected = true)
+            .addEventListener("disconnected", () => this.connected = false);
+    }
 
     public async connect() {
         await this.microbitSerial.connect();
-        this.microbitSerial.subscribe(this.checkMessage.bind(this));
-        if (this.alreadyKnown) {
-            this.checkMessage("lc")
-        }
     }
 
     private checkForNewUser(newUser: string) {
@@ -140,13 +140,7 @@ class MicrobitService {
     public rebuildConnection() {
         console.log("rebuilding")
 
-        console.log({
-            knownMicrobits: this.knownMicrobits,
-            knownImages: newImages,
-            encryption: features.isActive(Features.Encryption),
-            router: features.isActive(Features.Router)
-        });
-
+        this.broadcastSettings();
 
         for (let i = 0; i < this.knownMicrobits.length; i++) {
             this.writeToMB("known", this.knownMicrobits[i].name)
@@ -158,8 +152,6 @@ class MicrobitService {
         for (let i = 0; i < newImages.length; i++) {
             this.writeToMB("knownImg", packImageString(newImages[i]))
         }
-
-        this.broadcastSettings();
     }
 
     /**

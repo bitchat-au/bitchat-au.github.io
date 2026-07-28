@@ -1,10 +1,8 @@
 <script>
     import { Features, features } from "../../services/features.svelte";
-    import { microbitService } from "../../services/microbit.svelte";
     import Devices from "../components/Devices.svelte";
     import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
     import Icon from "../components/Icon.svelte";
-    import RouterModal from "../components/RouterModal.svelte";
     import MessageLog from "../pages/MessageLog.svelte";
 </script>
 
@@ -38,25 +36,12 @@
             </nav>
             <FeaturesDropdown />
         </header>
-        <!-- Default feature content -->
         <MessageLog />
     </section>
 
     <section class="devices">
         <h2>Enheder</h2>
-
-        {microbitService.connected ? "connected" : "not connected"}
-
         <Devices />
-        
-        <button
-            onclick={() =>
-                microbitService
-                    .connect()
-                    .then(() => microbitService.writeToMB("start"))}
-            >Connect to device</button
-        >
-        <!-- List of devices -->
     </section>
 </main>
 

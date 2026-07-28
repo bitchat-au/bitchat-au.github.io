@@ -27,7 +27,12 @@
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color: var(--white);
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: 
+    linear-gradient(rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px),
+    linear-gradient(90deg, rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px);
+  background-size: 25px 25px;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
