@@ -3,6 +3,7 @@ radioChannel = 1
 # Imports go at the top
 from microbit import *
 import radio
+import time
 
 uart.init()
 
@@ -24,6 +25,10 @@ should_beep = False
 encryption_code = ""
 receive_from_known = []
 packed_image = ""
+image_broadcast_debounce = 0
+should_broadcast_images = False
+settings_broadcast_debounce = 0
+should_broadcast_settings = False
 
 ###################################################
 ## Setup for the radio:
@@ -46,18 +51,10 @@ def write_to_computer(message_to_write):
 
 
 def broadcast_settings():
-    """Broadcast the current settings to all known micro:bits."""
-    # settings_| isEncryptable |_| autoEncrypt |_| allowRecipient |_| shouldBeep |
-    send_radio_message(
-        "settings_"
-        + ("1" if encryptable else "0")
-        + "_"
-        + ("1" if auto_encryptable else "0")
-        + "_"
-        + ("1" if allow_recipient else "0")
-        + "_"
-        + ("1" if should_beep else "0")
-    )
+    """Flags that settings should be broadcasted to all known micro:bits."""
+    global should_broadcast_settings, settings_broadcast_debounce
+    should_broadcast_settings = True
+    settings_broadcast_debounce = time.ticks_ms()  # Reset the debounce timer
 
 
 def pack_image(matrix):
@@ -78,6 +75,19 @@ def unpack_image(payload):
         for c in payload
     ]
 
+def add_generated_image(img_to_add, send_to_radio=True):
+    """Adds a new generated image to the list, if it's not already present."""
+    if img_to_add not in generated_images:
+        image_index = len(generated_images)
+        generated_images.append(img_to_add)
+        if send_to_radio:
+            send_radio_message("image_" + str(image_index) + "_" + img_to_add)
+
+def broadcast_images():
+    """Flags that images should be broadcasted to all known micro:bits."""
+    global should_broadcast_images, image_broadcast_debounce
+    should_broadcast_images = True
+    image_broadcast_debounce = time.ticks_ms()  # Reset the debounce timer
 
 def send_radio_message(message_to_send):
     """Sends a message over the radio and logs it."""
@@ -108,38 +118,40 @@ while True:
         if uart.any():
             sleep(300)  # Give time for the full message to be received
             uartmessage = str(uart.readline())
-            if "echo" in uartmessage:  # Echo the message back to the computer
+            code = uartmessage.split("_")[2]
+            if code == "echo":  # Echo the message back to the computer
                 write_to_computer("echo_" + uartmessage.split("_")[3])
-            if "count" in uartmessage:  # Get update on number of known micro:bits by the computer
+            if code == "count":  # Get update on number of known micro:bits by the computer
                 for i, known in enumerate(known_microbits):
                     write_to_computer("nu_" + str(i) + "_" + str(known).split("'")[1])
-            if "nmComp" in uartmessage:  # If all of the message has been received
+            if code == "nmComp":  # If all of the message has been received
                 uart_over = True
-            if "sendMessage" in uartmessage:
+            if code == "sendMessage":
                 sender_name = uartmessage.split("_")[3]
                 recipient_name = uartmessage.split("_")[4]
                 packed_image = uartmessage.split("_")[5]
                 send_on_permitted = True
                 uart_over = True
-            if "newImg" in uartmessage:
-                image_index = len(generated_images)
-                packed_image = uartmessage.split("_")[3]
-                generated_images.append(packed_image)
-
-                send_radio_message("newImg_" + str(image_index) + "_" + packed_image)
-            if "known" in uartmessage:
+            if code == "newImg":
+                add_generated_image(uartmessage.split("_")[3])
+            if code == "known":
                 known_microbits.append([uartmessage.split("_")[3]])
-            if "knownImg" in uartmessage:
-                image_index = len(generated_images)
-                generated_images.append(uartmessage.split("_")[3])
-            if "settings" in uartmessage:
+            if code == "knownImg":
+                add_generated_image(uartmessage.split("_")[3], send_to_radio=False)
+                broadcast_images()
+            if code == "removeImg":
+                img_to_remove = uartmessage.split("_")[3]
+                if img_to_remove in generated_images:
+                    generated_images.remove(img_to_remove)
+                    send_radio_message("removeImg_" + img_to_remove)
+            if code == "settings":
                 encryptable = uartmessage.split("_")[3] == "1"
                 auto_encryptable = uartmessage.split("_")[4] == "1"
                 allow_recipient = uartmessage.split("_")[5] == "1"
                 should_beep = uartmessage.split("_")[6] == "1"
                 broadcast_settings()
 
-            if "forgetAll" in uartmessage:
+            if code == "forgetAll":
                 known_microbits = []
                 generated_images = []
                 send_radio_message("reintroduce")
@@ -188,9 +200,7 @@ while True:
                     )
                     send_radio_message("known_" + str(len(known_microbits)))
 
-                for i, generatedImage in enumerate(generated_images):
-                    send_radio_message("newImg_" + str(i) + "_" + generatedImage)
-
+                broadcast_images()
                 broadcast_settings()
 
             if "send" in message:
@@ -263,3 +273,24 @@ while True:
                 + ("_" + encryption_code if encryptable else "")
             )
             send_on_permitted = False
+
+        if should_broadcast_images and (time.ticks_ms() - image_broadcast_debounce) > 500:
+            for i, generatedImage in enumerate(generated_images):
+                send_radio_message("image_" + str(i) + "_" + generatedImage)
+            image_broadcast_debounce = 0;
+            should_broadcast_images = False;
+
+        if should_broadcast_settings and (time.ticks_ms() - settings_broadcast_debounce) > 500:
+            # settings_| isEncryptable |_| autoEncrypt |_| allowRecipient |_| shouldBeep |
+            send_radio_message(
+                "settings_"
+                + ("1" if encryptable else "0")
+                + "_"
+                + ("1" if auto_encryptable else "0")
+                + "_"
+                + ("1" if allow_recipient else "0")
+                + "_"
+                + ("1" if should_beep else "0")
+            )
+            settings_broadcast_debounce = 0;
+            should_broadcast_settings = False;

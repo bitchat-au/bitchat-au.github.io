@@ -302,7 +302,8 @@ def check_radio():
         if (
             "settings" in radio_message
             or "known" in radio_message
-            or "newImg" in radio_message
+            or "image" in radio_message
+            or "removeImg" in radio_message
         ):
             machine.reset()
 
@@ -351,14 +352,17 @@ while True:
             display.clear()
         if "known" in message:
             known_recipients = int(message.split("_")[1])
-        if "newImg" in message:
-
-            imageIndex = (
-                int(message.split("_")[1]) + 2
-            )  # +2 is the offset for the two default images
+        if "image" in message:
+            # Should check if the image is already in the list before adding it
             packedNewImage = message.split("_")[2]
-
-            led_images.append(unpack_image(packedNewImage))
+            unpackedNewImage = unpack_image(packedNewImage)
+            if not unpackedNewImage in led_images:
+                led_images.append(unpackedNewImage)
+        if "removeImg" in message:
+            packedImageToRemove = message.split("_")[1]
+            unpackedImageToRemove = unpack_image(packedImageToRemove)
+            if unpackedImageToRemove in led_images:
+                led_images.remove(unpackedImageToRemove)
         if "settings" in message:
             encryptable = message.split("_")[1] == "1"
             auto_encryptable = message.split("_")[2] == "1"
