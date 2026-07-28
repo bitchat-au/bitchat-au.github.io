@@ -18,6 +18,7 @@ button:not(.no-style) {
 
     display: flex;
     align-items: center;
+    gap: 0.5em;
     background-color: var(--button-bg);
     color: var(--button-color);
     border: none;
