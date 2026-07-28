@@ -45,6 +45,8 @@
     <section class="devices">
         <h2>Enheder</h2>
 
+        {microbitService.connected ? "connected" : "not connected"}
+
         <Devices />
         
         <button
@@ -76,6 +78,7 @@
         padding-right: 24px;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
     }
 
     .devices {
