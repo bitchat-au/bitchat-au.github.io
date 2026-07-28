@@ -158,8 +158,8 @@ export function getMBImage(mbName: string): ImageMatrix {
 export function createImageWithCaption(matrix: ImageMatrix, caption: string): ImageMatrixWithCaption {
     Object.defineProperty(matrix, CAPTION_KEY, {
         value: caption,
-        writable: false,
-        enumerable: false,
+        writable: true,
+        enumerable: true,
         configurable: true
     });
     return matrix as ImageMatrixWithCaption;
@@ -170,4 +170,19 @@ export function getImageCaption(matrix: ImageMatrix | undefined | null): string 
         return (matrix as ImageMatrixWithCaption)[CAPTION_KEY];
     }
     return undefined;
+}
+
+export function isEmptyImage(matrix: ImageMatrix): boolean {
+    return matrix.every(row => row.every(value => value === 0));
+}
+
+export function areImagesEqual(img1: ImageMatrix, img2: ImageMatrix): boolean {
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+            if (img1[i][j] !== img2[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
 }

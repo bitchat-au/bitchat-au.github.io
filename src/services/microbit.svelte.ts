@@ -3,8 +3,7 @@ import { dialogManager } from "./dialog_manager.svelte";
 import { Features, features } from "./features.svelte";
 import { friendlyLogService, LogType } from "./friendly_log.svelte";
 import { MicrobitSerialConnection } from "./serial_connection";
-
-const newImages: string[] = [];
+import { userImages } from "./user_images.svelte";
 
 type BooleanInt = 0 | 1;
 interface MessagesToMicrobit {
@@ -13,6 +12,7 @@ interface MessagesToMicrobit {
     newImg: [packedImage: string],
     known: [microbitName: string],
     knownImg: [packedImage: string],
+    removeImg: [packedImage: string],
     settings: [encryptable: BooleanInt, autoEncryptable: BooleanInt, allowRecipient: BooleanInt, shouldBeep: BooleanInt],
     forgetAll: [],
     start: [],
@@ -43,6 +43,7 @@ class MicrobitService {
 
     public async connect() {
         await this.microbitSerial.connect();
+        await this.writeToMB("start");
     }
 
     private checkForNewUser(newUser: string) {
@@ -82,7 +83,7 @@ class MicrobitService {
                 break;
             case "mbc":
                 if (this.knownMicrobits.length != Number(message.split("_")[1])) {
-                    console.log("microbit count mismatch, rebuilding connection")
+                    console.log("microbit count mismatch, rebuilding connection", this.knownMicrobits.length, Number(message.split("_")[1]));
                     this.writeToMB("count");
                 }
                 break;
@@ -137,21 +138,18 @@ class MicrobitService {
         this.writeToMB("sendMessage", sender, receiver, packImage(messageImage));
     }
 
-    public rebuildConnection() {
+    public async rebuildConnection() {
         console.log("rebuilding")
-
-        this.broadcastSettings();
-
-        for (let i = 0; i < this.knownMicrobits.length; i++) {
-            this.writeToMB("known", this.knownMicrobits[i].name)
+        
+        for await (const mb of this.knownMicrobits) {
+            await this.writeToMB("known", mb.name);
         }
         if (this.knownMicrobits.length == 0) {
-            this.writeToMB("forgetAll");
+            await this.writeToMB("forgetAll");
         }
 
-        for (let i = 0; i < newImages.length; i++) {
-            this.writeToMB("knownImg", packImageString(newImages[i]))
-        }
+        await this.broadcastSettings();
+        await this.broadcastImages();
     }
 
     /**
@@ -168,20 +166,32 @@ class MicrobitService {
     /**
      * Should convert the input string to a binary string, to be able to send eveything in one message.
      * The micro:bit will then convert the binary back to an image and display it.
-     * @param image Image string e.g. "1000101010001000101010001" (10001  01010  00100  01010  10001)
+     * @param image The image to send to the micro:bit
      */
-    async writeImageToMB(image: string) {
-        this.writeToMB("newImg", packImageString(image));
+    async writeImageToMB(image: ImageMatrix) {
+        await this.writeToMB("newImg", packImage(image));
     }
 
-    public broadcastSettings() {
-        this.writeToMB(
+    async removeImageFromMB(image: ImageMatrix) {
+        await this.writeToMB("removeImg", packImage(image));
+    }
+
+    public async broadcastSettings() {
+        await this.writeToMB(
             "settings",
             features.enabledFeatures.has(Features.Encryption) ? 1 : 0,
             features.enabledFeatures.has(Features.AutoEncryption) ? 1 : 0,
             features.enabledFeatures.has(Features.Router) ? 1 : 0,
             features.enabledFeatures.has(Features.Beep) ? 1 : 0
         );
+    }
+
+    public async broadcastImages() {
+        for await (const image of userImages) {
+            await this.writeToMB("knownImg", packImage(image));
+            await new Promise(resolve => setTimeout(resolve, 100)); // Wait for 100ms to avoid overwhelming the micro:bit
+        }
+        // userImages.forEach(image => this.writeToMB("knownImg", packImage(image)));
     }
 }
 

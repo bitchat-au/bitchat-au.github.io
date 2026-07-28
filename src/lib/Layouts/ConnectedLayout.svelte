@@ -1,9 +1,34 @@
-<script>
+<script lang="ts">
     import { Features, features } from "../../services/features.svelte";
     import Devices from "../components/Devices.svelte";
     import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
     import Icon from "../components/Icon.svelte";
+    import ImageBuilder from "../pages/ImageBuilder.svelte";
     import MessageLog from "../pages/MessageLog.svelte";
+
+    let view: "log" | "image-builder" | "code-cracker" | "empty" =
+        $state(chooseDefaultView());
+
+    function chooseDefaultView(): typeof view {
+        if (features.isActive(Features.Server)) return "log";
+        if (features.isActive(Features.ImageBuilder)) return "image-builder";
+        if (features.isActive(Features.KodeKnækkeren)) return "code-cracker";
+        return "empty";
+    }
+
+    // Ensure current view is valid when features change or on init
+    $effect(() => {
+        if (
+            (view === "log" && !features.isActive(Features.Server)) ||
+            (view === "image-builder" &&
+                !features.isActive(Features.ImageBuilder)) ||
+            (view === "code-cracker" &&
+                !features.isActive(Features.KodeKnækkeren)) ||
+            view === "empty"
+        ) {
+            view = chooseDefaultView();
+        }
+    });
 </script>
 
 <main>
@@ -12,22 +37,28 @@
             <nav class="feature-navigation">
                 <ul>
                     {#if features.isActive(Features.Server)}
-                        <li class="active">
-                            <button class="no-style"
+                        <li class:active={view === "log"}>
+                            <button
+                                class="no-style"
+                                onclick={() => (view = "log")}
                                 ><Icon name="code-block" /> Besked trafik</button
                             >
                         </li>
                     {/if}
                     {#if features.isActive(Features.ImageBuilder)}
-                        <li>
-                            <button class="no-style"
+                        <li class:active={view === "image-builder"}>
+                            <button
+                                class="no-style"
+                                onclick={() => (view = "image-builder")}
                                 ><Icon name="face-grin" /> Billed byggeren</button
                             >
                         </li>
                     {/if}
                     {#if features.isActive(Features.KodeKnækkeren)}
-                        <li>
-                            <button class="no-style"
+                        <li class:active={view === "code-cracker"}>
+                            <button
+                                class="no-style"
+                                onclick={() => (view = "code-cracker")}
                                 ><Icon name="lock-open" /> Kode knækkeren</button
                             >
                         </li>
@@ -36,7 +67,21 @@
             </nav>
             <FeaturesDropdown />
         </header>
-        <MessageLog />
+
+        {#if view === "log"}
+            <MessageLog />
+        {/if}
+        {#if view === "image-builder"}
+            <ImageBuilder />
+        {/if}
+        {#if view === "code-cracker"}
+            <p>Kode knækkeren er under udvikling</p>
+        {/if}
+        {#if view === "empty"}
+            <div class="empty">
+                <p>Vent på instruktioner fra din lærer</p>
+            </div>
+        {/if}
     </section>
 
     <section class="devices">
@@ -64,6 +109,13 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+    }
+
+    .empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
     }
 
     .devices {

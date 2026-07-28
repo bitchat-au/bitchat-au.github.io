@@ -1,15 +1,27 @@
 <script lang="ts">
-    import { COMMON_IMAGES, getImageCaption, type ImageMatrix } from "../../helpers/images";
+    import {
+        COMMON_IMAGES,
+        getImageCaption,
+        type ImageMatrix,
+    } from "../../helpers/images";
 
     interface Props {
         matrix?: ImageMatrix | null;
         class?: string;
+        padding?: number;
+        caption?: string;
     }
 
-    const { matrix = COMMON_IMAGES.EMPTY, class: classList }: Props = $props();
-    const padding = 30; // padding around the matrix
+    const {
+        matrix = COMMON_IMAGES.EMPTY,
+        class: classList,
+        padding = 30,
+        caption: customCaption,
+    }: Props = $props();
 
-    const caption = $derived(getImageCaption(matrix) ?? "5x5 LED matrix");
+    const caption = $derived(
+        (customCaption || getImageCaption(matrix)) ?? "5x5 LED matrix",
+    );
 </script>
 
 <svg
