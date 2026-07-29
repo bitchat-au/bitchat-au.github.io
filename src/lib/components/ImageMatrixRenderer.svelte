@@ -10,6 +10,7 @@
         class?: string;
         padding?: number;
         caption?: string;
+        highlightedPixel?: [number, number] | null;
     }
 
     const {
@@ -17,6 +18,7 @@
         class: classList,
         padding = 30,
         caption: customCaption,
+        highlightedPixel = null,
     }: Props = $props();
 
     const caption = $derived(
@@ -62,6 +64,20 @@
             {/if}
         {/each}
     {/each}
+
+    {#if highlightedPixel}
+        <rect
+            class="highlight"
+            aria-label="Markeret pixel ({highlightedPixel[0]},{highlightedPixel[1]})"
+            x={highlightedPixel[1] * 46 + 12 + padding - 4}
+            y={highlightedPixel[0] * 44 + 10 + padding - 4}
+            width="18"
+            height="28"
+            rx="4"
+            ry="4"
+            style="outline: 2px solid var(--accent); fill-opacity: 0;"
+        />
+    {/if}
 </svg>
 
 <style>

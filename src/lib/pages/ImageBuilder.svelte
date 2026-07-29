@@ -13,6 +13,7 @@
     import Icon from "../components/Icon.svelte";
     import ImageMatrixRenderer from "../components/ImageMatrixRenderer.svelte";
 
+    let hoverIndex = $state<number | null>(null);
     let imageUnderConstruction = $state<ImageMatrix>([
         [0, 0, 0, 0, 0],
         [0, 1, 1, 1, 0],
@@ -37,7 +38,11 @@
 
 <div class="builder">
     <div class="header">
-        <div class="bit-string-interactive">
+        <div
+            class="bit-string-interactive"
+            role="group"
+            aria-label="Billed kontrol panel"
+        >
             {#each imageUnderConstruction as row, rowIndex}
                 <div class="row">
                     <span>{rowIndex + 1}:</span>
@@ -45,6 +50,13 @@
                         <button
                             class="pixel"
                             class:active={pixel === 1}
+                            aria-label="Kontrol for pixel ({rowIndex + 1},{colIndex + 1})"
+                            onmouseover={() =>
+                                (hoverIndex = rowIndex * 5 + colIndex)}
+                            onfocus={() =>
+                                (hoverIndex = rowIndex * 5 + colIndex)}
+                            onmouseleave={() => (hoverIndex = null)}
+                            onblur={() => (hoverIndex = null)}
                             onclick={() =>
                                 (imageUnderConstruction[rowIndex][colIndex] =
                                     pixel === 1 ? 0 : 1)}>{pixel}</button
@@ -53,15 +65,23 @@
                 </div>
             {/each}
         </div>
-        <span class="bit-string"
-            >Bit streng: {imageUnderConstruction.flat().join("")}</span
-        >
+        <span
+            class="bit-string"
+            aria-label="Bit streng for det aktuelle billede"
+            >Bit streng:
+            {#each imageUnderConstruction.flat() as pixel, index}
+                <span class:highlight={hoverIndex === index}>{pixel}</span>
+            {/each}
+        </span>
     </div>
     <ImageMatrixRenderer
         matrix={imageUnderConstruction}
         class="image-preview"
         padding={10}
         caption="Forhåndsvisning af billede"
+        highlightedPixel={hoverIndex !== null
+            ? [Math.floor(hoverIndex / 5), hoverIndex % 5]
+            : null}
     />
 </div>
 
@@ -72,10 +92,10 @@
     >
 </div>
 
-<footer>
+<footer aria-label="Gemte billeder">
     <h2>Gemte billeder</h2>
 
-    <div class="saved-images">
+    <div class="saved-images" role="list" aria-label="Liste over gemte billeder">
         <ImageMatrixRenderer matrix={COMMON_IMAGES.HAPPY} class="saved-image" />
         <ImageMatrixRenderer matrix={COMMON_IMAGES.SAD} class="saved-image" />
         {#each userImages as image}
@@ -91,6 +111,10 @@
 </footer>
 
 <style>
+    .highlight {
+        text-decoration: underline;
+    }
+
     .builder {
         display: flex;
         flex-direction: column;
@@ -153,11 +177,19 @@
                     background-color: var(--bg);
                     color: var(--white);
                     border: 1px solid var(--white);
+
+                    &:hover {
+                        background-color: var(--muted-grey);
+                    }
                 }
 
                 &.active {
                     background-color: var(--white);
                     color: var(--bg);
+
+                    &:hover {
+                        background-color: #aaa;
+                    }
                 }
             }
         }
@@ -174,6 +206,7 @@
             width: 100%;
             overflow-x: auto;
             scrollbar-width: thin;
+            padding: 4px 0; /* Allows for the focus outline of the saved-image buttons */
 
             :global(.saved-image) {
                 max-width: 80px;
@@ -190,8 +223,10 @@
 
             button.saved-image {
                 position: relative;
+                display: flex;
 
-                &:hover::after {
+                &:hover::after,
+                &:focus-visible::after {
                     content: "";
                     position: absolute;
                     inset: 0;
@@ -201,7 +236,8 @@
                     backdrop-filter: blur(2px);
                 }
 
-                &:hover :global(.delete) {
+                &:hover :global(.delete),
+                &:focus-visible :global(.delete) {
                     opacity: 1;
                 }
 
