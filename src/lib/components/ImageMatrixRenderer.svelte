@@ -22,7 +22,7 @@
     }: Props = $props();
 
     const caption = $derived(
-        (customCaption || getImageCaption(matrix)) ?? "5x5 LED matrix",
+        (customCaption || getImageCaption(matrix)) ?? "5x5 LED-matrix",
     );
 </script>
 

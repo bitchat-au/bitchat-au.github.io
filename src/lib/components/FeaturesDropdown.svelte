@@ -103,7 +103,7 @@
                 use:onEnter={submitcode}
                 aria-label="Indtast feature kode"
             />
-            <button onclick={submitcode} aria-label="Check feature kode"><Icon name="arrow-right" /></button>
+            <button onclick={submitcode} aria-label="Tjek feature kode"><Icon name="arrow-right" /></button>
         </div>
         {#if codeError}
             <small class="field-error">Forkert kode</small>

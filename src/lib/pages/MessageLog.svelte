@@ -6,7 +6,7 @@
 
 <div>
     <samp>
-        Bit:Chat Server
+        Bit:Chat server
         {#each friendlyLogService.logs as log}
             <LogEntryRenderer entry={log} />
         {/each}
@@ -16,7 +16,7 @@
             class="transparent"
             onclick={() => friendlyLogService.clearLogs()}
         >
-            Clear Logs
+            Ryd log
             <Icon name="trash-alt" />
         </button>
     </footer>

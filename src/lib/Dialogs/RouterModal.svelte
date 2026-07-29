@@ -27,7 +27,7 @@
     let selectedReceiver: string | null = $state(null);
 </script>
 
-<Dialog open {onClose} ariaLabel="Router modal">
+<Dialog open {onClose} ariaLabel="Router popup">
     <h2><Icon name="sitemap" /> <span>Router</span></h2>
 
     <div class="message-preview">
@@ -69,7 +69,7 @@
     </div>
 
     <footer>
-        <button class="transparent" onclick={onClose}>Cancel</button>
+        <button class="transparent" onclick={onClose}>Slet besked</button>
         <button
             onclick={() => onResult({ newReceiver: selectedReceiver! })}
             disabled={selectedReceiver === null}>Send</button

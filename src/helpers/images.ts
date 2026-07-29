@@ -114,173 +114,173 @@ export const COMMON_IMAGES = Object.freeze({
         [0, 0, 0, 0, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0]
-    ], "Happy face"),
+    ], "Glad smiley"),
     SAD: createImageWithCaption([
         [0, 0, 0, 0, 0],
         [0, 1, 0, 1, 0],
         [0, 0, 0, 0, 0],
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1]
-    ], "Sad face"),
+    ], "Trist smiley"),
     FULL: createImageWithCaption([
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1]
-    ], "5 by 5 image fully filled"),
+    ], "5x5 billede helt tændt"),
     EMPTY: createImageWithCaption([
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0]
-    ], "5 by 5 image empty"),
+    ], "5x5 billede tomt"),
     ["1"]: createImageWithCaption([
         [0, 0, 1, 0, 0],
         [0, 1, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0]
-    ], "Digit 1"),
+    ], "Tal 1"),
     ["2"]: createImageWithCaption([
         [1, 1, 1, 0, 0],
         [0, 0, 0, 1, 0],
         [0, 1, 1, 0, 0],
         [1, 0, 0, 0, 0],
         [1, 1, 1, 1, 0]
-    ], "Digit 2"),
+    ], "Tal 2"),
     ["3"]: createImageWithCaption([
         [1, 1, 1, 1, 0],
         [0, 0, 0, 1, 0],
         [0, 0, 1, 0, 0],
         [1, 0, 0, 1, 0],
         [0, 1, 1, 0, 0]
-    ], "Digit 3"),
+    ], "Tal 3"),
     ["4"]: createImageWithCaption([
         [0, 0, 1, 1, 0],
         [0, 1, 0, 1, 0],
         [1, 0, 0, 1, 0],
         [1, 1, 1, 1, 1],
         [0, 0, 0, 1, 0]
-    ], "Digit 4"),
+    ], "Tal 4"),
     ["5"]: createImageWithCaption([
         [1, 1, 1, 1, 1],
         [1, 0, 0, 0, 0],
         [1, 1, 1, 1, 0],
         [0, 0, 0, 0, 1],
         [1, 1, 1, 1, 0]
-    ], "Digit 5"),
+    ], "Tal 5"),
     ["6"]: createImageWithCaption([
         [0, 0, 0, 1, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0]
-    ], "Digit 6"),
+    ], "Tal 6"),
     ["7"]: createImageWithCaption([
         [1, 1, 1, 1, 1],
         [0, 0, 0, 1, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 0, 0, 0],
         [1, 0, 0, 0, 0]
-    ], "Digit 7"),
+    ], "Tal 7"),
     ["8"]: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0]
-    ], "Digit 8"),
+    ], "Tal 8"),
     ["9"]: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 0, 0, 0]
-    ], "Digit 9"),
+    ], "Tal 9"),
     ["0"]: createImageWithCaption([
         [0, 1, 1, 0, 0],
         [1, 0, 0, 1, 0],
         [1, 0, 0, 1, 0],
         [1, 0, 0, 1, 0],
         [0, 1, 1, 0, 0]
-    ], "Digit 0"),
+    ], "Tal 0"),
     HEART: createImageWithCaption([
         [0, 1, 0, 1, 0],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0]
-    ], "Heart"),
+    ], "Hjerte"),
     DUCK: createImageWithCaption([
         [0, 1, 1, 0, 0],
         [1, 1, 1, 0, 0],
         [0, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 0, 0, 0]
-    ], "Duck"),
+    ], "And"),
     HOUSE: createImageWithCaption([
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0],
         [1, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 1, 1, 1, 0]
-    ], "House"),
+    ], "Hus"),
     GHOST: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 0, 1, 0, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 0, 1, 0, 1]
-    ], "Ghost"),
+    ], "Spøgelse"),
     GIRAFFE: createImageWithCaption([
         [1, 1, 0, 0, 0],
         [0, 1, 0, 0, 0],
         [0, 1, 0, 0, 0],
         [0, 1, 1, 1, 0],
         [0, 1, 0, 1, 0]
-    ], "Giraffe"),
+    ], "Giraf"),
     UMBRELLA: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 1, 1, 1, 1],
         [0, 0, 1, 0, 0],
         [1, 0, 1, 0, 0],
         [1, 1, 1, 0, 0]
-    ], "Umbrella"),
+    ], "Paraply"),
     SNAKE: createImageWithCaption([
         [1, 1, 0, 0, 0],
         [1, 1, 0, 1, 1],
         [0, 1, 0, 1, 0],
         [0, 1, 1, 1, 0],
         [0, 0, 0, 0, 0]
-    ], "Snake"),
+    ], "Slange"),
     RABBIT: createImageWithCaption([
         [1, 0, 1, 0, 0],
         [1, 0, 1, 0, 0],
         [1, 1, 1, 1, 0],
         [1, 1, 0, 1, 0],
         [1, 1, 1, 1, 0]
-    ], "Rabbit"),
+    ], "Kanin"),
     COW: createImageWithCaption([
         [1, 0, 0, 0, 1],
         [1, 0, 0, 0, 1],
         [1, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0]
-    ], "Cow"),
+    ], "Ko"),
     PITCHFORK: createImageWithCaption([
         [1, 0, 1, 0, 1],
         [1, 0, 1, 0, 1],
         [1, 1, 1, 1, 1],
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0]
-    ], "Pitchfork"),
+    ], "Gaffel"),
     SWORD: createImageWithCaption([
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0]
-    ], "Sword"),
+    ], "Sværd"),
 })

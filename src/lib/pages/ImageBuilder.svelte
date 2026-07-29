@@ -30,7 +30,7 @@
             return;
         }
 
-        const image = createImageWithCaption(imageUnderConstruction, "User image");
+        const image = createImageWithCaption(imageUnderConstruction, "Eget billede");
         if (addUserImage(image)) {
             microbitService.writeImageToMB(image);
         }
