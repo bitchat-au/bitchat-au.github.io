@@ -1,7 +1,7 @@
 <script lang="ts">
     import { friendlyLogService } from "../../services/friendly_log.svelte";
-    import Icon from "../components/Icon.svelte";
-    import LogEntryRenderer from "../components/LogEntryRenderer.svelte";
+    import Icon from "../Components/Icon.svelte";
+    import LogEntryRenderer from "../Components/LogEntryRenderer.svelte";
 </script>
 
 <div>

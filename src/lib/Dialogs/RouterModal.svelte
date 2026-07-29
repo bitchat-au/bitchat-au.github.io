@@ -1,11 +1,11 @@
 <script lang="ts">
     import type { DialogProps } from "../../services/dialog_manager.svelte";
-    import { COMMON_IMAGES, type ImageMatrix } from "../../helpers/images";
-    import Dialog from "./Dialog.svelte";
-    import Icon from "./Icon.svelte";
-    import ImageMatrixRenderer from "./ImageMatrixRenderer.svelte";
+    import { type ImageMatrix } from "../../helpers/images";
+    import Dialog from "../Components/Dialog.svelte";
+    import Icon from "../Components/Icon.svelte";
+    import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
     import { microbitService } from "../../services/microbit.svelte";
-    import CodeMarquee from "./CodeMarquee.svelte";
+    import CodeMarquee from "../Components/CodeMarquee.svelte";
 
     type Props = DialogProps<
         { sender: string; requestedReceiver: string; message: ImageMatrix },

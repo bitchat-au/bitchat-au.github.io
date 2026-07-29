@@ -1,11 +1,11 @@
 <script lang="ts">
     import { Features, features } from "../../services/features.svelte";
-    import Devices from "../components/Devices.svelte";
-    import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
-    import Icon from "../components/Icon.svelte";
-    import CodeCracker from "../pages/CodeCracker.svelte";
-    import ImageBuilder from "../pages/ImageBuilder.svelte";
-    import MessageLog from "../pages/MessageLog.svelte";
+    import Devices from "../Components/Devices.svelte";
+    import FeaturesDropdown from "../Components/FeaturesDropdown.svelte";
+    import Icon from "../Components/Icon.svelte";
+    import CodeCracker from "../Pages/CodeCracker.svelte";
+    import ImageBuilder from "../Pages/ImageBuilder.svelte";
+    import MessageLog from "../Pages/MessageLog.svelte";
 
     let view: "log" | "image-builder" | "code-cracker" | "empty" =
         $state(chooseDefaultView());

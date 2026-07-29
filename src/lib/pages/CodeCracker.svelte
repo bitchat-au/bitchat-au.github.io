@@ -5,7 +5,7 @@
         type ImageMatrix,
     } from "../../helpers/images";
     import { userImages } from "../../services/user_images.svelte";
-    import ImageMatrixRenderer from "../components/ImageMatrixRenderer.svelte";
+    import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
 
     let imageSelection: "own" | "random" = $state("own");
     let correctCode = $state("");

@@ -1,24 +1,25 @@
-import { areImagesEqual, packImage, type ImageMatrix } from "../helpers/images";
-import { microbitService } from "./microbit.svelte";
+import { areImagesEqual, type ImageMatrix } from "../helpers/images";
 
 export let userImages: ImageMatrix[] = $state(loadFromLocalStorage() ?? []);
 
 export function addUserImage(image: ImageMatrix) {
     const exists = userImages.some(img => areImagesEqual(img, image));
-    if (exists) return;
+    if (exists) return false;
     
     userImages.push(image);
-    microbitService.writeImageToMB(image);
     saveToLocalStorage();
+    return true;
 }
 
 export function removeUserImage(image: ImageMatrix) {
     const index = userImages.findIndex(img => areImagesEqual(img, image));
     if (index !== -1) {
         userImages.splice(index, 1);
-        microbitService.removeImageFromMB(image);
         saveToLocalStorage();
+        return true;
     }
+
+    return false;
 }
 
 function saveToLocalStorage() {

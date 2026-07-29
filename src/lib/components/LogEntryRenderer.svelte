@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { getMBImage } from "../../helpers/images";
+    import { COMMON_IMAGES } from "../../helpers/images";
     import { Features, features } from "../../services/features.svelte";
+    import { microbitService } from "../../services/microbit.svelte";
     import {
         LogType,
         type FriendLogs,
@@ -16,6 +17,13 @@
     const { entry }: Props = $props();
     const entryId = $props.id();
     const showTranslator = $derived(features.isActive(Features.Translator));
+
+    function getDeviceImage(name: string) {
+        const device = microbitService.knownMicrobits.find(
+            (mb) => mb.name === name,
+        );
+        return device?.image ?? COMMON_IMAGES.EMPTY;
+    }
 </script>
 
 <code>
@@ -38,11 +46,11 @@
         </button>
 
         <div popover="auto" class="translated-image" id="translator-{entryId}">
-            <ImageMatrixRenderer matrix={getMBImage(senderName)} />
+            <ImageMatrixRenderer matrix={getDeviceImage(senderName)} />
             <CodeMarquee />
             <ImageMatrixRenderer matrix={message} />
             <CodeMarquee />
-            <ImageMatrixRenderer matrix={getMBImage(recipientName)} />
+            <ImageMatrixRenderer matrix={getDeviceImage(recipientName)} />
         </div>
     {/if}
 </code>

@@ -1,5 +1,5 @@
-import { COMMON_IMAGES, createImageWithCaption, packImage, packImageString, unpackImage, type ImageMatrix } from "../helpers/images";
-import { dialogManager } from "./dialog_manager.svelte";
+import { COMMON_IMAGES, createImageWithCaption, packImage, unpackImage, type ImageMatrix } from "../helpers/images";
+import { showPrompt } from "./dialog_manager.svelte";
 import { Features, features } from "./features.svelte";
 import { friendlyLogService, LogType } from "./friendly_log.svelte";
 import { MicrobitSerialConnection } from "./serial_connection";
@@ -118,7 +118,7 @@ class MicrobitService {
             // setUpHacking(messageSender, messageReceiver, messageString)
         } else if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
             this.writeToMB("nmComp");
-            const result = await dialogManager.showPrompt("RouterModal", {
+            const result = await showPrompt("RouterModal", {
                 sender,
                 requestedReceiver: receiver,
                 message: messageImage
@@ -196,4 +196,6 @@ class MicrobitService {
 }
 
 export const microbitService = MicrobitService.instance;
-(window as any).microbitService = microbitService;
+if (import.meta.env.DEV) {
+    (window as any).microbitService = microbitService;
+}

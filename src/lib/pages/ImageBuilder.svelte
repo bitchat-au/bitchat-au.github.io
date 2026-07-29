@@ -10,8 +10,9 @@
         removeUserImage,
         userImages,
     } from "../../services/user_images.svelte";
-    import Icon from "../components/Icon.svelte";
-    import ImageMatrixRenderer from "../components/ImageMatrixRenderer.svelte";
+    import { microbitService } from "../../services/microbit.svelte";
+    import Icon from "../Components/Icon.svelte";
+    import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
 
     let hoverIndex = $state<number | null>(null);
     let imageUnderConstruction = $state<ImageMatrix>([
@@ -29,10 +30,18 @@
             return;
         }
 
-        addUserImage(
-            createImageWithCaption(imageUnderConstruction, "User image"),
-        );
+        const image = createImageWithCaption(imageUnderConstruction, "User image");
+        if (addUserImage(image)) {
+            microbitService.writeImageToMB(image);
+        }
+
         clearImage();
+    };
+
+    const onRemove = (image: ImageMatrix) => {
+        if (removeUserImage(image)) {
+            microbitService.removeImageFromMB(image);
+        }
     };
 </script>
 
@@ -101,7 +110,7 @@
         {#each userImages as image}
             <button
                 class="saved-image no-style"
-                onclick={() => removeUserImage(image)}
+                onclick={() => onRemove(image)}
             >
                 <ImageMatrixRenderer matrix={image} />
                 <Icon name="trash-alt" class="delete" />

@@ -1,5 +1,3 @@
-import { microbitService } from "../services/microbit.svelte";
-
 export type ImageMatrix = [[number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number]];
 export type ImageMatrixWithCaption = ImageMatrix & { [CAPTION_KEY]: string };
 
@@ -41,16 +39,6 @@ export function unpackImage(payload: string): ImageMatrix {
         const binaryString = val.toString(2).padStart(5, '0');
         return binaryString.split('').map(bit => parseInt(bit, 10));
     }) as ImageMatrix;
-}
-
-export function getMBImage(mbName: string): ImageMatrix {
-    const mb = microbitService.knownMicrobits.find(mb => mb.name === mbName);
-    if (mb) {
-        return mb.image;
-    } else {
-        console.warn(`Microbit with name ${mbName} not found. Returning empty image.`);
-        return COMMON_IMAGES.EMPTY;
-    }
 }
 
 export function createImageWithCaption(matrix: ImageMatrix, caption: string): ImageMatrixWithCaption {

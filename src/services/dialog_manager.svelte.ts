@@ -1,5 +1,5 @@
 import type { Component } from "svelte";
-import RouterModal from "../lib/components/RouterModal.svelte";
+import RouterModal from "../lib/Dialogs/RouterModal.svelte";
 
 type DialogResult<T extends unknown> =
     { type: "error", error: string } |
@@ -8,21 +8,21 @@ type DialogResult<T extends unknown> =
 
 export interface DialogProps<Data extends unknown, Return extends unknown> {
     data: Data;
-    dialogRef: string;
+    id: string;
     onError: (err: string) => void;
     onResult: (res: Return) => void;
     onClose: () => void
 }
 
 interface OpenDialog<K extends AvailableDialogs = AvailableDialogs> {
-    dialogRef: string;
-    Component: RegisteredDialogs[K];
+    dialogRef: K;
+    id: string;
     data: InferDialogData<K>;
     promiseResolve: (res: DialogResult<InferDialogReturn<K>>) => void;
     promiseReject: (err: Error) => void;
 }
 
-type RegisteredDialogs = typeof DialogManager.registeredDialogs;
+type RegisteredDialogs = typeof registeredDialogs;
 type AvailableDialogs = keyof RegisteredDialogs;
 type InferDialogData<K extends AvailableDialogs> = DialogPropsOf<K>["data"];
 type InferDialogReturn<K extends AvailableDialogs> = DialogPropsOf<K>["return"];
@@ -32,49 +32,38 @@ type DialogPropsOf<K extends AvailableDialogs> =
         ? { data: Data; return: Return }
         : never;
 
-type TData = InferDialogData<"RouterModal">;
-type TReturn = InferDialogReturn<"RouterModal">;
+export const registeredDialogs = {
+    RouterModal
+}
 
-export class DialogManager {
-    private static _instance: DialogManager;
-    public static get instance(): DialogManager {
-        if (!DialogManager._instance) {
-            DialogManager._instance = new DialogManager();
+export const openDialogs: Array<OpenDialog> = $state([]);
+
+export function showPrompt<K extends AvailableDialogs>(component: K, data: InferDialogData<K>): Promise<DialogResult<InferDialogReturn<K>>> {
+    return new Promise((resolve, reject) => {
+        const openDialog: OpenDialog<K> = {
+            id: Math.random().toString(),
+            dialogRef: component,
+            data,
+            promiseResolve: resolve,
+            promiseReject: reject
         }
-        return DialogManager._instance;
-    }
+        
+        openDialogs.push(openDialog);
+    });
+}
 
-    public static registeredDialogs = {
-        RouterModal
-    }
-
-    public openDialogs: Array<OpenDialog> = $state([]);
-
-    private constructor() { }
-
-    public showPrompt<K extends AvailableDialogs>(component: K, data: InferDialogData<K>): Promise<DialogResult<InferDialogReturn<K>>> {
-        return new Promise((resolve, reject) => {
-            const openDialog: OpenDialog<K> = {
-                dialogRef: Math.random().toString(),
-                Component: DialogManager.registeredDialogs[component],
-                data,
-                promiseResolve: resolve,
-                promiseReject: reject
-            }
-            
-            this.openDialogs.push(openDialog);
-        });
-    }
-
-    public resolveDialog<K extends AvailableDialogs>(dialog: OpenDialog<K>, result: DialogResult<InferDialogReturn<K>>): void {
+export function resolveDialog<K extends AvailableDialogs>(
+    dialog: OpenDialog<K>,
+    result: DialogResult<InferDialogReturn<K>>
+): void {
         dialog.promiseResolve(result);
 
-        const index = this.openDialogs.indexOf(dialog);
-        if (index !== -1) {
-            this.openDialogs.splice(index, 1);
-        }
+    const index = openDialogs.indexOf(dialog);
+    if (index !== -1) {
+        openDialogs.splice(index, 1);
     }
 }
 
-export const dialogManager = DialogManager.instance;
-(window as any).dialogManager = dialogManager;
+if (import.meta.env.DEV) {
+    (window as any).dialogManager = { openDialogs, showPrompt, resolveDialog };
+}
