@@ -27,7 +27,7 @@
         gap: 0.5rem;
         padding: 0.5rem 0;
 
-        border-top: 1px solid rgb(from var(--muted-grey) r g b / 0.5);
+        border-top: 1px solid var(--stroke);
 
         &:first-child {
             border-top: none;

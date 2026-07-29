@@ -122,6 +122,7 @@
         align-items: center;
         flex-grow: 1;
         gap: 1rem;
+        width: 100%;
 
         .header {
             display: flex;
@@ -196,8 +197,9 @@
     }
 
     footer {
-        border-top: 1px solid var(--muted-grey);
+        border-top: 1px solid var(--stroke);
         padding-top: 1rem;
+        width: 100%;
 
         .saved-images {
             display: flex;

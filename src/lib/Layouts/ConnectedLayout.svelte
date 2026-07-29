@@ -3,6 +3,7 @@
     import Devices from "../components/Devices.svelte";
     import FeaturesDropdown from "../components/FeaturesDropdown.svelte";
     import Icon from "../components/Icon.svelte";
+    import CodeCracker from "../pages/CodeCracker.svelte";
     import ImageBuilder from "../pages/ImageBuilder.svelte";
     import MessageLog from "../pages/MessageLog.svelte";
 
@@ -75,7 +76,7 @@
             <ImageBuilder />
         {/if}
         {#if view === "code-cracker"}
-            <p>Kode knækkeren er under udvikling</p>
+            <CodeCracker />
         {/if}
         {#if view === "empty"}
             <div class="empty">
@@ -109,6 +110,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        align-items: center;
     }
 
     .empty {
@@ -119,7 +121,7 @@
     }
 
     .devices {
-        border-left: 1px solid var(--muted-grey);
+        border-left: 1px solid var(--stroke);
         padding-left: 24px;
     }
 
@@ -128,6 +130,7 @@
         justify-content: space-between;
         align-items: flex-start;
         margin-bottom: 12px;
+        width: 100%;
     }
 
     .feature-navigation ul {

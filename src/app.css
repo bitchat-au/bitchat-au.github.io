@@ -17,7 +17,8 @@
   --muted-grey: #717171;
   --white: #E0E4DD;
   --accent: #5BEE4E;
-  --danger: #EE4E4E;  
+  --danger: #EE4E4E;
+  --stroke: rgb(from var(--muted-grey) r g b / 50%); /* To be used for horizontal/vertical dividers */
 
   --sans: 'Momo Trust Sans', system-ui, sans-serif;
   --sans-display: 'Momo Trust Display', system-ui, sans-serif;
@@ -68,6 +69,19 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1;
   font-weight: 400;
   margin-top: 0;
+
+  &:has(+ .subheading) {
+    margin-bottom: 0.2em;
+  }
+}
+
+.subheading {
+  color: var(--muted-grey);
+  margin-top: 0;
+  
+  & + * {
+    margin-bottom: 1em;
+  }
 }
 
 pre, samp, code {
@@ -95,4 +109,11 @@ pre, samp, code {
 
 [popover] {
   border: none;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--stroke);
+  margin: 1rem 0;
+  width: 100%;
 }

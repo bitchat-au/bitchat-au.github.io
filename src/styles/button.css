@@ -15,8 +15,8 @@ button.transparent {
 }
 
 button:not(.no-style) {
-
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 0.5em;
     background-color: var(--button-bg);

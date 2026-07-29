@@ -51,7 +51,7 @@
 
     <div class="receivers">
         {#each receivers as receiver}
-            <label class="no-style" for={receiver.name}>
+            <label class="hide-input" for={receiver.name}>
                 <input
                     type="radio"
                     value={receiver.name}
@@ -142,17 +142,8 @@
                 border: 1px solid var(--muted-grey);
             }
 
-            &:has(input:focus-visible) {
-                outline: 2px solid var(--accent);
-            }
-
             &:has(input:checked) {
                 border: 1px solid var(--accent);
-            }
-
-            input {
-                position: absolute;
-                opacity: 0;
             }
 
             :global(.image-matrix.candidate) {
