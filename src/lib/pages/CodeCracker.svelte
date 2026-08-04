@@ -64,82 +64,125 @@
             newChar +
             inputCode.substring(index + 1);
     };
+
+    function reset() {
+        selectedImage = null;
+        inputCode = "AAAAA";
+        correctness = 0;
+        decryptedImage = COMMON_IMAGES.EMPTY;
+    }
 </script>
 
-{#if !selectedImage}
-    <header>
-        <h2>{scopedT("title")}</h2>
-        <span class="subheading"
-            >{@html scopedT("instructions")}</span
-        >
-    </header>
-
-    <div class="source-selection">
-        <div class="radio-group">
-            <label class="as-button"
-                ><input
-                    type="radio"
-                    name="billede"
-                    value="own"
-                    bind:group={imageSelection}
-                />{scopedT("ownImage")}</label
-            >
-            <label class="as-button"
-                ><input
-                    type="radio"
-                    name="billede"
-                    value="random"
-                    bind:group={imageSelection}
-                />{scopedT("randomImage")}</label
-            >
-        </div>
-        <button onclick={generateImage}>{scopedT("generate")}</button>
-    </div>
-{:else}
-    <div class="code-input">
-        <div class="input">
-            <h3 class="label">{scopedT("code")}:</h3>
-            <div class="characters">
-                {#each inputCode.split("") as char, index}
-                    <button
-                        class="no-style character"
-                        onclick={() => flipCharacter(index)}
-                    >
-                        {char}
-                    </button>
-                {/each}
+<div class="code-cracker">
+    {#if !selectedImage}
+        <header>
+            <h2>{scopedT("title")}</h2>
+            <span class="subheading">{@html scopedT("instructions")}</span>
+        </header>
+    
+        <div class="source-selection">
+            <div class="radio-group">
+                <label class="as-button"
+                    ><input
+                        type="radio"
+                        name="billede"
+                        value="own"
+                        bind:group={imageSelection}
+                    />{scopedT("ownImage")}</label
+                >
+                <label class="as-button"
+                    ><input
+                        type="radio"
+                        name="billede"
+                        value="random"
+                        bind:group={imageSelection}
+                    />{scopedT("randomImage")}</label
+                >
             </div>
+            <hr>
+            <button onclick={generateImage}>{scopedT("generate")}</button>
         </div>
-        <button onclick={checkCode} class="decrypt">{scopedT("decrypt")}</button>
-    </div>
-    <ImageMatrixRenderer
-        matrix={decryptedImage}
-        class="image-preview"
-        padding={10}
-        caption={scopedT("imageRenderAriaLabel")}
-    />
-    <p class="correctness">{scopedT("correctness", { correctness })}</p>
-    <button onclick={() => (selectedImage = null)}>{scopedT("tryAgain")}</button>
-{/if}
+    {:else}
+        {#if correctness === 5}
+            <h2>{scopedT("decrypted")}</h2>
+            <p class="subheading">{scopedT("decryptedDescription")}</p>
+            <button onclick={reset}>{scopedT("tryAgain")}</button>
+        {:else}
+            <div class="code-input">
+                <div class="input">
+                    <h3 class="label">{scopedT("code")}:</h3>
+                    <div class="characters">
+                        {#each inputCode.split("") as char, index}
+                            <button
+                                class="no-style character"
+                                onclick={() => flipCharacter(index)}
+                            >
+                                {char}
+                            </button>
+                        {/each}
+                    </div>
+                </div>
+                <button onclick={checkCode} class="decrypt">{scopedT("decrypt")}</button
+                >
+        
+                <div class="indicator">
+                    <div class="indicator-bar">
+                        {#each Array.from({ length: 5 }) as _, index}
+                            <span
+                                class:correct={index < correctness}
+                                class:incorrect={index >= correctness}
+                            ></span>
+                        {/each}
+                    </div>
+            
+                    <p class="correctness">{scopedT("correctness", { correctness })}</p>
+                </div>
+            </div>
+        {/if}
+
+        <ImageMatrixRenderer
+            matrix={decryptedImage}
+            class="image-preview"
+            padding={10}
+            caption={scopedT("imageRenderAriaLabel")}
+        />
+    
+        <!-- <button onclick={() => (selectedImage = null)}>{scopedT("tryAgain")}</button
+        > -->
+    {/if}
+</div>
 
 <style>
+    .code-cracker {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        flex-grow: 1;
+    }
+
     header {
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        margin-top: 10rem;
     }
 
     .source-selection {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        gap: 2rem;
+        align-items: center;
+        gap: 0.5rem;
         margin-top: 1rem;
+        flex-wrap: wrap;
+        width: 100%;
     }
 
     :global(.image-matrix.image-preview) {
         max-width: 300px;
+        margin-top: 2rem;
     }
 
     .code-input {
@@ -147,8 +190,6 @@
         flex-direction: column;
         align-items: center;
         gap: 0.5rem;
-        margin-bottom: 3rem;
-        margin-top: 10rem;
 
         .input {
             display: flex;
@@ -159,11 +200,11 @@
                 margin: 0;
                 font-size: 24px;
             }
-    
+
             .characters {
                 display: flex;
                 gap: 0.25rem;
-    
+
                 button.character {
                     display: flex;
                     justify-content: center;
@@ -185,6 +226,40 @@
 
         .decrypt {
             width: 100%;
+        }
+    }
+
+    .indicator {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        margin-top: 0.5rem;
+        
+        .indicator-bar {
+            display: flex;
+            justify-content: center;
+            gap: 0.25rem;
+            max-width: 300px;
+            width: 100%;
+    
+            span {
+                flex-grow: 1;
+                height: 0.25rem;
+    
+                &.correct {
+                    background-color: var(--accent);
+                }
+    
+                &.incorrect {
+                    background-color: var(--danger);
+                }
+            }
+        }
+    
+        .correctness {
+            font-size: 0.9rem;
+            color: var(--muted-grey);
         }
     }
 </style>

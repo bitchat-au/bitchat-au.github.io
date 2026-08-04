@@ -57,8 +57,10 @@
         "decrypt": "Dekrypter",
         "code": "Kode",
         "imageRenderAriaLabel": "Forhåndsvisning af krypteret billede",
-        "correctness": "Korrekt: {{correctness}} / 5",
-        "tryAgain": "Prøv igen"
+        "correctness": "{{correctness}} ud af 5 korrekt",
+        "tryAgain": "Prøv et nyt billede",
+        "decrypted": "Dekrypteret!",
+        "decryptedDescription": "Du har dekrypteret billedet korrekt. Godt arbejde!"
     },
     "imageBuilder": {
         "bitStringInteractiveAriaLabel": "Billed kontrol panel",

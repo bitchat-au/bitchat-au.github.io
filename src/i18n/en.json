@@ -57,8 +57,10 @@
         "decrypt": "Decrypt",
         "code": "Code",
         "imageRenderAriaLabel": "Preview of encrypted image",
-        "correctness": "Correct: {{correctness}} / 5",
-        "tryAgain": "Try again"
+        "correctness": "{{correctness}} out of 5 correct",
+        "tryAgain": "Try a new image",
+        "decrypted": "Decrypted image",
+        "decryptedDescription": "You have successfully decrypted the image. Good job!"
     },
     "imageBuilder": {
         "bitStringInteractiveAriaLabel": "Image control panel",
