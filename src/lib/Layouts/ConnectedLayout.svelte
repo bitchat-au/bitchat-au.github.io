@@ -97,7 +97,6 @@
         display: grid;
         grid-template-columns: auto 300px;
         padding: 24px;
-        height: 100vh;
         box-sizing: border-box;
     }
 

@@ -1,8 +1,15 @@
 import danishTranslations from '../i18n/da.json'
 
 const availableTranslations = {
-    da: flattenTranslations(danishTranslations)
+    da: flattenTranslations(danishTranslations),
+    ...(
+        import.meta.env.DEV && {
+            null: {} // Dev mode to check translation keys
+        }
+    )
 }
+
+export const availableLocales = Object.keys(availableTranslations) as Array<keyof typeof availableTranslations>;
 
 type AvailableLocales = keyof typeof availableTranslations;
 type Translations = typeof danishTranslations;
@@ -58,6 +65,7 @@ function getLocale(): AvailableLocales {
 
     if (!(locale in availableTranslations)) {
         console.warn(`Locale '${locale}' not found. Falling back to 'da'.`);
+        localStorage.setItem(storageKey, 'da');
         return 'da';
     }
 
@@ -69,8 +77,9 @@ function getLocale(): AvailableLocales {
 
 export const locale = getLocale();
 const translations = loadTranslations(locale);
-export function t(key: string, variables?: Record<string, string | number>): string {
-    let translation = translations[key] || key;
+export function t(path: string | string[], variables?: Record<string, string | number>): string {
+    const translationKey = Array.isArray(path) ? path.join('.') : path;
+    let translation = translations[translationKey] || translationKey;
     if (variables) {
         translation = Object.entries(variables).reduce((acc, [varName, varValue]) => {
             return acc.replace(new RegExp(`\\{\\{${varName}\\}\\}`, 'g'), String(varValue));
@@ -81,8 +90,17 @@ export function t(key: string, variables?: Record<string, string | number>): str
 }
 
 export function scope(prefix: string): typeof t {
-    return (key: string, variables?: Record<string, string | number>) => {
-        const scopedKey = `${prefix}.${key}`;
+    return (path: string | string[], variables?: Record<string, string | number>) => {
+        const scopedKey = `${prefix}.${Array.isArray(path) ? path.join('.') : path}`;
         return t(scopedKey, variables);
     };
+}
+
+export function changeLocale(newLocale: AvailableLocales): void {
+    if (!(newLocale in availableTranslations)) {
+        throw new Error(`Translations for locale '${newLocale}' not found`);
+    }
+
+    localStorage.setItem(storageKey, newLocale);
+    window.location.reload();
 }

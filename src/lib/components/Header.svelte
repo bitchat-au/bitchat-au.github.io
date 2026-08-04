@@ -1,5 +1,6 @@
 <script>
-    import { t } from "@i18n";
+    import { availableLocales, changeLocale, locale, t } from "@i18n";
+    import Icon from "./Icon.svelte";
 
 </script>
 <header>
@@ -52,6 +53,24 @@
             fill="currentColor"
         />
     </svg>
+
+    <button class="transparent locale" popovertarget="locale-popup">
+        <Icon name="globe" />
+        <span>{t(['locales', locale])}</span>
+    </button>
+
+    <div class="locale-popup" id="locale-popup" popover>
+        {#each availableLocales as loc}
+            <button
+                class="transparent"
+                on:click={() => changeLocale(loc)}
+                disabled={loc === locale}
+            >
+                <Icon name={`flag-${loc}`} />
+                {t(['locales', loc])}
+            </button>
+        {/each}
+    </div>
 </header>
 
 <style>
@@ -59,14 +78,40 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding: 0.75rem;
         background-color: var(--bg);
         border-bottom: 1px solid var(--stroke);
+        padding: 0 1rem;
         height: 3rem;
     }
 
     .logo {
         color: var(--accent);
         height: 100%;
+        padding: 0.75rem 0;
+    }
+
+    .locale {
+        margin-left: auto;
+        anchor-name: --locale-anchor;
+    }
+
+    .locale-popup {
+        flex-direction: column;
+        position: absolute;
+        position-anchor: --locale-anchor;
+        position-area: bottom span-left;
+        background-color: var(--bg);
+        border: 1px solid var(--muted-grey);
+        color: var(--white);
+        padding: 0.5rem;
+        align-items: flex-start;
+
+        &:popover-open {
+            display: flex;
+        }
+
+        button {
+            padding: 0.5rem 0.75rem;
+        }
     }
 </style>

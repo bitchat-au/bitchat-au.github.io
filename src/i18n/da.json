@@ -1,5 +1,9 @@
 {
     "title": "Bit:Chat",
+    "locales": {
+        "en": "Engelsk",
+        "da": "Dansk"
+    },
     "knownImages": {
         "HAPPY": "Glad smiley",
         "SAD": "Trist smiley",
