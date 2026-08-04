@@ -112,6 +112,8 @@
 
         button {
             padding: 0.5rem 0.75rem;
+            width: 100%;
+            justify-content: flex-start;
         }
     }
 </style>

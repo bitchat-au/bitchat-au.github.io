@@ -61,7 +61,8 @@
         "correctness": "{{correctness}} out of 5 correct",
         "tryAgain": "Try a new image",
         "decrypted": "Decrypted image",
-        "decryptedDescription": "You have successfully decrypted the image. Good job!"
+        "decryptedDescription": "You have successfully decrypted the image. Good job!",
+        "showHint": "Show hint"
     },
     "imageBuilder": {
         "bitStringInteractiveAriaLabel": "Image control panel",
@@ -105,8 +106,8 @@
             "featureCodeInputAriaLabel": "Enter feature code",
             "featureCodeSubmitAriaLabel": "Check feature code",
             "wrongCode": "Wrong code",
-            "true": "True",
-            "false": "False"
+            "true": "On",
+            "false": "Off"
         },
         "Server": "Server",
         "Translator": "Translator",

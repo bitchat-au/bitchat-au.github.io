@@ -30,7 +30,7 @@
     {#if entry.type === LogType.Device}
         {entry.message[0]} joined
     {:else if entry.type === LogType.Message}
-        {@const [senderName, recipientName, message, encrypted] =
+        {@const [senderName, recipientName, message] =
             entry.message as FriendLogs[LogType.Message]}
         {@const messageAsString = message.map((row) => row.join("")).join(":")}
 
@@ -42,7 +42,6 @@
         >
             [{senderName}] ---&#8203;&gt; [{recipientName}] ---
             {messageAsString}
-            {#if encrypted}🔑{/if}
         </button>
 
         <div popover="auto" class="translated-image" id="translator-{entryId}">

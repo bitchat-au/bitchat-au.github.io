@@ -61,7 +61,8 @@
         "correctness": "{{correctness}} ud af 5 korrekt",
         "tryAgain": "Prøv et nyt billede",
         "decrypted": "Dekrypteret!",
-        "decryptedDescription": "Du har dekrypteret billedet korrekt. Godt arbejde!"
+        "decryptedDescription": "Du har dekrypteret billedet korrekt. Godt arbejde!",
+        "showHint": "Vis et hint"
     },
     "imageBuilder": {
         "bitStringInteractiveAriaLabel": "Billed kontrol panel",
@@ -105,8 +106,8 @@
             "featureCodeInputAriaLabel": "Indtast feature kode",
             "featureCodeSubmitAriaLabel": "Tjek feature kode",
             "wrongCode": "Forkert kode",
-            "true": "Sandt",
-            "false": "Falsk"
+            "true": "Til",
+            "false": "Fra"
         },
         "Server": "Server",
         "Translator": "Oversætter",

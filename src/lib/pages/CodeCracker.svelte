@@ -16,6 +16,7 @@
     let selectedImage: ImageMatrix | null = $state(null);
     let decryptedImage: ImageMatrix = $state(COMMON_IMAGES.EMPTY);
     let correctness = $state(0);
+    let showHint = $state(false);
 
     function generateImage() {
         const candidates =
@@ -45,6 +46,7 @@
         selectedImage = encryptImage(image, correctCode);
         correctness = 0;
         decryptedImage = selectedImage;
+        showHint = false;
     }
 
     function checkCode() {
@@ -70,6 +72,7 @@
         inputCode = "AAAAA";
         correctness = 0;
         decryptedImage = COMMON_IMAGES.EMPTY;
+        showHint = false;
     }
 </script>
 
@@ -79,7 +82,7 @@
             <h2>{scopedT("title")}</h2>
             <span class="subheading">{@html scopedT("instructions")}</span>
         </header>
-    
+
         <div class="source-selection">
             <div class="radio-group">
                 <label class="as-button"
@@ -99,7 +102,7 @@
                     />{scopedT("randomImage")}</label
                 >
             </div>
-            <hr>
+            <hr />
             <button onclick={generateImage}>{scopedT("generate")}</button>
         </div>
     {:else}
@@ -122,21 +125,9 @@
                         {/each}
                     </div>
                 </div>
-                <button onclick={checkCode} class="decrypt">{scopedT("decrypt")}</button
+                <button onclick={checkCode} class="decrypt"
+                    >{scopedT("decrypt")}</button
                 >
-        
-                <div class="indicator">
-                    <div class="indicator-bar">
-                        {#each Array.from({ length: 5 }) as _, index}
-                            <span
-                                class:correct={index < correctness}
-                                class:incorrect={index >= correctness}
-                            ></span>
-                        {/each}
-                    </div>
-            
-                    <p class="correctness">{scopedT("correctness", { correctness })}</p>
-                </div>
             </div>
         {/if}
 
@@ -146,9 +137,31 @@
             padding={10}
             caption={scopedT("imageRenderAriaLabel")}
         />
-    
-        <!-- <button onclick={() => (selectedImage = null)}>{scopedT("tryAgain")}</button
-        > -->
+
+        {#if correctness < 5}
+            <div class="hint">
+                <hr />
+
+                {#if showHint}
+                    <div class="indicator-bar">
+                        {#each Array.from({ length: 5 }) as _, index}
+                            <span
+                                class:correct={index < correctness}
+                                class:incorrect={index >= correctness}
+                            ></span>
+                        {/each}
+                    </div>
+
+                    <p class="correctness">
+                        {scopedT("correctness", { correctness })}
+                    </p>
+                {:else}
+                    <button onclick={() => (showHint = !showHint)}>
+                        {scopedT("showHint")}
+                    </button>
+                {/if}
+            </div>
+        {/if}
     {/if}
 </div>
 
@@ -229,34 +242,33 @@
         }
     }
 
-    .indicator {
+    .hint {
         display: flex;
         flex-direction: column;
         width: 100%;
         align-items: center;
-        margin-top: 0.5rem;
-        
+
         .indicator-bar {
             display: flex;
             justify-content: center;
             gap: 0.25rem;
             max-width: 300px;
             width: 100%;
-    
+
             span {
                 flex-grow: 1;
                 height: 0.25rem;
-    
+
                 &.correct {
                     background-color: var(--accent);
                 }
-    
+
                 &.incorrect {
                     background-color: var(--danger);
                 }
             }
         }
-    
+
         .correctness {
             font-size: 0.9rem;
             color: var(--muted-grey);

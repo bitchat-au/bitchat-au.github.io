@@ -1,6 +1,7 @@
 import { SvelteSet } from "svelte/reactivity";
 import { microbitService } from "./microbit.svelte";
 import { scope } from "@i18n";
+import EventEmitter, { type EventMap } from "../helpers/event_emitter";
 
 ////////////////////////////////////////////////////////////////////////////
 /////// Helper shenanigans for creating a strongly type feature enum ///////
@@ -56,6 +57,10 @@ export const featureMap = [
 export const Features = createFeatureMap(featureMap);
 export type Features = keyof typeof Features;
 
+const isFeature = (value: any): value is Features => {
+    return Object.values(Features).includes(value);
+}
+
 // What passwords unlock which features
 const passwordT = scope("features.passwords");
 const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
@@ -72,12 +77,17 @@ const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
     { features: Object.values(Features), passwords: [passwordT("all")] },
 ]
 
+type Events = EventMap & {
+    enable: (feature: Features) => void;
+    disable: (feature: Features) => void;
+}
+
 /**
  * Singleton service to manage feature flags in the application.
  * It allows enabling/disabling features, marking them as available/unavailable, and checking their status.
  * The state is persisted in localStorage.
  */
-class FeaturesService {
+class FeaturesService extends EventEmitter<Events> {
     private static StorageKey = "bit:chat:features";
 
     private static _instance: FeaturesService;
@@ -89,6 +99,7 @@ class FeaturesService {
     }
 
     private constructor() {
+        super();
         this.loadState();
     }
 
@@ -122,6 +133,34 @@ class FeaturesService {
                 console.error("Failed to load features state:", e);
             }
         }
+
+        this.loadFromURLParams(); // Load features from URL parameters after loading from localStorage
+    }
+
+    /**
+     * Loads feature from the URL parameters and activates them if they are valid.
+     */
+    private loadFromURLParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const featuresParam = decodeURIComponent(urlParams.get("features") || "");
+        if (featuresParam) {
+            const featuresToEnable = featuresParam.split(",") as Features[];
+            featuresToEnable.forEach(f => {
+                if (isFeature(f)) {
+                    this.addAvailableFeature(f);
+                }
+            });
+        }
+    }
+
+    /**
+     * Generates a shareable URL that includes the currently enabled features as query parameters.
+     * @returns A shareable URL that includes the currently enabled features as query parameters.
+     */
+    private getFeatureShareURL() {
+        const baseUrl = window.location.origin + window.location.pathname;
+        const featuresParam = Array.from(this.enabledFeatures).join(",");
+        return `${baseUrl}?features=${encodeURIComponent(featuresParam)}`;
     }
 
     /**
@@ -131,7 +170,7 @@ class FeaturesService {
     public enable(feature: Features): void {
         this.enabledFeatures.add(feature);
         this.saveState();
-        microbitService.broadcastSettings();
+        this.emit("enable", feature);
     }
 
     /**
@@ -141,7 +180,7 @@ class FeaturesService {
     public disable(feature: Features): void {
         this.enabledFeatures.delete(feature);
         this.saveState();
-        microbitService.broadcastSettings();
+        this.emit("disable", feature);
     }
 
     /**
@@ -162,6 +201,7 @@ class FeaturesService {
      */
     public addAvailableFeature(feature: Features): void {
         this.availableFeatures.add(feature);
+        this.enable(feature);
         this.saveState();
     }
 

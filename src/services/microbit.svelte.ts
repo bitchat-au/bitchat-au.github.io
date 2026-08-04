@@ -39,6 +39,10 @@ class MicrobitService {
             .addEventListener("message", this.checkMessage.bind(this))
             .addEventListener("connected", () => this.connected = true)
             .addEventListener("disconnected", () => this.connected = false);
+
+        features
+            .addEventListener("enable", this.broadcastSettings.bind(this))
+            .addEventListener("disable", this.broadcastSettings.bind(this));
     }
 
     public async connect() {
@@ -176,7 +180,7 @@ class MicrobitService {
         await this.writeToMB("removeImg", packImage(image));
     }
 
-    public async broadcastSettings() {
+    private async broadcastSettings() {
         await this.writeToMB(
             "settings",
             features.enabledFeatures.has(Features.Encryption) ? 1 : 0,
