@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
     import Icon from "./Icon.svelte";
+    import { t } from "@i18n";
 
     interface Props {
         children?: Snippet;
@@ -28,7 +29,7 @@
     aria-label={ariaLabel}
     tabindex="-1"
 >
-    <button class="no-style close" onclick={onClose} aria-label="Close dialog" autofocus>
+    <button class="no-style close" onclick={onClose} aria-label={t("dialogs.close")} autofocus>
         <Icon name="times" />
     </button>
     {@render children?.()}

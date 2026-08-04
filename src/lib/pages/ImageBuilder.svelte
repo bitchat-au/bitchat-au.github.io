@@ -13,6 +13,9 @@
     import { microbitService } from "../../services/microbit.svelte";
     import Icon from "../Components/Icon.svelte";
     import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
+    import { scope } from "@i18n";
+
+    const scopedT = scope("imageBuilder");
 
     let hoverIndex = $state<number | null>(null);
     let imageUnderConstruction = $state<ImageMatrix>([
@@ -30,7 +33,10 @@
             return;
         }
 
-        const image = createImageWithCaption(imageUnderConstruction, "Eget billede");
+        const image = createImageWithCaption(
+            imageUnderConstruction,
+            scopedT("ownImageCaption"),
+        );
         if (addUserImage(image)) {
             microbitService.writeImageToMB(image);
         }
@@ -50,7 +56,7 @@
         <div
             class="bit-string-interactive"
             role="group"
-            aria-label="Billed kontrol panel"
+            aria-label={scopedT("bitStringInteractiveAriaLabel")}
         >
             {#each imageUnderConstruction as row, rowIndex}
                 <div class="row">
@@ -59,7 +65,10 @@
                         <button
                             class="pixel"
                             class:active={pixel === 1}
-                            aria-label="Kontrol for pixel ({rowIndex + 1},{colIndex + 1})"
+                            aria-label={scopedT("pixelButtonAriaLabel", {
+                                row: rowIndex + 1,
+                                col: colIndex + 1,
+                            })}
                             onmouseover={() =>
                                 (hoverIndex = rowIndex * 5 + colIndex)}
                             onfocus={() =>
@@ -76,8 +85,8 @@
         </div>
         <span
             class="bit-string"
-            aria-label="Bit streng for det aktuelle billede"
-            >Bit streng:
+            aria-label={scopedT("bitStringAriaLabel")}
+            >{scopedT("bitStringLabel")}:
             {#each imageUnderConstruction.flat() as pixel, index}
                 <span class:highlight={hoverIndex === index}>{pixel}</span>
             {/each}
@@ -87,7 +96,7 @@
         matrix={imageUnderConstruction}
         class="image-preview"
         padding={10}
-        caption="Forhåndsvisning af billede"
+        caption={scopedT("imageRenderAriaLabel")}
         highlightedPixel={hoverIndex !== null
             ? [Math.floor(hoverIndex / 5), hoverIndex % 5]
             : null}
@@ -95,22 +104,23 @@
 </div>
 
 <div class="actions">
-    <button onclick={clearImage} class="transparent">Ryd billede</button>
+    <button onclick={clearImage} class="transparent">{scopedT("clearImage")}</button>
     <button onclick={onSave} disabled={isEmptyImage(imageUnderConstruction)}
-        >Gem billede</button
+        >{scopedT("saveImage")}</button
     >
 </div>
 
-<footer aria-label="Gemte billeder">
-    <h2>Gemte billeder</h2>
+<footer aria-label={scopedT("savedImages")}>
+    <h2>{scopedT("savedImages")}</h2>
 
-    <div class="saved-images" role="list" aria-label="Liste over gemte billeder">
+    <div class="saved-images" role="list" aria-label={scopedT("savedImagesAriaLabel")}>
         <ImageMatrixRenderer matrix={COMMON_IMAGES.HAPPY} class="saved-image" />
         <ImageMatrixRenderer matrix={COMMON_IMAGES.SAD} class="saved-image" />
         {#each userImages as image}
             <button
                 class="saved-image no-style"
                 onclick={() => onRemove(image)}
+                aria-label={scopedT("deleteImageAriaLabel")}
             >
                 <ImageMatrixRenderer matrix={image} />
                 <Icon name="trash-alt" class="delete" />

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "@i18n";
     import {
         COMMON_IMAGES,
         getImageCaption,
@@ -22,7 +23,7 @@
     }: Props = $props();
 
     const caption = $derived(
-        (customCaption || getImageCaption(matrix)) ?? "5x5 LED-matrix",
+        (customCaption || getImageCaption(matrix)) ?? t("knownImages.defaultCaption"),
     );
 </script>
 
@@ -46,7 +47,7 @@
                     ry="3"
                     style="filter: url(&quot;#ledglow&quot;); fill: rgb(255, 127, 127);"
                 >
-                    <title>({rowIndex},{colIndex})</title>
+                    <title>{t("imageMatrixRenderer.pixelTitle", { row: rowIndex, col: colIndex })}</title>
                 </rect>
             {:else}
                 <rect
@@ -59,7 +60,7 @@
                     ry="2"
                     style="fill: rgb(32, 32, 32);"
                 >
-                    <title>({rowIndex},{colIndex})</title>
+                    <title>{t("imageMatrixRenderer.pixelTitle", { row: rowIndex, col: colIndex })}</title>
                 </rect>
             {/if}
         {/each}
@@ -68,7 +69,10 @@
     {#if highlightedPixel}
         <rect
             class="highlight"
-            aria-label="Markeret pixel ({highlightedPixel[0]},{highlightedPixel[1]})"
+            aria-label={t("imageMatrixRenderer.highlightedPixelAriaLabel", {
+                row: highlightedPixel[0],
+                col: highlightedPixel[1],
+            })}
             x={highlightedPixel[1] * 46 + 12 + padding - 4}
             y={highlightedPixel[0] * 44 + 10 + padding - 4}
             width="18"

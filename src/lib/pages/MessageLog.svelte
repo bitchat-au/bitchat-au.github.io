@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "@i18n";
     import { friendlyLogService } from "../../services/friendly_log.svelte";
     import Icon from "../Components/Icon.svelte";
     import LogEntryRenderer from "../Components/LogEntryRenderer.svelte";
@@ -6,7 +7,7 @@
 
 <div>
     <samp>
-        Bit:Chat server
+        {t("messageLogs.serverTitle")}
         {#each friendlyLogService.logs as log}
             <LogEntryRenderer entry={log} />
         {/each}
@@ -16,7 +17,7 @@
             class="transparent"
             onclick={() => friendlyLogService.clearLogs()}
         >
-            Ryd log
+            {t("messageLogs.clearLog")}
             <Icon name="trash-alt" />
         </button>
     </footer>

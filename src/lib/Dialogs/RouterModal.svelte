@@ -6,6 +6,9 @@
     import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
     import { microbitService } from "../../services/microbit.svelte";
     import CodeMarquee from "../Components/CodeMarquee.svelte";
+    import { scope } from "@i18n";
+
+    const scopedT = scope("dialogs.routerModal");
 
     type Props = DialogProps<
         { sender: string; requestedReceiver: string; message: ImageMatrix },
@@ -27,8 +30,8 @@
     let selectedReceiver: string | null = $state(null);
 </script>
 
-<Dialog open {onClose} ariaLabel="Router popup">
-    <h2><Icon name="sitemap" /> <span>Router</span></h2>
+<Dialog open {onClose} ariaLabel={scopedT("dialogAriaLabel")}>
+    <h2><Icon name="sitemap" /> <span>{scopedT("title")}</span></h2>
 
     <div class="message-preview">
         <ImageMatrixRenderer matrix={sender?.image} class="sender" />
@@ -43,10 +46,11 @@
 
     <div class="text">
         <p>
-            <span class="highlight">{data.sender}</span> vil sende en besked til
+            <span class="highlight">{data.sender}</span>
+            {scopedT("wantsToSend")}
             <span class="highlight">{data.requestedReceiver}</span>
         </p>
-        <p>Vælg modtager</p>
+        <p>{scopedT("chooseReceipient")}</p>
     </div>
 
     <div class="receivers">
@@ -69,10 +73,13 @@
     </div>
 
     <footer>
-        <button class="transparent" onclick={onClose}>Slet besked</button>
+        <button class="transparent" onclick={onClose}
+            >{scopedT("deleteMessage")}</button
+        >
         <button
             onclick={() => onResult({ newReceiver: selectedReceiver! })}
-            disabled={selectedReceiver === null}>Send</button
+            disabled={selectedReceiver === null}
+            >{scopedT("sendMessage")}</button
         >
     </footer>
 </Dialog>

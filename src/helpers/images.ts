@@ -1,3 +1,5 @@
+import { t } from "./i18n.svelte";
+
 export type ImageMatrix = [[number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number], [number, number, number, number, number]];
 export type ImageMatrixWithCaption = ImageMatrix & { [CAPTION_KEY]: string };
 
@@ -114,173 +116,173 @@ export const COMMON_IMAGES = Object.freeze({
         [0, 0, 0, 0, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0]
-    ], "Glad smiley"),
+    ], t("knownImages.HAPPY")),
     SAD: createImageWithCaption([
         [0, 0, 0, 0, 0],
         [0, 1, 0, 1, 0],
         [0, 0, 0, 0, 0],
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1]
-    ], "Trist smiley"),
+    ], t("knownImages.SAD")),
     FULL: createImageWithCaption([
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1]
-    ], "5x5 billede helt tændt"),
+    ], t("knownImages.FULL")),
     EMPTY: createImageWithCaption([
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0]
-    ], "5x5 billede tomt"),
+    ], t("knownImages.EMPTY")),
     ["1"]: createImageWithCaption([
         [0, 0, 1, 0, 0],
         [0, 1, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0]
-    ], "Tal 1"),
+    ], t("knownImages.1")),
     ["2"]: createImageWithCaption([
         [1, 1, 1, 0, 0],
         [0, 0, 0, 1, 0],
         [0, 1, 1, 0, 0],
         [1, 0, 0, 0, 0],
         [1, 1, 1, 1, 0]
-    ], "Tal 2"),
+    ], t("knownImages.2")),
     ["3"]: createImageWithCaption([
         [1, 1, 1, 1, 0],
         [0, 0, 0, 1, 0],
         [0, 0, 1, 0, 0],
         [1, 0, 0, 1, 0],
         [0, 1, 1, 0, 0]
-    ], "Tal 3"),
+    ], t("knownImages.3")),
     ["4"]: createImageWithCaption([
         [0, 0, 1, 1, 0],
         [0, 1, 0, 1, 0],
         [1, 0, 0, 1, 0],
         [1, 1, 1, 1, 1],
         [0, 0, 0, 1, 0]
-    ], "Tal 4"),
+    ], t("knownImages.4")),
     ["5"]: createImageWithCaption([
         [1, 1, 1, 1, 1],
         [1, 0, 0, 0, 0],
         [1, 1, 1, 1, 0],
         [0, 0, 0, 0, 1],
         [1, 1, 1, 1, 0]
-    ], "Tal 5"),
+    ], t("knownImages.5")),
     ["6"]: createImageWithCaption([
         [0, 0, 0, 1, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0]
-    ], "Tal 6"),
+    ], t("knownImages.6")),
     ["7"]: createImageWithCaption([
         [1, 1, 1, 1, 1],
         [0, 0, 0, 1, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 0, 0, 0],
         [1, 0, 0, 0, 0]
-    ], "Tal 7"),
+    ], t("knownImages.7")),
     ["8"]: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0]
-    ], "Tal 8"),
+    ], t("knownImages.8")),
     ["9"]: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 0, 0, 0, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 0, 0, 0]
-    ], "Tal 9"),
+    ], t("knownImages.9")),
     ["0"]: createImageWithCaption([
         [0, 1, 1, 0, 0],
         [1, 0, 0, 1, 0],
         [1, 0, 0, 1, 0],
         [1, 0, 0, 1, 0],
         [0, 1, 1, 0, 0]
-    ], "Tal 0"),
+    ], t("knownImages.0")),
     HEART: createImageWithCaption([
         [0, 1, 0, 1, 0],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0]
-    ], "Hjerte"),
+    ], t("knownImages.HEART")),
     DUCK: createImageWithCaption([
         [0, 1, 1, 0, 0],
         [1, 1, 1, 0, 0],
         [0, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 0, 0, 0]
-    ], "And"),
+    ], t("knownImages.DUCK")),
     HOUSE: createImageWithCaption([
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0],
         [1, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 1, 1, 1, 0]
-    ], "Hus"),
+    ], t("knownImages.HOUSE")),
     GHOST: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 0, 1, 0, 1],
         [1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1],
         [1, 0, 1, 0, 1]
-    ], "Spøgelse"),
+    ], t("knownImages.GHOST")),
     GIRAFFE: createImageWithCaption([
         [1, 1, 0, 0, 0],
         [0, 1, 0, 0, 0],
         [0, 1, 0, 0, 0],
         [0, 1, 1, 1, 0],
         [0, 1, 0, 1, 0]
-    ], "Giraf"),
+    ], t("knownImages.GIRAFFE")),
     UMBRELLA: createImageWithCaption([
         [0, 1, 1, 1, 0],
         [1, 1, 1, 1, 1],
         [0, 0, 1, 0, 0],
         [1, 0, 1, 0, 0],
         [1, 1, 1, 0, 0]
-    ], "Paraply"),
+    ], t("knownImages.UMBRELLA")),
     SNAKE: createImageWithCaption([
         [1, 1, 0, 0, 0],
         [1, 1, 0, 1, 1],
         [0, 1, 0, 1, 0],
         [0, 1, 1, 1, 0],
         [0, 0, 0, 0, 0]
-    ], "Slange"),
+    ], t("knownImages.SNAKE")),
     RABBIT: createImageWithCaption([
         [1, 0, 1, 0, 0],
         [1, 0, 1, 0, 0],
         [1, 1, 1, 1, 0],
         [1, 1, 0, 1, 0],
         [1, 1, 1, 1, 0]
-    ], "Kanin"),
+    ], t("knownImages.RABBIT")),
     COW: createImageWithCaption([
         [1, 0, 0, 0, 1],
         [1, 0, 0, 0, 1],
         [1, 1, 1, 1, 1],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0]
-    ], "Ko"),
+    ], t("knownImages.COW")),
     PITCHFORK: createImageWithCaption([
         [1, 0, 1, 0, 1],
         [1, 0, 1, 0, 1],
         [1, 1, 1, 1, 1],
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0]
-    ], "Gaffel"),
+    ], t("knownImages.PITCHFORK")),
     SWORD: createImageWithCaption([
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0]
-    ], "Sværd"),
+    ], t("knownImages.SWORD")),
 })

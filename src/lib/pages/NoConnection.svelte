@@ -1,10 +1,11 @@
 <script>
+    import { t } from "@i18n";
     import { microbitService } from "../../services/microbit.svelte";
 </script>
 
 <main>
-    <h1>Ingen enhed forbundet</h1>
-    <button onclick={() => microbitService.connect()}>Forbind micro:bit</button>
+    <h1>{t("welcome.noConnection")}</h1>
+    <button onclick={() => microbitService.connect()}>{t("welcome.connect")}</button>
 </main>
 
 <style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { scope, t } from "@i18n";
     import { onEnter } from "../../helpers/on_enter.svelte";
     import {
         featureMap,
@@ -8,6 +9,8 @@
     } from "../../services/features.svelte";
     import Icon from "./Icon.svelte";
 
+    const scopedT = scope("features.popup");
+    
     let codeInput = $state("");
     let codeError = $state(false);
     $effect(() => {
@@ -56,13 +59,13 @@
 
 <article popover="auto" id="feature-popover">
     <header>
-        <h2>Features</h2>
+        <h2>{scopedT("title")}</h2>
         <button
             class="transparent"
             disabled={featureList.length === 0}
             onclick={() => features.clearAll()}
         >
-            <small>Slet alle</small>
+            <small>{scopedT("deleteAll")}</small>
         </button>
     </header>
 
@@ -70,7 +73,7 @@
         {#each featureList as { key, depth }}
             <li style:--indent={depth}>
                 <label>
-                    {key}
+                    {t(`features.${key}`)}
                     <input
                         type="checkbox"
                         class="sr-only feature-checkbox"
@@ -79,17 +82,16 @@
                     />
 
                     <span class="true-false-container" aria-hidden="true">
-                        <span class="true">Sandt</span>
+                        <span class="true">{scopedT("true")}</span>
                         <span>/</span>
-                        <span class="false">Falsk</span>
+                        <span class="false">{scopedT("false")}</span>
                     </span>
                 </label>
             </li>
         {/each}
         {#if featureList.length === 0}
             <li class="no-features">
-                Ingen tilgængelige features <br /> Spørg din lærer om adgang til
-                nye features
+                {scopedT("noneAvailable")} <br /> {scopedT("askTeacher")}
             </li>
         {/if}
     </ul>
@@ -98,22 +100,22 @@
         <div class="input-container">
             <input
                 type="text"
-                placeholder="Feature kode"
+                placeholder={scopedT("featureCodePlaceholder")}
                 bind:value={codeInput}
                 use:onEnter={submitcode}
-                aria-label="Indtast feature kode"
+                aria-label={scopedT("featureCodeInputAriaLabel")}
             />
-            <button onclick={submitcode} aria-label="Tjek feature kode"><Icon name="arrow-right" /></button>
+            <button onclick={submitcode} aria-label={scopedT("featureCodeSubmitAriaLabel")}><Icon name="arrow-right" /></button>
         </div>
         {#if codeError}
-            <small class="field-error">Forkert kode</small>
+            <small class="field-error">{scopedT("wrongCode")}</small>
         {/if}
     </div>
 </article>
 
 <button class="features" popovertarget="feature-popover">
     <Icon name="angle-down" />
-    Features
+    {scopedT("title")}
 </button>
 
 <style>

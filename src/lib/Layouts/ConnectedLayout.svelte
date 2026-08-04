@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "@i18n";
     import { Features, features } from "../../services/features.svelte";
     import Devices from "../Components/Devices.svelte";
     import FeaturesDropdown from "../Components/FeaturesDropdown.svelte";
@@ -42,7 +43,7 @@
                             <button
                                 class="no-style"
                                 onclick={() => (view = "log")}
-                                ><Icon name="code-block" /> Besked trafik</button
+                                ><Icon name="code-block" /> {t("nav.log")}</button
                             >
                         </li>
                     {/if}
@@ -51,7 +52,7 @@
                             <button
                                 class="no-style"
                                 onclick={() => (view = "image-builder")}
-                                ><Icon name="face-grin" /> Billed byggeren</button
+                                ><Icon name="face-grin" /> {t("nav.image-builder")}</button
                             >
                         </li>
                     {/if}
@@ -60,7 +61,7 @@
                             <button
                                 class="no-style"
                                 onclick={() => (view = "code-cracker")}
-                                ><Icon name="lock-open" /> Kode knækkeren</button
+                                ><Icon name="lock-open" /> {t("nav.code-cracker")}</button
                             >
                         </li>
                     {/if}
@@ -80,13 +81,13 @@
         {/if}
         {#if view === "empty"}
             <div class="empty">
-                <p>Vent på instruktioner fra din lærer</p>
+                <p>{t("nav.empty")}</p>
             </div>
         {/if}
     </section>
 
     <section class="devices">
-        <h2>Enheder</h2>
+        <h2>{t("devices.title")}</h2>
         <Devices />
     </section>
 </main>

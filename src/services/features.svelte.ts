@@ -1,5 +1,6 @@
 import { SvelteSet } from "svelte/reactivity";
 import { microbitService } from "./microbit.svelte";
+import { scope } from "@i18n";
 
 ////////////////////////////////////////////////////////////////////////////
 /////// Helper shenanigans for creating a strongly type feature enum ///////
@@ -56,18 +57,19 @@ export const Features = createFeatureMap(featureMap);
 export type Features = keyof typeof Features;
 
 // What passwords unlock which features
+const passwordT = scope("features.passwords");
 const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
-    { features: [Features.Server], passwords: ["server"] },
-    { features: [Features.Translator], passwords: ["translator", "oversætter"] },
-    { features: [Features.ImageBuilder], passwords: ["byg", "build"] },
-    { features: [Features.KodeKnækkeren], passwords: ["knæk", "break"] },
-    { features: [Features.Router], passwords: ["modtager", "recipient", "router"] },
-    { features: [Features.AutoRouter, Features.Router], passwords: ["auto-router", "auto-modtager"] },
-    { features: [Features.Encryption], passwords: ["krypter", "encrypt"] },
-    { features: [Features.AutoEncryption, Features.Encryption], passwords: ["auto-krypter", "auto-encrypt"] },
-    { features: [Features.Hacker], passwords: ["hack"] },
-    { features: [Features.Beep], passwords: ["beep"] },
-    { features: Object.values(Features), passwords: ["meget hemmelig kode"] },
+    { features: [Features.Server], passwords: [passwordT("Server")] },
+    { features: [Features.Translator], passwords: [passwordT("Translator")] },
+    { features: [Features.ImageBuilder], passwords: [passwordT("ImageBuilder")] },
+    { features: [Features.KodeKnækkeren], passwords: [passwordT("KodeKnækkeren")] },
+    { features: [Features.Router], passwords: [passwordT("Router")] },
+    { features: [Features.AutoRouter, Features.Router], passwords: [passwordT("AutoRouter")] },
+    { features: [Features.Encryption], passwords: [passwordT("Encryption")] },
+    { features: [Features.AutoEncryption, Features.Encryption], passwords: [passwordT("AutoEncryption")] },
+    { features: [Features.Hacker], passwords: [passwordT("Hacker")] },
+    { features: [Features.Beep], passwords: [passwordT("Beep")] },
+    { features: Object.values(Features), passwords: [passwordT("all")] },
 ]
 
 /**

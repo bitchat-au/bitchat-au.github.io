@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { scope, t } from "@i18n";
     import {
         COMMON_IMAGES,
         encryptImage,
@@ -6,6 +7,8 @@
     } from "../../helpers/images";
     import { userImages } from "../../services/user_images.svelte";
     import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
+
+    const scopedT = scope("codeCracker");
 
     let imageSelection: "own" | "random" = $state("own");
     let correctCode = $state("");
@@ -65,10 +68,9 @@
 
 {#if !selectedImage}
     <header>
-        <h2>Kode knækkeren</h2>
+        <h2>{scopedT("title")}</h2>
         <span class="subheading"
-            >Kan du knække et krypteret billede? <br /> Prøv et af dine egne billeder,
-            eller generer et tilfældigt billede</span
+            >{@html scopedT("instructions")}</span
         >
     </header>
 
@@ -80,7 +82,7 @@
                     name="billede"
                     value="own"
                     bind:group={imageSelection}
-                />Eget billede</label
+                />{scopedT("ownImage")}</label
             >
             <label class="as-button"
                 ><input
@@ -88,15 +90,15 @@
                     name="billede"
                     value="random"
                     bind:group={imageSelection}
-                />Tilfældigt billede</label
+                />{scopedT("randomImage")}</label
             >
         </div>
-        <button onclick={generateImage}>Generer et krypteret billede</button>
+        <button onclick={generateImage}>{scopedT("generate")}</button>
     </div>
 {:else}
     <div class="code-input">
         <div class="input">
-            <h3 class="label">Kode:</h3>
+            <h3 class="label">{scopedT("code")}:</h3>
             <div class="characters">
                 {#each inputCode.split("") as char, index}
                     <button
@@ -108,16 +110,16 @@
                 {/each}
             </div>
         </div>
-        <button onclick={checkCode} class="decrypt">Dekrypter</button>
+        <button onclick={checkCode} class="decrypt">{scopedT("decrypt")}</button>
     </div>
     <ImageMatrixRenderer
         matrix={decryptedImage}
         class="image-preview"
         padding={10}
-        caption="Forhåndsvisning af billede"
+        caption={scopedT("imageRenderAriaLabel")}
     />
-    <p class="correctness">Korrekt: {correctness} / 5</p>
-    <button onclick={() => (selectedImage = null)}>Prøv igen</button>
+    <p class="correctness">{scopedT("correctness", { correctness })}</p>
+    <button onclick={() => (selectedImage = null)}>{scopedT("tryAgain")}</button>
 {/if}
 
 <style>
