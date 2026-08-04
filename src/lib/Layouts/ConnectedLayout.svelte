@@ -123,6 +123,8 @@
     .devices {
         border-left: 1px solid var(--stroke);
         padding-left: 24px;
+        display: flex;
+        flex-direction: column;
     }
 
     header {

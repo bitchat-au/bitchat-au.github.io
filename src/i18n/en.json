@@ -42,7 +42,8 @@
         "empty": "Wait for instructions from your teacher"
     },
     "devices": {
-        "title": "Devices"
+        "title": "Devices",
+        "noDevices": "No Micro:bits connected"
     },
     "welcome": {
         "noConnection": "No device connected",
@@ -71,7 +72,7 @@
         "imageRenderAriaLabel": "Image preview",
         "clearImage": "Clear image",
         "saveImage": "Save image",
-        "savedImages": "Image saved",
+        "savedImages": "Saved images",
         "savedImagesAriaLabel": "List of saved images",
         "deleteImageAriaLabel": "Delete image"
     },

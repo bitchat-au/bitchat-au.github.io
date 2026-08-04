@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "@i18n";
     import { microbitService } from "../../services/microbit.svelte";
     import ImageMatrixRenderer from "./ImageMatrixRenderer.svelte";
 
@@ -13,6 +14,10 @@
         </li>
     {/each}
 </ul>
+
+{#if devices.length === 0}
+    <p class="muted no-devices">{t("devices.noDevices")}</p>
+{/if}
 
 <style>
     ul {
@@ -43,5 +48,11 @@
             font-size: 0.8rem;
             text-transform: uppercase;
         }
+    }
+
+    .no-devices {
+        text-align: center;
+        margin-top: auto;
+        margin-bottom: auto;
     }
 </style>

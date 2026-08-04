@@ -42,7 +42,8 @@
         "empty": "Vent på instruktioner fra din lærer"
     },
     "devices": {
-        "title": "Enheder"
+        "title": "Enheder",
+        "noDevices": "Ingen Micro:bits forbundet"
     },
     "welcome": {
         "noConnection": "Ingen enhed forbundet",
@@ -71,7 +72,7 @@
         "imageRenderAriaLabel": "Forhåndsvisning af billede",
         "clearImage": "Ryd billede",
         "saveImage": "Gem billede",
-        "savedImages": "Billedet er gemt",
+        "savedImages": "Gemte billede",
         "savedImagesAriaLabel": "Liste over gemte billeder",
         "deleteImageAriaLabel": "Slet billede"
     },
