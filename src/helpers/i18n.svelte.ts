@@ -1,7 +1,9 @@
 import danishTranslations from '../i18n/da.json'
+import englishTranslations from '../i18n/en.json'
 
 const availableTranslations = {
     da: flattenTranslations(danishTranslations),
+    en: flattenTranslations(englishTranslations),
     ...(
         import.meta.env.DEV && {
             null: {} // Dev mode to check translation keys
