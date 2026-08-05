@@ -238,27 +238,6 @@ while True:
                     + ("_" + encryption_code if encryptable else "")
                 )  # nm: new message
                 write_to_computer("mbc_" + str(len(known_microbits)))
-            if "complete" in message:
-                sender_id = str(message.split("_")[0])
-                all_received = False
-                if not allow_recipient:
-                    for i, receiveEntry in enumerate(receive_from_known):
-                        if sender_id == receiveEntry[0]:
-                            receive_from_known[i][1] = True
-
-                    all_received = True
-
-                    for i, receiveEntry in enumerate(receive_from_known):
-                        if not receiveEntry[1]:
-                            all_received = False
-
-                if sender_id == recipient_name or all_received:
-                    sender_name = ""
-                    recipient_name = ""
-                    message_complete = False
-                    message_under_construction = False
-                    send_on_permitted = False
-                uart_over = False
 
         if send_on_permitted:
             sender_number = 0

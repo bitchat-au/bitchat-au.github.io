@@ -144,19 +144,9 @@ def send_message(message_to_send):
     radio.send(device_name + "_" + str(message_to_send))
 
 
-def set_image(image_index, image_list):
-    """Returns the image at the specified index from the provided list of images."""
-    image_string = ""
-    for i in range(5):
-        for j in range(5):
-            if image_list == output_message:
-                image_string = image_string + str(image_list[i][j] * 9)
-            else:
-                image_string = image_string + str(image_list[image_index][i][j] * 9)
-        if i is not 4:
-            image_string = image_string + ":"
-    return image_string
-
+def get_image(image_index):
+    """Returns the image in the specified index, as a string where each row is seperated by a :"""
+    return matrix_to_image(led_images[image_index])
 
 def build_send_image(frame_index):
     """Builds a sending animation frame by shifting a base arrow image."""
@@ -489,7 +479,7 @@ while True:
             Image("99999:" "99099:" "90909:" "90009:" "99999")
         )  # show envelope image
         sleep(1000)
-        display.show(Image(set_image(0, led_images)))
+        display.show(Image(get_image(0)))
         choosing_content = True
         reset_button_states()
 
@@ -522,21 +512,12 @@ while True:
             break
 
         if button_a_was_released():
-            message_number -= 1
-
-            if message_number < 0:
-                message_number = len(led_images) - 1
-
-            display.show(Image(set_image(message_number, led_images)))
-            print(message_number)
+            message_number = len(led_images) - 1 if message_number == 0 else message_number - 1
     
         if button_b_was_released():
-            message_number += 1
-            if message_number > len(led_images) - 1:
-                message_number = 0
+            message_number = 0 if message_number == len(led_images) - 1 else message_number + 1
 
-            display.show(Image(set_image(message_number, led_images)))
-            print(message_number)
+        display.show(Image(get_image(message_number)))
 
     while encrypting_message:
         check_radio()
@@ -545,11 +526,9 @@ while True:
         random_encrypt_animation()
         output_message = create_encryption(output_message)
         display.clear()
-        display.show(Image(set_image(message_number, led_images)))
+        display.show(Image(get_image(message_number)))
         encrypt_image(output_message)
-        code_string = ""
-        for i in range(5):
-            code_string += code[i]
+        code_string = "".join(code)
         code = []
         ready_to_send = True
 
@@ -582,19 +561,12 @@ while True:
             break
 
         if button_a_was_released():
-            recipient_index -= 1
-
-            if recipient_index < 0:
-                recipient_index = len(known_recipient_list) - 1
-
-            display.show(known_recipient_list[recipient_index] + 1)
+            recipient_index = len(known_recipient_list) - 1 if recipient_index == 0 else recipient_index - 1
 
         if button_b_was_released():
-            recipient_index += 1
-            if recipient_index > len(known_recipient_list) - 1:
-                recipient_index = 0
+            recipient_index = 0 if recipient_index == len(known_recipient_list) - 1 else recipient_index + 1
 
-            display.show(known_recipient_list[recipient_index] + 1)
+        display.show(known_recipient_list[recipient_index] + 1)
 
     while sending_message:
         send_animation()
