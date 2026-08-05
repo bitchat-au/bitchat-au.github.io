@@ -126,7 +126,7 @@ class MicrobitService {
                 sender,
                 requestedReceiver: receiver,
                 message: messageImage
-            });
+            }, { timeout: 30000 });
 
             if (result.type != "success") {
                 console.log("Router modal closed without sending message");

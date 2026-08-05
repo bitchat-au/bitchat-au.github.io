@@ -18,8 +18,11 @@ interface OpenDialog<K extends AvailableDialogs = AvailableDialogs> {
     dialogRef: K;
     id: string;
     data: InferDialogData<K>;
-    promiseResolve: (res: DialogResult<InferDialogReturn<K>>) => void;
-    promiseReject: (err: Error) => void;
+    timeout: ReturnType<typeof setTimeout> | null;
+}
+
+type DialogOptions = {
+    timeout?: number;
 }
 
 type RegisteredDialogs = typeof registeredDialogs;
@@ -37,18 +40,23 @@ export const registeredDialogs = {
 }
 
 export const openDialogs: Array<OpenDialog> = $state([]);
+const promises: Record<string, { resolve: (res: any) => void, reject: (err: Error) => void }> = {};
 
-export function showPrompt<K extends AvailableDialogs>(component: K, data: InferDialogData<K>): Promise<DialogResult<InferDialogReturn<K>>> {
+export function showPrompt<K extends AvailableDialogs>(component: K, data: InferDialogData<K>, options: DialogOptions = {}): Promise<DialogResult<InferDialogReturn<K>>> {
+    const dialog: OpenDialog<K> = {
+        id: Math.random().toString(),
+        dialogRef: component,
+        data,
+        timeout: options.timeout ? setTimeout(() => {
+            resolveDialog(dialog, { type: "closed" });
+        }, options.timeout) : null
+    }
+
+    openDialogs.push(dialog);
+    
     return new Promise((resolve, reject) => {
-        const openDialog: OpenDialog<K> = {
-            id: Math.random().toString(),
-            dialogRef: component,
-            data,
-            promiseResolve: resolve,
-            promiseReject: reject
-        }
-        
-        openDialogs.push(openDialog);
+        const promiseRef = { resolve, reject };
+        promises[dialog.id] = promiseRef;
     });
 }
 
@@ -56,9 +64,22 @@ export function resolveDialog<K extends AvailableDialogs>(
     dialog: OpenDialog<K>,
     result: DialogResult<InferDialogReturn<K>>
 ): void {
-        dialog.promiseResolve(result);
+    const promiseRef = promises[dialog.id];
+    if (!promiseRef) {
+        console.error(`No promise found for dialog with id ${dialog.id}`);
+        return;
+    }
 
-    const index = openDialogs.indexOf(dialog);
+    if (result.type === "error") {
+        promiseRef.reject(new Error(result.error));
+    } else {
+        promiseRef.resolve(result);
+    }
+
+    delete promises[dialog.id];
+
+    clearTimeout(dialog.timeout || undefined);
+    const index = openDialogs.findIndex(d => d.id === dialog.id);
     if (index !== -1) {
         openDialogs.splice(index, 1);
     }
