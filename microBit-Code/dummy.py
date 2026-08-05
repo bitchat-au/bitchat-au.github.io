@@ -23,6 +23,8 @@ wrong_message = False
 pitch_list = [6, 8, 10, 12]
 last_recorded_message = 0
 reset_microbit_time = False
+last_ping_received = 0
+PING_INACTIVITY_TIMEOUT = 15000  # Should reset the microbit after 15 seconds of no pings
 
 
 def show_inner_dot_animation():
@@ -57,71 +59,15 @@ led_images = [
     ],
 ]
 
-send_images = [
-    [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0],
-    ],
-    [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 1, 1, 1, 0],
-    ],
-    [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 1, 1, 1, 0],
-        [1, 0, 1, 0, 1],
-    ],
-    [
-        [0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 1, 1, 1, 0],
-        [1, 0, 1, 0, 1],
-        [0, 0, 1, 0, 0],
-    ],
-    [
-        [0, 0, 1, 0, 0],
-        [0, 1, 1, 1, 0],
-        [1, 0, 1, 0, 1],
-        [0, 0, 1, 0, 0],
-        [0, 0, 1, 0, 0],
-    ],
-    [
-        [0, 1, 1, 1, 0],
-        [1, 0, 1, 0, 1],
-        [0, 0, 1, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 0, 0, 0, 0],
-    ],
-    [
-        [1, 0, 1, 0, 1],
-        [0, 0, 1, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-    ],
-    [
-        [0, 0, 1, 0, 0],
-        [0, 0, 1, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-    ],
-    [
-        [0, 0, 1, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-    ],
+send_image_base = [
+    [0, 0, 1, 0, 0],
+    [0, 1, 1, 1, 0],
+    [1, 0, 1, 0, 1],
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0],
 ]
+
+send_image_offsets = [3, 2, 1, 0, -1, -2, -3, -4, -5]
 
 ###################################################
 ## Received message structure
@@ -212,6 +158,19 @@ def set_image(image_index, image_list):
     return image_string
 
 
+def build_send_image(frame_index):
+    """Builds a sending animation frame by shifting a base arrow image."""
+    image = [[0, 0, 0, 0, 0] for _ in range(5)]
+    offset = send_image_offsets[frame_index]
+    for y in range(5):
+        shifted_y = y + offset
+        if shifted_y < 0 or shifted_y > 4:
+            continue
+        for x in range(5):
+            image[shifted_y][x] = send_image_base[y][x]
+    return image
+
+
 def matrix_to_image(matrix):
     """Converts a 5x5 matrix into a string format suitable for display."""
     rows = ["".join(str(int(x) * 9) for x in row) for row in matrix]
@@ -231,11 +190,10 @@ def set_recipients():
 
 def send_animation():
     """Displays a sending animation on the micro:bit's LED matrix."""
-    for i in range(len(send_images)):
-        display.show(Image(set_image(i, send_images)))
+    for i in range(len(send_image_offsets)):
+        display.show(Image(matrix_to_image(build_send_image(i))))
         sleep(100)
     display.clear()
-    sleep(100)
 
 
 def create_encryption(message_list):
@@ -249,20 +207,44 @@ def create_encryption(message_list):
                     message_list[k][j] = 1
     return message_list
 
+def set_column(column_index, value):
+    """Sets a specific column on the micro:bit's LED matrix."""
+    for row in range(5):
+        display.set_pixel(column_index, row, value)
 
 def encrypt_image(image_list):
     """Displays the encrypted image on the micro:bit's LED matrix."""
     sleep(500)
     for j in range(5):  # Kolonne
-        for l in range(5):
-            display.set_pixel(j, l, 0)
+        set_column(j, 9)  # Light up entire column
+        sleep(400)
+        set_column(j, 0)  # Clear entire column
         for k in range(5):  # række
             led_strength = int(image_list[k][j])
-            if led_strength < 9:
-                led_strength = led_strength * 9
-            display.set_pixel(j, k, led_strength)
-        sleep(500)
+            display.set_pixel(j, k, led_strength * 9)
+        sleep(100)
 
+def random_encrypt_animation():
+    display.clear()
+    for _ in range(2):
+        for j in range(5):
+            for k in range(5):
+                if random.randint(0, 1) > 0:
+                    display.set_pixel(k, j, 9)
+                else:
+                    display.set_pixel(k, j, 0)
+        sleep(500)
+    display.clear()
+
+def display_code_input(code):
+    """Displays the current code input on the micro:bit's LED matrix."""
+    display.clear()
+    for i in range(len(code)):
+        if int(code[i]) > 0:
+            for j in range(5):
+                display.set_pixel(i, j, 9)
+        else:
+            display.set_pixel(i, 2, 9)
 
 def pack_image(matrix):
     """Converts a 5x5 matrix into a 5-char alphanumeric string (A-Z, 0-5)."""
@@ -304,9 +286,71 @@ def check_radio():
             or "known" in radio_message
             or "image" in radio_message
             or "removeImg" in radio_message
+            or "reintroduce" in radio_message
         ):
             machine.reset()
 
+        if "ping" in radio_message:
+            global last_ping_received
+            last_ping_received = time.ticks_ms()
+
+def both_buttons_pressed():
+    """Checks if both buttons A and B are pressed simultaneously."""
+    return button_a.is_pressed() and button_b.is_pressed()
+
+last_state_a = False
+last_state_b = False
+
+def button_a_was_released():
+    global last_state_a
+    
+    current_state = button_a.is_pressed()
+    # Released means it WAS pressed (True) but is NOW not pressed (False)
+    released = (last_state_a == True) and (current_state == False)
+    
+    last_state_a = current_state
+    return released
+
+def button_b_was_released():
+    global last_state_b
+    
+    current_state = button_b.is_pressed()
+    # Released means it WAS pressed (True) but is NOW not pressed (False)
+    released = (last_state_b == True) and (current_state == False)
+    
+    last_state_b = current_state
+    return released
+
+def reset_button_states():
+    global last_state_a, last_state_b
+    last_state_a = button_a.is_pressed()
+    last_state_b = button_b.is_pressed()
+
+    button_a.was_pressed()  # Reset the was_pressed state
+    button_b.was_pressed()  # Reset the was_pressed state
+
+def input_code():
+    reset_button_states()
+    current_input = []
+
+    while len(current_input) < 5:
+        if button_a_was_released():
+            display.clear()
+            display.show("A")
+            current_input.append("0")
+            sleep(500)
+            display.clear()
+            display_code_input(current_input)
+
+        if button_b_was_released():
+            display.clear()
+            display.show("B")
+            current_input.append("1")
+            sleep(500)
+            display.clear()
+            display_code_input(current_input)
+
+    return current_input
 
 ###################################################
 ## Loop
@@ -330,19 +374,6 @@ while True:
                 code_string = messageComponents[4] if encryptable else ""
 
                 message_complete = True
-            if "repeat" in message:
-                repeat_index = int(message.split("_")[2])
-                send_message(
-                    "send_"
-                    + message_recipient
-                    + "_"
-                    + str(repeat_index)
-                    + "_"
-                    + message_construct[repeat_index]
-                    + ("_" + code_string if encryptable else "")
-                )
-            if "wrong" in message:
-                wrong_message = True
         if "reintroduce" in message:
             known = False
             last_known_ping = time.ticks_ms() - (
@@ -382,9 +413,16 @@ while True:
 
             if message_sender != int(id_number):
                 message_complete = True
+        if "ping" in message:
+            last_ping_received = time.ticks_ms()
+
+    if known and (time.ticks_ms() - last_ping_received) > PING_INACTIVITY_TIMEOUT:
+        machine.reset()  # Reset the micro:bit if no ping has been received for a certain duration
 
     # When a full message has been received
     if message_complete:
+        reset_button_states()  # Reset button states to avoid accidental presses
+
         if should_beep:
             for i, pitch in enumerate(pitch_list):
                 if wrong_message:
@@ -405,52 +443,15 @@ while True:
         send_message("complete")
 
         if encryptable:
-            inputPress = 0
-            analysisInProgress = True
-            if auto_encryptable:
-                analysisInProgress = False
-            correctInput = True
-            while analysisInProgress:
-                a_pressed = button_a.was_pressed()
-                b_pressed = button_b.was_pressed()
+            code = input_code()
 
-                if a_pressed and int(code[inputPress]) > 1:
-                    correctInput = False
-                    analysisInProgress = False
-
-                if b_pressed and int(code[inputPress]) < 1:
-                    correctInput = False
-                    analysisInProgress = False
-
-                if a_pressed or b_pressed:
-                    display.show("A" if a_pressed else "B")
-                    sleep(500)
-                    display.clear()
-
-                    inputPress += 1
-                    for i in range(inputPress):
-                        if int(code[i]) > 0:
-                            for j in range(5):
-                                display.set_pixel(i, j, 9)
-                        else:
-                            display.set_pixel(i, 2, 9)
-
-                if inputPress > 4:
-                    analysisInProgress = False
-
-            if correctInput:
-                output_message = create_encryption(output_message)
-                encrypt_image(output_message)
-                sleep(4000)
-                display.show(Image.ARROW_W)
-                sleep(1000)
-                display.show(int(message_sender) + 1)
-                reset_microbit_time = True
-            else:
-                display.clear()
-                display.show(Image.NO)
-                sleep(2000)
-                reset_microbit_time = True
+            output_message = create_encryption(output_message)
+            encrypt_image(output_message)
+            sleep(4000)
+            display.show(Image.ARROW_W)
+            sleep(1000)
+            display.show(int(message_sender) + 1)
+            reset_microbit_time = True
         else:
             sleep(4000)
             display.show(Image.ARROW_W)
@@ -481,7 +482,7 @@ while True:
         continue;
 
     # When starting a new message
-    if pin_logo.is_touched():
+    if both_buttons_pressed():
         output_message = []
         code = []
         display.show(
@@ -490,28 +491,12 @@ while True:
         sleep(1000)
         display.show(Image(set_image(0, led_images)))
         choosing_content = True
+        reset_button_states()
 
     while choosing_content:
         check_radio()
 
-        if button_a.was_pressed():
-            message_number -= 1
-
-            if message_number < 0:
-                message_number = len(led_images) - 1
-
-            display.show(Image(set_image(message_number, led_images)))
-            print(message_number)
-
-        if button_b.was_pressed():
-            message_number += 1
-            if message_number > len(led_images) - 1:
-                message_number = 0
-
-            display.show(Image(set_image(message_number, led_images)))
-            print(message_number)
-
-        if pin_logo.is_touched():
+        if both_buttons_pressed():
             output_message = [[], [], [], [], []]
             for i in range(5):
                 for j in range(5):
@@ -533,82 +518,70 @@ while True:
                 sending_message = True
                 choosing_content = False
 
+            reset_button_states()
+            break
+
+        if button_a_was_released():
+            message_number -= 1
+
+            if message_number < 0:
+                message_number = len(led_images) - 1
+
+            display.show(Image(set_image(message_number, led_images)))
+            print(message_number)
+    
+        if button_b_was_released():
+            message_number += 1
+            if message_number > len(led_images) - 1:
+                message_number = 0
+
+            display.show(Image(set_image(message_number, led_images)))
+            print(message_number)
+
     while encrypting_message:
         check_radio()
+        code = [str(random.randint(0, 1)) for _ in range(5)] if auto_encryptable else input_code()
 
-        if button_a.was_pressed():
-            if len(code) < 1:
-                display.clear()
-            display.clear()
-            display.show("A")
-            sleep(500)
-            display.clear()
-            code.append("0")
-            for i, char in enumerate(code):
-                if int(char) > 0:
-                    for j in range(5):
-                        display.set_pixel(i, j, 9)
-                else:
-                    display.set_pixel(i, 2, 9)
+        random_encrypt_animation()
+        output_message = create_encryption(output_message)
+        display.clear()
+        display.show(Image(set_image(message_number, led_images)))
+        encrypt_image(output_message)
+        code_string = ""
+        for i in range(5):
+            code_string += code[i]
+        code = []
+        ready_to_send = True
 
-        if button_b.was_pressed():
-            if len(code) < 1:
-                display.clear()
-            display.clear()
-            display.show("B")
-            sleep(500)
-            display.clear()
-            code.append("1")
-            for i, char in enumerate(code):
-                if int(char) > 0:
-                    for j in range(5):
-                        display.set_pixel(i, j, 9)
-                else:
-                    display.set_pixel(i, 2, 9)
+        while ready_to_send:
+            check_radio()
 
-        if auto_encryptable:
-            for i in range(5):
-                code.append(str(random.randint(0, 1)))
-
-        if len(code) > 4:
-            display.clear()
-            for i in range(3):
-                for j in range(5):
-                    for k in range(5):
-                        if random.randint(0, 1) > 0:
-                            display.set_pixel(k, j, 9)
-                        else:
-                            display.set_pixel(k, j, 0)
-                sleep(500)
-            output_message = create_encryption(output_message)
-            display.clear()
-            display.show(Image(set_image(message_number, led_images)))
-            encrypt_image(output_message)
-            code_string = ""
-            for i in range(5):
-                code_string += code[i]
-            code = []
-            ready_to_send = True
-
-            while ready_to_send:
-                check_radio()
-
-                if pin_logo.is_touched():
+            if both_buttons_pressed():
+                if allow_recipient:
                     display.show(Image.ARROW_E)
                     sleep(1000)
-                    if allow_recipient:
-                        known_recipient_list = set_recipients()
-                        display.show(known_recipient_list[0] + 1)
-                        choosing_recipient = True
-                    else:
-                        sending_message = True
-                    encrypting_message = False
-                    ready_to_send = False
+                    known_recipient_list = set_recipients()
+                    display.show(known_recipient_list[0] + 1)
+                    choosing_recipient = True
+                else:
+                    sending_message = True
+                encrypting_message = False
+                ready_to_send = False
+
+                reset_button_states()
+                break
 
     while choosing_recipient:
         check_radio()
 
-        if button_a.was_pressed():
+        if both_buttons_pressed():
+            sending_message = True
+            choosing_recipient = False
+
+            reset_button_states()
+            break
+
+        if button_a_was_released():
             recipient_index -= 1
 
             if recipient_index < 0:
@@ -616,16 +589,12 @@ while True:
 
             display.show(known_recipient_list[recipient_index] + 1)
 
-        if button_b.was_pressed():
+        if button_b_was_released():
             recipient_index += 1
             if recipient_index > len(known_recipient_list) - 1:
                 recipient_index = 0
 
             display.show(known_recipient_list[recipient_index] + 1)
-
-        if pin_logo.is_touched():
-            sending_message = True
-            choosing_recipient = False
 
     while sending_message:
         send_animation()

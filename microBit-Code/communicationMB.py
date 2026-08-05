@@ -29,6 +29,8 @@ image_broadcast_debounce = 0
 should_broadcast_images = False
 settings_broadcast_debounce = 0
 should_broadcast_settings = False
+last_ping_time = 0
+PING_INTERVAL = 5000  # 5 seconds
 
 ###################################################
 ## Setup for the radio:
@@ -294,3 +296,7 @@ while True:
             )
             settings_broadcast_debounce = 0;
             should_broadcast_settings = False;
+
+        if (time.ticks_ms() - last_ping_time) > PING_INTERVAL:
+            send_radio_message("ping")
+            last_ping_time = time.ticks_ms()
