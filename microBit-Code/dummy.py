@@ -331,6 +331,7 @@ def input_code():
             sleep(500)
             display.clear()
             display_code_input(current_input)
+            continue
 
         if button_b_was_released():
             display.clear()
@@ -339,6 +340,7 @@ def input_code():
             sleep(500)
             display.clear()
             display_code_input(current_input)
+            continue
 
     return current_input
 
