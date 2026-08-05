@@ -8,9 +8,10 @@
         open: boolean;
         onClose?: () => void;
         ariaLabel: string;
+        class?: string;
     }
 
-    const { children, open, onClose, ariaLabel }: Props = $props();
+    const { children, open, onClose, ariaLabel, class: dialogClass }: Props = $props();
 
     let dialog: HTMLDialogElement;
 
@@ -28,6 +29,7 @@
     onclose={onClose}
     aria-label={ariaLabel}
     tabindex="-1"
+    class={dialogClass}
 >
     <button class="no-style close" onclick={onClose} aria-label={t("dialogs.close")} autofocus>
         <Icon name="times" />

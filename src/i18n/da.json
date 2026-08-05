@@ -50,6 +50,14 @@
         "noConnection": "Ingen enhed forbundet",
         "connect": "Forbind micro:bit"
     },
+    "widgets": {
+        "interactiveBitString": {
+            "bitStringInteractiveAriaLabel": "Billed kontrol panel",
+            "pixelButtonAriaLabel": "Kontrol for pixel {row} {col}",
+            "bitStringAriaLabel": "Bit string for det aktuelle billede",
+            "bitStringLabel": "Bit streng"
+        }
+    },
     "codeCracker": {
         "title": "Kode knækkeren",
         "instructions": "Kan du knække et krypteret billede? <br /> Prøv et af dine egne billeder, eller generer et tilfældigt billede",
@@ -66,10 +74,6 @@
         "showHint": "Vis et hint"
     },
     "imageBuilder": {
-        "bitStringInteractiveAriaLabel": "Billed kontrol panel",
-        "pixelButtonAriaLabel": "Kontrol for pixel {row} {col}",
-        "bitStringAriaLabel": "Bit string for det aktuelle billede",
-        "bitStringLabel": "Bit streng",
         "ownImageCaption": "Eget billede",
         "imageRenderAriaLabel": "Forhåndsvisning af billede",
         "clearImage": "Ryd billede",
@@ -95,6 +99,13 @@
             "chooseReceipient": "Vælg modtager",
             "deleteMessage": "Slet besked",
             "sendMessage": "Send"
+        },
+        "hackerModal": {
+            "title": "Hacker",
+            "cancel": "Send uden ændringer",
+            "modify": "Send med ændringer",
+            "wantsToSend": "vil sende en besked til",
+            "changeMessage": "Lav om på beskeden"
         }
     },
     "features": {
@@ -133,5 +144,6 @@
             "Beep": "beep",
             "all": "meget hemmelig kode"
         }
-    }
+    },
+    "allMicrobits": "alle"
 }

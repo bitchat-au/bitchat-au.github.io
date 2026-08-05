@@ -120,4 +120,8 @@ hr {
   border-top: 1px solid var(--stroke);
   margin: 1rem 0;
   width: 100%;
+
+  &.large {
+    margin: 2rem 0;
+  }
 }

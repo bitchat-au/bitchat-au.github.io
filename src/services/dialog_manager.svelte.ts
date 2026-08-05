@@ -1,5 +1,6 @@
 import type { Component } from "svelte";
 import RouterModal from "../lib/Dialogs/RouterModal.svelte";
+import HackerModal from "../lib/Dialogs/HackerModal.svelte";
 
 type DialogResult<T extends unknown> =
     { type: "error", error: string } |
@@ -36,7 +37,8 @@ type DialogPropsOf<K extends AvailableDialogs> =
         : never;
 
 export const registeredDialogs = {
-    RouterModal
+    RouterModal,
+    HackerModal
 }
 
 export const openDialogs: Array<OpenDialog> = $state([]);
@@ -83,6 +85,14 @@ export function resolveDialog<K extends AvailableDialogs>(
     if (index !== -1) {
         openDialogs.splice(index, 1);
     }
+}
+
+export function unpackDialogResult<T extends unknown>(result: DialogResult<T>): T | undefined {
+    if (result.type === "success") {
+        return result.data;
+    }
+
+    return undefined;
 }
 
 if (import.meta.env.DEV) {

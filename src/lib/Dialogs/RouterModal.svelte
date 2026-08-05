@@ -6,7 +6,7 @@
     import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
     import { microbitService } from "../../services/microbit.svelte";
     import CodeMarquee from "../Components/CodeMarquee.svelte";
-    import { scope } from "@i18n";
+    import { scope, t } from "@i18n";
 
     const scopedT = scope("dialogs.routerModal");
 
@@ -28,6 +28,11 @@
     );
 
     let selectedReceiver: string | null = $state(null);
+    let receiverName = $derived(
+        data.requestedReceiver === "ALL"
+            ? t("allMicrobits")
+            : data.requestedReceiver,
+    );
 </script>
 
 <Dialog open {onClose} ariaLabel={scopedT("dialogAriaLabel")}>
@@ -48,7 +53,7 @@
         <p>
             <span class="highlight">{data.sender}</span>
             {scopedT("wantsToSend")}
-            <span class="highlight">{data.requestedReceiver}</span>
+            <span class="highlight">{receiverName}</span>
         </p>
         <p>{scopedT("chooseReceipient")}</p>
     </div>

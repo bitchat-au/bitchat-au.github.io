@@ -50,6 +50,14 @@
         "noConnection": "No device connected",
         "connect": "Connect micro:bit"
     },
+    "widgets": {
+        "interactiveBitString": {
+            "bitStringInteractiveAriaLabel": "Image control panel",
+            "pixelButtonAriaLabel": "Control for pixel {row} {col}",
+            "bitStringAriaLabel": "Bit string for the current image",
+            "bitStringLabel": "Bit string"
+        }
+    },
     "codeCracker": {
         "title": "Code cracker",
         "instructions": "Can you crack an encrypted image? <br /> Try one of your own images, or generate a random image",
@@ -66,10 +74,6 @@
         "showHint": "Show hint"
     },
     "imageBuilder": {
-        "bitStringInteractiveAriaLabel": "Image control panel",
-        "pixelButtonAriaLabel": "Control for pixel {row} {col}",
-        "bitStringAriaLabel": "Bit string for the current image",
-        "bitStringLabel": "Bit string",
         "ownImageCaption": "Own image",
         "imageRenderAriaLabel": "Image preview",
         "clearImage": "Clear image",
@@ -95,6 +99,13 @@
             "chooseReceipient": "Choose recipient",
             "deleteMessage": "Delete message",
             "sendMessage": "Send"
+        },
+        "hackerModal": {
+            "title": "Hacker",
+            "cancel": "Send without changes",
+            "modify": "Send with changes",
+            "wantsToSend": "wants to send a message to",
+            "changeMessage": "Change message"
         }
     },
     "features": {
@@ -133,5 +144,6 @@
             "Beep": "beep",
             "all": "very secret code"
         }
-    }
+    },
+    "allMicrobits": "all"
 }

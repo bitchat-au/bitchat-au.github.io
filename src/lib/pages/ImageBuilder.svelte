@@ -14,6 +14,7 @@
     import Icon from "../Components/Icon.svelte";
     import ImageMatrixRenderer from "../Components/ImageMatrixRenderer.svelte";
     import { scope } from "@i18n";
+    import InteractiveBitString from "../Components/InteractiveBitString.svelte";
 
     const scopedT = scope("imageBuilder");
 
@@ -53,44 +54,10 @@
 
 <div class="builder">
     <div class="header">
-        <div
-            class="bit-string-interactive"
-            role="group"
-            aria-label={scopedT("bitStringInteractiveAriaLabel")}
-        >
-            {#each imageUnderConstruction as row, rowIndex}
-                <div class="row">
-                    <span>{rowIndex + 1}:</span>
-                    {#each row as pixel, colIndex}
-                        <button
-                            class="pixel"
-                            class:active={pixel === 1}
-                            aria-label={scopedT("pixelButtonAriaLabel", {
-                                row: rowIndex + 1,
-                                col: colIndex + 1,
-                            })}
-                            onmouseover={() =>
-                                (hoverIndex = rowIndex * 5 + colIndex)}
-                            onfocus={() =>
-                                (hoverIndex = rowIndex * 5 + colIndex)}
-                            onmouseleave={() => (hoverIndex = null)}
-                            onblur={() => (hoverIndex = null)}
-                            onclick={() =>
-                                (imageUnderConstruction[rowIndex][colIndex] =
-                                    pixel === 1 ? 0 : 1)}>{pixel}</button
-                        >
-                    {/each}
-                </div>
-            {/each}
-        </div>
-        <span
-            class="bit-string"
-            aria-label={scopedT("bitStringAriaLabel")}
-            >{scopedT("bitStringLabel")}:
-            {#each imageUnderConstruction.flat() as pixel, index}
-                <span class:highlight={hoverIndex === index}>{pixel}</span>
-            {/each}
-        </span>
+        <InteractiveBitString
+            bind:image={imageUnderConstruction}
+            onHover={(index) => (hoverIndex = index)}
+        />
     </div>
     <ImageMatrixRenderer
         matrix={imageUnderConstruction}
@@ -130,10 +97,6 @@
 </footer>
 
 <style>
-    .highlight {
-        text-decoration: underline;
-    }
-
     .builder {
         display: flex;
         flex-direction: column;
@@ -148,12 +111,6 @@
             flex-direction: column;
             align-items: center;
             gap: 0.25rem;
-
-            .bit-string {
-                font-family: var(--mono);
-                font-size: 0.9rem;
-                color: var(--muted-grey);
-            }
         }
 
         :global(.image-preview) {
@@ -168,51 +125,6 @@
         gap: 1rem;
         width: 100%;
         margin-bottom: 1rem;
-    }
-
-    .bit-string-interactive {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        .row {
-            display: flex;
-            align-items: center;
-
-            span {
-                margin-right: 0.5rem;
-                font-family: var(--sans-display);
-            }
-
-            .pixel {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 20px;
-                height: 20px;
-                font-family: var(--mono);
-
-                &:not(.active) {
-                    background-color: var(--bg);
-                    color: var(--white);
-                    border: 1px solid var(--white);
-
-                    &:hover {
-                        background-color: var(--muted-grey);
-                    }
-                }
-
-                &.active {
-                    background-color: var(--white);
-                    color: var(--bg);
-
-                    &:hover {
-                        background-color: #aaa;
-                    }
-                }
-            }
-        }
     }
 
     footer {

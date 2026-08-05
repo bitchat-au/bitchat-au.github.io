@@ -108,6 +108,16 @@ export function encryptImage(matrix: ImageMatrix, code: string): ImageMatrix {
     return removeImageCaption(encryptedMatrix);
 }
 
+/**
+ * Clone an image matrix, removing any caption if present.
+ * @param matrix ImageMatrix input image
+ * @returns A new ImageMatrix that is a clone of the input, without any caption.
+ */
+export function cloneImage(matrix: ImageMatrix): ImageMatrix {
+    const clonedMatrix: ImageMatrix = matrix.map(row => [...row]) as ImageMatrix;
+    return removeImageCaption(clonedMatrix);
+}
+
 // Common images
 export const COMMON_IMAGES = Object.freeze({
     HAPPY: createImageWithCaption([
@@ -293,3 +303,7 @@ export const COMMON_IMAGES = Object.freeze({
         [0, 0, 1, 0, 0]
     ], t("knownImages.QUESTION_MARK"))
 })
+
+if (import.meta.env.DEV) {
+    (window as any).COMMON_IMAGES = COMMON_IMAGES;
+}

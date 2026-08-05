@@ -193,7 +193,7 @@
         width: 100%;
     }
 
-    :global(.image-matrix.image-preview) {
+    .code-cracker :global(.image-matrix.image-preview) {
         max-width: 300px;
         margin-top: 2rem;
     }

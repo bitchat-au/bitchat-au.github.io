@@ -1,5 +1,5 @@
 import { COMMON_IMAGES, createImageWithCaption, packImage, unpackImage, type ImageMatrix } from "../helpers/images";
-import { showPrompt } from "./dialog_manager.svelte";
+import { showPrompt, unpackDialogResult } from "./dialog_manager.svelte";
 import { Features, features } from "./features.svelte";
 import { friendlyLogService, LogType } from "./friendly_log.svelte";
 import { MicrobitSerialConnection } from "./serial_connection";
@@ -116,11 +116,7 @@ class MicrobitService {
         this.logService.addLog(LogType.Message, sender, receiver, messageImage, !!encryptionCode);
         console.log({ sender, receiver, messageImage });
 
-        if (features.isActive(Features.Hacker)) {
-            console.log("Show hacking menu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            this.writeToMB("nmComp");
-            // setUpHacking(messageSender, messageReceiver, messageString)
-        } else if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
+        if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
             this.writeToMB("nmComp");
             const result = await showPrompt("RouterModal", {
                 sender,
@@ -137,6 +133,17 @@ class MicrobitService {
             receiver = result.data.newReceiver;
 
             console.log("Router modal result:", result);
+        }
+        
+        if (features.isActive(Features.Hacker)) {
+            this.writeToMB("nmComp");
+            const result = await showPrompt("HackerModal", {
+                message: messageImage,
+                sender,
+                receiver
+            }, { timeout: 30000 });
+
+            messageImage = unpackDialogResult(result)?.newMessage || messageImage;
         }
 
         this.writeToMB("sendMessage", sender, receiver, packImage(messageImage));
