@@ -19,10 +19,14 @@
     const showTranslator = $derived(features.isActive(Features.Translator));
 
     function getDeviceImage(name: string) {
+        if (name === "ALL") {
+            return COMMON_IMAGES.FULL;
+        }
+
         const device = microbitService.knownMicrobits.find(
             (mb) => mb.name === name,
         );
-        return device?.image ?? COMMON_IMAGES.EMPTY;
+        return device?.image ?? COMMON_IMAGES.QUESTION_MARK;
     }
 </script>
 
@@ -34,35 +38,35 @@
             entry.message as FriendLogs[LogType.Message]}
         {@const messageAsString = message.map((row) => row.join("")).join(":")}
 
-        <button
+        <label
             role={showTranslator ? "button" : "presentation"}
             class="no-style image-string"
-            disabled={!showTranslator}
-            popovertarget="translator-{entryId}"
+            for={`translator-${entryId}`}
         >
             [{senderName}] ---&#8203;&gt; [{recipientName}] ---
             {messageAsString}
-        </button>
+            <input
+                class="translator-toggle"
+                type="checkbox"
+                disabled={!showTranslator}
+                name="translator-toggle"
+                id="translator-{entryId}"
+                hidden
+            />
+        </label>
 
-        <div popover="auto" class="translated-image" id="translator-{entryId}">
-            <ImageMatrixRenderer matrix={getDeviceImage(senderName)} />
+        <div class="translated" id="translator-{entryId}">
+            <ImageMatrixRenderer matrix={getDeviceImage(senderName)} class="sender" />
             <CodeMarquee />
-            <ImageMatrixRenderer matrix={message} />
-            <CodeMarquee />
-            <ImageMatrixRenderer matrix={getDeviceImage(recipientName)} />
+            <ImageMatrixRenderer matrix={getDeviceImage(recipientName)} class="recipient" />
+            <ImageMatrixRenderer matrix={message} class="message"/>
         </div>
     {/if}
 </code>
 
 <style>
-    code {
-        anchor-scope: all;
-    }
-
     .image-string {
-        anchor-name: --image-string;
-
-        &:not([disabled]) {
+        &:not(:has([disabled])) {
             text-decoration: underline;
         }
 
@@ -71,26 +75,61 @@
         }
     }
 
-    .translated-image {
-        align-items: center;
-        gap: 0.5rem;
-        padding: 8px;
-        overflow: hidden;
-        width: 400px;
-
-        position: absolute;
-        position-anchor: --image-string;
-        position-area: bottom center;
-
-        background-color: var(--bg);
-        border: 1px solid var(--muted-grey);
-
-        &:popover-open {
+    /* Only show translation if the toggle is turned on, and the translator isnt disabled */
+    code:has(.translator-toggle:checked):not(
+            :has(.translator-toggle[disabled])
+        ) {
+        position: relative;
+        margin-bottom: 4px;
+        
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -6px;
+            width: 1px;
+            background-color: var(--muted-grey);
+        }
+        .translated {
             display: flex;
         }
+    }
+
+    .translated {
+        align-items: center;
+        /* padding: 8px; */
+        overflow: hidden;
+        width: calc(55ch + 4px);
+        max-width: 100%;
+        margin-top: 2px;
+        margin-left: -4px;
+        padding: 8px 4px;
+        display: none;
+        font-family: var(--mono);
+        font-size: 16px;
+        position: relative;
+        height: 5rem;
+        padding-right: 15ch;
+
+        background-color: var(--bg);
 
         :global(.image-matrix) {
-            max-width: 60px;
+            max-width: 68px;
+            position: absolute;
+            z-index: 1;
+
+            &.sender {
+                left: 4px;
+            }
+
+            &.recipient {
+                left: calc(13ch + 4px);
+            }
+
+            &.message {
+                left: calc(37ch + 2px);
+            }
         }
     }
 </style>

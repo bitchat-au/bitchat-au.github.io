@@ -38,7 +38,7 @@
         display: flex;
         flex-direction: column;
         background-color: black;
-        padding: 0.5rem;
+        padding: 0.75rem;
         width: 100%;
         flex-grow: 1;
         overflow: auto;

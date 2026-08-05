@@ -30,6 +30,7 @@
         "COW": "Ko",
         "PITCHFORK": "Gaffel",
         "SWORD": "Sværd",
+        "QUESTION_MARK": "Spørgsmålstegn",
         "defaultCaption": "5x5  LED-matrix"
     },
     "header": {

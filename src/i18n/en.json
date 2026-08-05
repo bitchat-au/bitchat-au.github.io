@@ -30,6 +30,7 @@
         "COW": "Cow",
         "PITCHFORK": "Pitchfork",
         "SWORD": "Sword",
+        "QUESTION_MARK": "Question mark",
         "defaultCaption": "5x5 LED matrix"
     },
     "header": {

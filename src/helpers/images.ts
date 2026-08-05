@@ -285,4 +285,11 @@ export const COMMON_IMAGES = Object.freeze({
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0]
     ], t("knownImages.SWORD")),
+    QUESTION_MARK: createImageWithCaption([
+        [0, 1, 1, 1, 0],
+        [1, 0, 0, 0, 1],
+        [0, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0]
+    ], t("knownImages.QUESTION_MARK"))
 })
