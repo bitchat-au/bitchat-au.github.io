@@ -1,214 +1,208 @@
 <script lang="ts">
-    import { scope, t } from "@i18n";
-    import { onEnter } from "../../helpers/on_enter.svelte";
-    import {
-        featureMap,
-        Features,
-        features,
-        type FeatItem,
-    } from "../../services/features.svelte";
-    import Icon from "./Icon.svelte";
+	import { scope, t } from '@i18n';
+	import { onEnter } from '../../helpers/on_enter.svelte';
+	import { featureMap, Features, features, type FeatItem } from '../../services/features.svelte';
+	import Icon from './Icon.svelte';
 
-    const scopedT = scope("features.popup");
-    
-    let codeInput = $state("");
-    let codeError = $state(false);
-    $effect(() => {
-        if (!codeError) return;
+	const scopedT = scope('features.popup');
 
-        const timeout = setTimeout(() => {
-            codeError = false;
-        }, 3000);
+	let codeInput = $state('');
+	let codeError = $state(false);
+	$effect(() => {
+		if (!codeError) return;
 
-        return () => clearTimeout(timeout);
-    });
+		const timeout = setTimeout(() => {
+			codeError = false;
+		}, 3000);
 
-    function submitcode() {
-        codeError = !features.checkPassword(codeInput.trim().toLowerCase());
-        codeInput = "";
-    }
+		return () => clearTimeout(timeout);
+	});
 
-    /**
-     * Traverse the feature map and return a flat list of features with their depth in the tree.
-     * This is used to render the features in a flat list with indentation based on their depth
-     * @param arr
-     * @param depth
-     */
-    const traverseFeatures = (
-        arr: readonly FeatItem[],
-        depth = 0,
-    ): Array<{ key: Features; depth: number }> => {
-        let result: Array<{ key: Features; depth: number }> = [];
-        for (const item of arr) {
-            result.push({ key: item.key as Features, depth });
-            if (item.children) {
-                result = result.concat(
-                    traverseFeatures(item.children, depth + 1),
-                );
-            }
-        }
-        return result;
-    };
+	function submitcode() {
+		codeError = !features.checkPassword(codeInput.trim().toLowerCase());
+		codeInput = '';
+	}
 
-    const featureList = $derived(
-        traverseFeatures(featureMap).filter((cur) =>
-            features.availableFeatures.has(cur.key),
-        ),
-    );
+	/**
+	 * Traverse the feature map and return a flat list of features with their depth in the tree.
+	 * This is used to render the features in a flat list with indentation based on their depth
+	 * @param arr
+	 * @param depth
+	 */
+	const traverseFeatures = (
+		arr: readonly FeatItem[],
+		depth = 0
+	): Array<{ key: Features; depth: number }> => {
+		let result: Array<{ key: Features; depth: number }> = [];
+		for (const item of arr) {
+			result.push({ key: item.key as Features, depth });
+			if (item.children) {
+				result = result.concat(traverseFeatures(item.children, depth + 1));
+			}
+		}
+		return result;
+	};
+
+	const featureList = $derived(
+		traverseFeatures(featureMap).filter((cur) => features.availableFeatures.has(cur.key))
+	);
 </script>
 
 <article popover="auto" id="feature-popover">
-    <header>
-        <h2>{scopedT("title")}</h2>
-        <button
-            class="transparent"
-            disabled={featureList.length === 0}
-            onclick={() => features.clearAll()}
-        >
-            <small>{scopedT("deleteAll")}</small>
-        </button>
-    </header>
+	<header>
+		<h2>{scopedT('title')}</h2>
+		<button
+			class="transparent"
+			disabled={featureList.length === 0}
+			onclick={() => features.clearAll()}
+		>
+			<small>{scopedT('deleteAll')}</small>
+		</button>
+	</header>
 
-    <ul>
-        {#each featureList as { key, depth }}
-            <li style:--indent={depth}>
-                <label>
-                    {t(`features.${key}`)}
-                    <input
-                        type="checkbox"
-                        class="sr-only feature-checkbox"
-                        checked={features.isActive(key)}
-                        onchange={() => features.toggle(key)}
-                    />
+	<ul>
+		{#each featureList as { key, depth } (key)}
+			<li style:--indent={depth}>
+				<label>
+					{t(`features.${key}`)}
+					<input
+						type="checkbox"
+						class="sr-only feature-checkbox"
+						checked={features.isActive(key)}
+						onchange={() => features.toggle(key)}
+					/>
 
-                    <span class="true-false-container" aria-hidden="true">
-                        <span class="true">{scopedT("true")}</span>
-                        <span>/</span>
-                        <span class="false">{scopedT("false")}</span>
-                    </span>
-                </label>
-            </li>
-        {/each}
-        {#if featureList.length === 0}
-            <li class="no-features">
-                {scopedT("noneAvailable")} <br /> {scopedT("askTeacher")}
-            </li>
-        {/if}
-    </ul>
+					<span class="true-false-container" aria-hidden="true">
+						<span class="true">{scopedT('true')}</span>
+						<span>/</span>
+						<span class="false">{scopedT('false')}</span>
+					</span>
+				</label>
+			</li>
+		{/each}
+		{#if featureList.length === 0}
+			<li class="no-features">
+				{scopedT('noneAvailable')} <br />
+				{scopedT('askTeacher')}
+			</li>
+		{/if}
+	</ul>
 
-    <div class="input-field">
-        <div class="input-container">
-            <input
-                type="text"
-                placeholder={scopedT("featureCodePlaceholder")}
-                bind:value={codeInput}
-                use:onEnter={submitcode}
-                aria-label={scopedT("featureCodeInputAriaLabel")}
-            />
-            <button onclick={submitcode} aria-label={scopedT("featureCodeSubmitAriaLabel")}><Icon name="arrow-right" /></button>
-        </div>
-        {#if codeError}
-            <small class="field-error">{scopedT("wrongCode")}</small>
-        {/if}
-    </div>
+	<div class="input-field">
+		<div class="input-container">
+			<input
+				type="text"
+				placeholder={scopedT('featureCodePlaceholder')}
+				bind:value={codeInput}
+				use:onEnter={submitcode}
+				aria-label={scopedT('featureCodeInputAriaLabel')}
+			/>
+			<button onclick={submitcode} aria-label={scopedT('featureCodeSubmitAriaLabel')}
+				><Icon name="arrow-right" /></button
+			>
+		</div>
+		{#if codeError}
+			<small class="field-error">{scopedT('wrongCode')}</small>
+		{/if}
+	</div>
 </article>
 
 <button class="features" popovertarget="feature-popover">
-    <Icon name="angle-down" />
-    {scopedT("title")}
+	<Icon name="angle-down" />
+	{scopedT('title')}
 </button>
 
 <style>
-    button.features {
-        anchor-name: --feature-anchor;
+	button.features {
+		anchor-name: --feature-anchor;
 
-        display: flex;
-        align-items: flex-end;
-        gap: 8px;
-        margin-left: auto;
-        font: 16px/14px var(--heading);
-        color: var(--white);
-        background-color: transparent;
-        padding: 8px 12px;
+		display: flex;
+		align-items: flex-end;
+		gap: 8px;
+		margin-left: auto;
+		font: 16px/14px var(--heading);
+		color: var(--white);
+		background-color: transparent;
+		padding: 8px 12px;
 
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.2);
-        }
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.2);
+		}
 
-        #feature-popover:popover-open + & {
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-    }
+		#feature-popover:popover-open + & {
+			background-color: rgba(0, 0, 0, 0.2);
+		}
+	}
 
-    #feature-popover {
-        flex-direction: column;
-        position: absolute;
-        position-anchor: --feature-anchor;
-        position-area: bottom span-left;
-        background-color: var(--bg);
-        border: 1px solid var(--muted-grey);
-        color: var(--white);
-        padding: 16px;
-        width: 400px;
-        gap: 16px;
+	#feature-popover {
+		flex-direction: column;
+		position: absolute;
+		position-anchor: --feature-anchor;
+		position-area: bottom span-left;
+		background-color: var(--bg);
+		border: 1px solid var(--muted-grey);
+		color: var(--white);
+		padding: 16px;
+		width: 400px;
+		gap: 16px;
 
-        &:popover-open {
-            display: flex;
-        }
+		&:popover-open {
+			display: flex;
+		}
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+		}
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
 
-            li {
-                margin-left: calc(var(--indent) * 1rem);
+			li {
+				margin-left: calc(var(--indent) * 1rem);
 
-                label {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 8px;
-                    padding: 1px 0;
-                    cursor: pointer;
+				label {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					gap: 8px;
+					padding: 1px 0;
+					cursor: pointer;
 
-                    &:has(:focus-visible) {
-                        outline-style: solid;
-                        outline-width: 2px;
-                    }
-                }
-            }
+					&:has(:focus-visible) {
+						outline-style: solid;
+						outline-width: 2px;
+					}
+				}
+			}
 
-            .no-features {
-                width: 100%;
-                text-align: center;
-                color: var(--white);
-                font-size: 14px;
-                padding: 16px 0;
-            }
-        }
-    }
+			.no-features {
+				width: 100%;
+				text-align: center;
+				color: var(--white);
+				font-size: 14px;
+				padding: 16px 0;
+			}
+		}
+	}
 
-    .true-false-container {
-        display: flex;
-        gap: 2px;
-        font-size: 12px;
-        color: var(--muted-grey);
-        user-select: none;
+	.true-false-container {
+		display: flex;
+		gap: 2px;
+		font-size: 12px;
+		color: var(--muted-grey);
+		user-select: none;
 
-        .feature-checkbox:checked + & .true {
-            color: var(--accent);
-        }
-        .feature-checkbox:not(:checked) + & .false {
-            color: var(--danger);
-        }
-    }
+		.feature-checkbox:checked + & .true {
+			color: var(--accent);
+		}
+		.feature-checkbox:not(:checked) + & .false {
+			color: var(--danger);
+		}
+	}
 </style>

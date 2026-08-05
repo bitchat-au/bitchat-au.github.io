@@ -1,149 +1,149 @@
 {
-    "title": "Bit:Chat",
-    "locales": {
-        "en": "English",
-        "da": "Danish"
-    },
-    "knownImages": {
-        "HAPPY": "Happy smiley",
-        "SAD": "Sad smiley",
-        "FULL": "5x5 image fully lit",
-        "EMPTY": "5x5 image empty",
-        "1": "Number 1",
-        "2": "Number 2",
-        "3": "Number 3",
-        "4": "Number 4",
-        "5": "Number 5",
-        "6": "Number 6",
-        "7": "Number 7",
-        "8": "Number 8",
-        "9": "Number 9",
-        "0": "Number 0",
-        "HEART": "Heart",
-        "DUCK": "Duck",
-        "HOUSE": "House",
-        "GHOST": "Ghost",
-        "GIRAFFE": "Giraffe",
-        "UMBRELLA": "Umbrella",
-        "SNAKE": "Snake",
-        "RABBIT": "Rabbit",
-        "COW": "Cow",
-        "PITCHFORK": "Pitchfork",
-        "SWORD": "Sword",
-        "QUESTION_MARK": "Question mark",
-        "defaultCaption": "5x5 LED matrix"
-    },
-    "header": {
-        "logoAriaLabel": "Bit:Chat logo"
-    },
-    "nav": {
-        "log": "Message traffic",
-        "image-builder": "Image builder",
-        "code-cracker": "Code cracker",
-        "empty": "Wait for instructions from your teacher"
-    },
-    "devices": {
-        "title": "Devices",
-        "noDevices": "No Micro:bits connected"
-    },
-    "welcome": {
-        "noConnection": "No device connected",
-        "connect": "Connect micro:bit"
-    },
-    "widgets": {
-        "interactiveBitString": {
-            "bitStringInteractiveAriaLabel": "Image control panel",
-            "pixelButtonAriaLabel": "Control for pixel {row} {col}",
-            "bitStringAriaLabel": "Bit string for the current image",
-            "bitStringLabel": "Bit string"
-        }
-    },
-    "codeCracker": {
-        "title": "Code cracker",
-        "instructions": "Can you crack an encrypted image? <br /> Try one of your own images, or generate a random image",
-        "ownImage": "Own image",
-        "randomImage": "Random image",
-        "generate": "Generate an encrypted image",
-        "decrypt": "Decrypt",
-        "code": "Code",
-        "imageRenderAriaLabel": "Preview of encrypted image",
-        "correctness": "{{correctness}} out of 5 correct",
-        "tryAgain": "Try a new image",
-        "decrypted": "Decrypted image",
-        "decryptedDescription": "You have successfully decrypted the image. Good job!",
-        "showHint": "Show hint"
-    },
-    "imageBuilder": {
-        "ownImageCaption": "Own image",
-        "imageRenderAriaLabel": "Image preview",
-        "clearImage": "Clear image",
-        "saveImage": "Save image",
-        "savedImages": "Saved images",
-        "savedImagesAriaLabel": "List of saved images",
-        "deleteImageAriaLabel": "Delete image"
-    },
-    "messageLogs": {
-        "serverTitle": "Bit:Chat server",
-        "clearLog": "Clear log"
-    },
-    "imageMatrixRenderer": {
-        "pixelTitle": "Pixel ({row}, {col})",
-        "highlightedPixelAriaLabel": "Highlighted pixel ({row}, {col})"
-    },
-    "dialogs": {
-        "close": "Close popup",
-        "routerModal": {
-            "title": "Router",
-            "dialogAriaLabel": "Router dialog",
-            "wantsToSend": "wants to send a message to",
-            "chooseReceipient": "Choose recipient",
-            "deleteMessage": "Delete message",
-            "sendMessage": "Send"
-        },
-        "hackerModal": {
-            "title": "Hacker",
-            "cancel": "Send without changes",
-            "modify": "Send with changes",
-            "wantsToSend": "wants to send a message to",
-            "changeMessage": "Change message"
-        }
-    },
-    "features": {
-        "popup": {
-            "title": "Features",
-            "deleteAll": "Delete all",
-            "noneAvailable": "No features available",
-            "askTeacher": "Ask your teacher for access to new features",
-            "featureCodePlaceholder": "Feature code",
-            "featureCodeInputAriaLabel": "Enter feature code",
-            "featureCodeSubmitAriaLabel": "Check feature code",
-            "wrongCode": "Wrong code",
-            "true": "On",
-            "false": "Off"
-        },
-        "Server": "Server",
-        "Translator": "Translator",
-        "ImageBuilder": "Image builder",
-        "KodeKnækkeren": "Code cracker",
-        "Router": "Router",
-        "AutoRouter": "Auto Router",
-        "Encryption": "Encryption",
-        "AutoEncryption": "Auto Encryption",
-        "Hacker": "Hacker",
-        "Beep": "Beep",
-        "passwords": {
-            "Server": "server",
-            "Translator": "translator",
-            "ImageBuilder": "build",
-            "KodeKnækkeren": "crack",
-            "Router": "router",
-            "AutoRouter": "auto-router",
-            "Encryption": "encrypt",
-            "AutoEncryption": "auto-encrypt",
-            "Hacker": "hack",
-            "Beep": "beep",
-            "all": "very secret code"
-        }
-    },
-    "allMicrobits": "all"
+	"title": "Bit:Chat",
+	"locales": {
+		"en": "English",
+		"da": "Danish"
+	},
+	"knownImages": {
+		"HAPPY": "Happy smiley",
+		"SAD": "Sad smiley",
+		"FULL": "5x5 image fully lit",
+		"EMPTY": "5x5 image empty",
+		"1": "Number 1",
+		"2": "Number 2",
+		"3": "Number 3",
+		"4": "Number 4",
+		"5": "Number 5",
+		"6": "Number 6",
+		"7": "Number 7",
+		"8": "Number 8",
+		"9": "Number 9",
+		"0": "Number 0",
+		"HEART": "Heart",
+		"DUCK": "Duck",
+		"HOUSE": "House",
+		"GHOST": "Ghost",
+		"GIRAFFE": "Giraffe",
+		"UMBRELLA": "Umbrella",
+		"SNAKE": "Snake",
+		"RABBIT": "Rabbit",
+		"COW": "Cow",
+		"PITCHFORK": "Pitchfork",
+		"SWORD": "Sword",
+		"QUESTION_MARK": "Question mark",
+		"defaultCaption": "5x5 LED matrix"
+	},
+	"header": {
+		"logoAriaLabel": "Bit:Chat logo"
+	},
+	"nav": {
+		"log": "Message traffic",
+		"image-builder": "Image builder",
+		"code-cracker": "Code cracker",
+		"empty": "Wait for instructions from your teacher"
+	},
+	"devices": {
+		"title": "Devices",
+		"noDevices": "No Micro:bits connected"
+	},
+	"welcome": {
+		"noConnection": "No device connected",
+		"connect": "Connect micro:bit"
+	},
+	"widgets": {
+		"interactiveBitString": {
+			"bitStringInteractiveAriaLabel": "Image control panel",
+			"pixelButtonAriaLabel": "Control for pixel {row} {col}",
+			"bitStringAriaLabel": "Bit string for the current image",
+			"bitStringLabel": "Bit string"
+		}
+	},
+	"codeCracker": {
+		"title": "Code cracker",
+		"instructions": "Can you crack an encrypted image? <br /> Try one of your own images, or generate a random image",
+		"ownImage": "Own image",
+		"randomImage": "Random image",
+		"generate": "Generate an encrypted image",
+		"decrypt": "Decrypt",
+		"code": "Code",
+		"imageRenderAriaLabel": "Preview of encrypted image",
+		"correctness": "{{correctness}} out of 5 correct",
+		"tryAgain": "Try a new image",
+		"decrypted": "Decrypted image",
+		"decryptedDescription": "You have successfully decrypted the image. Good job!",
+		"showHint": "Show hint"
+	},
+	"imageBuilder": {
+		"ownImageCaption": "Own image",
+		"imageRenderAriaLabel": "Image preview",
+		"clearImage": "Clear image",
+		"saveImage": "Save image",
+		"savedImages": "Saved images",
+		"savedImagesAriaLabel": "List of saved images",
+		"deleteImageAriaLabel": "Delete image"
+	},
+	"messageLogs": {
+		"serverTitle": "Bit:Chat server",
+		"clearLog": "Clear log"
+	},
+	"imageMatrixRenderer": {
+		"pixelTitle": "Pixel ({row}, {col})",
+		"highlightedPixelAriaLabel": "Highlighted pixel ({row}, {col})"
+	},
+	"dialogs": {
+		"close": "Close popup",
+		"routerModal": {
+			"title": "Router",
+			"dialogAriaLabel": "Router dialog",
+			"wantsToSend": "wants to send a message to",
+			"chooseReceipient": "Choose recipient",
+			"deleteMessage": "Delete message",
+			"sendMessage": "Send"
+		},
+		"hackerModal": {
+			"title": "Hacker",
+			"cancel": "Send without changes",
+			"modify": "Send with changes",
+			"wantsToSend": "wants to send a message to",
+			"changeMessage": "Change message"
+		}
+	},
+	"features": {
+		"popup": {
+			"title": "Features",
+			"deleteAll": "Delete all",
+			"noneAvailable": "No features available",
+			"askTeacher": "Ask your teacher for access to new features",
+			"featureCodePlaceholder": "Feature code",
+			"featureCodeInputAriaLabel": "Enter feature code",
+			"featureCodeSubmitAriaLabel": "Check feature code",
+			"wrongCode": "Wrong code",
+			"true": "On",
+			"false": "Off"
+		},
+		"Server": "Server",
+		"Translator": "Translator",
+		"ImageBuilder": "Image builder",
+		"KodeKnækkeren": "Code cracker",
+		"Router": "Router",
+		"AutoRouter": "Auto Router",
+		"Encryption": "Encryption",
+		"AutoEncryption": "Auto Encryption",
+		"Hacker": "Hacker",
+		"Beep": "Beep",
+		"passwords": {
+			"Server": "server",
+			"Translator": "translator",
+			"ImageBuilder": "build",
+			"KodeKnækkeren": "crack",
+			"Router": "router",
+			"AutoRouter": "auto-router",
+			"Encryption": "encrypt",
+			"AutoEncryption": "auto-encrypt",
+			"Hacker": "hack",
+			"Beep": "beep",
+			"all": "very secret code"
+		}
+	},
+	"allMicrobits": "all"
 }

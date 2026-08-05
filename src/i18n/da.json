@@ -1,149 +1,149 @@
 {
-    "title": "Bit:Chat",
-    "locales": {
-        "en": "Engelsk",
-        "da": "Dansk"
-    },
-    "knownImages": {
-        "HAPPY": "Glad smiley",
-        "SAD": "Trist smiley",
-        "FULL": "5x5 billede helt tændt",
-        "EMPTY": "5x5 billede tomt",
-        "1": "Tal 1",
-        "2": "Tal 2",
-        "3": "Tal 3",
-        "4": "Tal 4",
-        "5": "Tal 5",
-        "6": "Tal 6",
-        "7": "Tal 7",
-        "8": "Tal 8",
-        "9": "Tal 9",
-        "0": "Tal 0",
-        "HEART": "Hjerte",
-        "DUCK": "And",
-        "HOUSE": "Hus",
-        "GHOST": "Spøgelse",
-        "GIRAFFE": "Giraf",
-        "UMBRELLA": "Paraply",
-        "SNAKE": "Slange",
-        "RABBIT": "Kanin",
-        "COW": "Ko",
-        "PITCHFORK": "Gaffel",
-        "SWORD": "Sværd",
-        "QUESTION_MARK": "Spørgsmålstegn",
-        "defaultCaption": "5x5  LED-matrix"
-    },
-    "header": {
-        "logoAriaLabel": "Bit:Chat logo"
-    },
-    "nav": {
-        "log": "Besked trafik",
-        "image-builder": "Billed byggeren",
-        "code-cracker": "Kode knækkeren",
-        "empty": "Vent på instruktioner fra din lærer"
-    },
-    "devices": {
-        "title": "Enheder",
-        "noDevices": "Ingen Micro:bits forbundet"
-    },
-    "welcome": {
-        "noConnection": "Ingen enhed forbundet",
-        "connect": "Forbind micro:bit"
-    },
-    "widgets": {
-        "interactiveBitString": {
-            "bitStringInteractiveAriaLabel": "Billed kontrol panel",
-            "pixelButtonAriaLabel": "Kontrol for pixel {row} {col}",
-            "bitStringAriaLabel": "Bit string for det aktuelle billede",
-            "bitStringLabel": "Bit streng"
-        }
-    },
-    "codeCracker": {
-        "title": "Kode knækkeren",
-        "instructions": "Kan du knække et krypteret billede? <br /> Prøv et af dine egne billeder, eller generer et tilfældigt billede",
-        "ownImage": "Eget billede",
-        "randomImage": "Tilfældigt billede",
-        "generate": "Generer et krypteret billede",
-        "decrypt": "Dekrypter",
-        "code": "Kode",
-        "imageRenderAriaLabel": "Forhåndsvisning af krypteret billede",
-        "correctness": "{{correctness}} ud af 5 korrekt",
-        "tryAgain": "Prøv et nyt billede",
-        "decrypted": "Dekrypteret!",
-        "decryptedDescription": "Du har dekrypteret billedet korrekt. Godt arbejde!",
-        "showHint": "Vis et hint"
-    },
-    "imageBuilder": {
-        "ownImageCaption": "Eget billede",
-        "imageRenderAriaLabel": "Forhåndsvisning af billede",
-        "clearImage": "Ryd billede",
-        "saveImage": "Gem billede",
-        "savedImages": "Gemte billede",
-        "savedImagesAriaLabel": "Liste over gemte billeder",
-        "deleteImageAriaLabel": "Slet billede"
-    },
-    "messageLogs": {
-        "serverTitle": "Bit:Chat server",
-        "clearLog": "Ryd log"
-    },
-    "imageMatrixRenderer": {
-        "pixelTitle": "Pixel ({row}, {col})",
-        "highlightedPixelAriaLabel": "Markeret pixel ({row}, {col})"
-    },
-    "dialogs": {
-        "close": "Luk popup",
-        "routerModal": {
-            "title": "Router",
-            "dialogAriaLabel": "Router dialog",
-            "wantsToSend": "vil sende en besked til",
-            "chooseReceipient": "Vælg modtager",
-            "deleteMessage": "Slet besked",
-            "sendMessage": "Send"
-        },
-        "hackerModal": {
-            "title": "Hacker",
-            "cancel": "Send uden ændringer",
-            "modify": "Send med ændringer",
-            "wantsToSend": "vil sende en besked til",
-            "changeMessage": "Lav om på beskeden"
-        }
-    },
-    "features": {
-        "popup": {
-            "title": "Features",
-            "deleteAll": "Slet alle",
-            "noneAvailable": "Ingen features tilgængelige",
-            "askTeacher": "Spørg din lærer om adgagn til nye features",
-            "featureCodePlaceholder": "Feature kode",
-            "featureCodeInputAriaLabel": "Indtast feature kode",
-            "featureCodeSubmitAriaLabel": "Tjek feature kode",
-            "wrongCode": "Forkert kode",
-            "true": "Til",
-            "false": "Fra"
-        },
-        "Server": "Server",
-        "Translator": "Oversætter",
-        "ImageBuilder": "Billed bygger",
-        "KodeKnækkeren": "Kode knækker",
-        "Router": "Router",
-        "AutoRouter": "Auto Router",
-        "Encryption": "Kryptering",
-        "AutoEncryption": "Auto Kryptering",
-        "Hacker": "Hacker",
-        "Beep": "Beep",
-        "passwords": {
-            "Server": "server",
-            "Translator": "oversætter",
-            "ImageBuilder": "byg",
-            "KodeKnækkeren": "knæk",
-            "Router": "modtager",
-            "AutoRouter": "auto-modtager",
-            "Encryption": "krypter",
-            "AutoEncryption": "auto-krypter",
-            "Hacker": "hack",
-            "Beep": "beep",
-            "all": "meget hemmelig kode"
-        }
-    },
-    "allMicrobits": "alle"
+	"title": "Bit:Chat",
+	"locales": {
+		"en": "Engelsk",
+		"da": "Dansk"
+	},
+	"knownImages": {
+		"HAPPY": "Glad smiley",
+		"SAD": "Trist smiley",
+		"FULL": "5x5 billede helt tændt",
+		"EMPTY": "5x5 billede tomt",
+		"1": "Tal 1",
+		"2": "Tal 2",
+		"3": "Tal 3",
+		"4": "Tal 4",
+		"5": "Tal 5",
+		"6": "Tal 6",
+		"7": "Tal 7",
+		"8": "Tal 8",
+		"9": "Tal 9",
+		"0": "Tal 0",
+		"HEART": "Hjerte",
+		"DUCK": "And",
+		"HOUSE": "Hus",
+		"GHOST": "Spøgelse",
+		"GIRAFFE": "Giraf",
+		"UMBRELLA": "Paraply",
+		"SNAKE": "Slange",
+		"RABBIT": "Kanin",
+		"COW": "Ko",
+		"PITCHFORK": "Gaffel",
+		"SWORD": "Sværd",
+		"QUESTION_MARK": "Spørgsmålstegn",
+		"defaultCaption": "5x5  LED-matrix"
+	},
+	"header": {
+		"logoAriaLabel": "Bit:Chat logo"
+	},
+	"nav": {
+		"log": "Besked trafik",
+		"image-builder": "Billed byggeren",
+		"code-cracker": "Kode knækkeren",
+		"empty": "Vent på instruktioner fra din lærer"
+	},
+	"devices": {
+		"title": "Enheder",
+		"noDevices": "Ingen Micro:bits forbundet"
+	},
+	"welcome": {
+		"noConnection": "Ingen enhed forbundet",
+		"connect": "Forbind micro:bit"
+	},
+	"widgets": {
+		"interactiveBitString": {
+			"bitStringInteractiveAriaLabel": "Billed kontrol panel",
+			"pixelButtonAriaLabel": "Kontrol for pixel {row} {col}",
+			"bitStringAriaLabel": "Bit string for det aktuelle billede",
+			"bitStringLabel": "Bit streng"
+		}
+	},
+	"codeCracker": {
+		"title": "Kode knækkeren",
+		"instructions": "Kan du knække et krypteret billede? <br /> Prøv et af dine egne billeder, eller generer et tilfældigt billede",
+		"ownImage": "Eget billede",
+		"randomImage": "Tilfældigt billede",
+		"generate": "Generer et krypteret billede",
+		"decrypt": "Dekrypter",
+		"code": "Kode",
+		"imageRenderAriaLabel": "Forhåndsvisning af krypteret billede",
+		"correctness": "{{correctness}} ud af 5 korrekt",
+		"tryAgain": "Prøv et nyt billede",
+		"decrypted": "Dekrypteret!",
+		"decryptedDescription": "Du har dekrypteret billedet korrekt. Godt arbejde!",
+		"showHint": "Vis et hint"
+	},
+	"imageBuilder": {
+		"ownImageCaption": "Eget billede",
+		"imageRenderAriaLabel": "Forhåndsvisning af billede",
+		"clearImage": "Ryd billede",
+		"saveImage": "Gem billede",
+		"savedImages": "Gemte billede",
+		"savedImagesAriaLabel": "Liste over gemte billeder",
+		"deleteImageAriaLabel": "Slet billede"
+	},
+	"messageLogs": {
+		"serverTitle": "Bit:Chat server",
+		"clearLog": "Ryd log"
+	},
+	"imageMatrixRenderer": {
+		"pixelTitle": "Pixel ({row}, {col})",
+		"highlightedPixelAriaLabel": "Markeret pixel ({row}, {col})"
+	},
+	"dialogs": {
+		"close": "Luk popup",
+		"routerModal": {
+			"title": "Router",
+			"dialogAriaLabel": "Router dialog",
+			"wantsToSend": "vil sende en besked til",
+			"chooseReceipient": "Vælg modtager",
+			"deleteMessage": "Slet besked",
+			"sendMessage": "Send"
+		},
+		"hackerModal": {
+			"title": "Hacker",
+			"cancel": "Send uden ændringer",
+			"modify": "Send med ændringer",
+			"wantsToSend": "vil sende en besked til",
+			"changeMessage": "Lav om på beskeden"
+		}
+	},
+	"features": {
+		"popup": {
+			"title": "Features",
+			"deleteAll": "Slet alle",
+			"noneAvailable": "Ingen features tilgængelige",
+			"askTeacher": "Spørg din lærer om adgagn til nye features",
+			"featureCodePlaceholder": "Feature kode",
+			"featureCodeInputAriaLabel": "Indtast feature kode",
+			"featureCodeSubmitAriaLabel": "Tjek feature kode",
+			"wrongCode": "Forkert kode",
+			"true": "Til",
+			"false": "Fra"
+		},
+		"Server": "Server",
+		"Translator": "Oversætter",
+		"ImageBuilder": "Billed bygger",
+		"KodeKnækkeren": "Kode knækker",
+		"Router": "Router",
+		"AutoRouter": "Auto Router",
+		"Encryption": "Kryptering",
+		"AutoEncryption": "Auto Kryptering",
+		"Hacker": "Hacker",
+		"Beep": "Beep",
+		"passwords": {
+			"Server": "server",
+			"Translator": "oversætter",
+			"ImageBuilder": "byg",
+			"KodeKnækkeren": "knæk",
+			"Router": "modtager",
+			"AutoRouter": "auto-modtager",
+			"Encryption": "krypter",
+			"AutoEncryption": "auto-krypter",
+			"Hacker": "hack",
+			"Beep": "beep",
+			"all": "meget hemmelig kode"
+		}
+	},
+	"allMicrobits": "alle"
 }

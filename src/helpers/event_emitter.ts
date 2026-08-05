@@ -16,7 +16,7 @@ class EventEmitter<T extends EventMap> {
 		}
 		this.events[event].push(listener);
 
-        return this;
+		return this;
 	}
 
 	public removeEventListener<K extends keyof T>(event: K | K[], listener: T[K]): this {
@@ -30,7 +30,7 @@ class EventEmitter<T extends EventMap> {
 		if (!listeners) return this;
 		this.events[event] = listeners.filter((l) => l !== listener);
 
-        return this;
+		return this;
 	}
 
 	protected emit<K extends keyof T>(event: K, ...args: Parameters<T[K]>): void {

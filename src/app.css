@@ -1,127 +1,137 @@
-@import "./styles/input.css";
-@import "./styles/button.css";
-@import "./styles/dialog.css";
+@import './styles/input.css';
+@import './styles/button.css';
+@import './styles/dialog.css';
 
 @font-face {
-  font-family: 'OffBit';
-  src: url("/fonts/OffBit-Regular.ttf") format("truetype");
+	font-family: 'OffBit';
+	src: url('/fonts/OffBit-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'OffBit Bold';
-  src: url("/fonts/OffBit-Bold.ttf") format("truetype");
+	font-family: 'OffBit Bold';
+	src: url('/fonts/OffBit-Bold.ttf') format('truetype');
 }
 
 :root {
-  --bg: #1F1F1F;
-  --muted-grey: #717171;
-  --white: #E0E4DD;
-  --accent: #5BEE4E;
-  --danger: #EE4E4E;
-  --stroke: rgb(from var(--muted-grey) r g b / 50%); /* To be used for horizontal/vertical dividers */
+	--bg: #1f1f1f;
+	--muted-grey: #717171;
+	--white: #e0e4dd;
+	--accent: #5bee4e;
+	--danger: #ee4e4e;
+	--stroke: rgb(
+		from var(--muted-grey) r g b / 50%
+	); /* To be used for horizontal/vertical dividers */
 
-  --sans: 'Momo Trust Sans', system-ui, sans-serif;
-  --sans-display: 'Momo Trust Display', system-ui, sans-serif;
-  --heading: 'OffBit Bold', system-ui, sans-serif;
-  --mono: 'Cascadia Code', ui-monospace, monospace;
+	--sans: 'Momo Trust Sans', system-ui, sans-serif;
+	--sans-display: 'Momo Trust Display', system-ui, sans-serif;
+	--heading: 'OffBit Bold', system-ui, sans-serif;
+	--mono: 'Cascadia Code', ui-monospace, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color: var(--white);
-  background-color: var(--bg);
-  background-image: 
-    linear-gradient(rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px),
-    linear-gradient(90deg, rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px);
-  background-size: 25px 25px;
+	font: 18px/145% var(--sans);
+	letter-spacing: 0.18px;
+	color: var(--white);
+	background-color: var(--bg);
+	background-image:
+		linear-gradient(rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px),
+		linear-gradient(90deg, rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px);
+	background-size: 25px 25px;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 
-  @media (max-width: 1724px) {
-    font-size: 16px;
-  }
+	@media (max-width: 1724px) {
+		font-size: 16px;
+	}
 }
 
 * {
-  box-sizing: border-box;
-  font-family: inherit;
-  outline-color: var(--accent);
-  outline-offset: 2px;
+	box-sizing: border-box;
+	font-family: inherit;
+	outline-color: var(--accent);
+	outline-offset: 2px;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  font-family: var(--sans);
+html,
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	font-family: var(--sans);
 }
 
 p {
-  margin: 0;
-  font-family: var(--sans);
-  font-weight: 400;
+	margin: 0;
+	font-family: var(--sans);
+	font-weight: 400;
 
-  &.muted {
-    color: var(--muted-grey);
-  }
+	&.muted {
+		color: var(--muted-grey);
+	}
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--heading);
-  line-height: 1;
-  font-weight: 400;
-  margin-top: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--heading);
+	line-height: 1;
+	font-weight: 400;
+	margin-top: 0;
 
-  &:has(+ .subheading) {
-    margin-bottom: 0.2em;
-  }
+	&:has(+ .subheading) {
+		margin-bottom: 0.2em;
+	}
 }
 
 .subheading {
-  color: var(--muted-grey);
-  margin-top: 0;
-  
-  &:has(+ *) {
-    margin-bottom: 1em;
-  }
+	color: var(--muted-grey);
+	margin-top: 0;
+
+	&:has(+ *) {
+		margin-bottom: 1em;
+	}
 }
 
-pre, samp, code {
-  font-family: var(--mono);
-  font-size: 16px;
-  line-height: 1.5;
-  margin: 0;
+pre,
+samp,
+code {
+	font-family: var(--mono);
+	font-size: 16px;
+	line-height: 1.5;
+	margin: 0;
 }
 
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
-  border-width: 0;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
 }
 
 *:focus-visible {
-  outline: 2px solid var(--accent);
+	outline: 2px solid var(--accent);
 }
 
 [popover] {
-  border: none;
+	border: none;
 }
 
 hr {
-  border: none;
-  border-top: 1px solid var(--stroke);
-  margin: 1rem 0;
-  width: 100%;
+	border: none;
+	border-top: 1px solid var(--stroke);
+	margin: 1rem 0;
+	width: 100%;
 
-  &.large {
-    margin: 2rem 0;
-  }
+	&.large {
+		margin: 2rem 0;
+	}
 }

@@ -1,11 +1,11 @@
 dialog {
-    background-color: var(--bg);
-    border: 1px solid var(--muted-grey);
-    color: var(--white);
-    min-width: min(90%, 500px);
-    overflow: visible;
+	background-color: var(--bg);
+	border: 1px solid var(--muted-grey);
+	color: var(--white);
+	min-width: min(90%, 500px);
+	overflow: visible;
 
-    &:not(.no-backdrop)::backdrop {
-        background-color: rgba(0, 0, 0, 0.50);
-    }
+	&:not(.no-backdrop)::backdrop {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
 }

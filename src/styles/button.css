@@ -1,60 +1,60 @@
 /* Button colors */
 button:not(.transparent),
 button.default {
-    --button-bg: var(--accent);
-    --button-color: var(--bg);
-    --button-hover-bg: hsl(from var(--accent) h s calc(l * 0.8));
-    --button-active-bg: hsl(from var(--accent) h s calc(l * 0.6));
+	--button-bg: var(--accent);
+	--button-color: var(--bg);
+	--button-hover-bg: hsl(from var(--accent) h s calc(l * 0.8));
+	--button-active-bg: hsl(from var(--accent) h s calc(l * 0.6));
 }
 
 button.transparent {
-    --button-bg: var(--bg);
-    --button-color: var(--white);
-    --button-hover-bg: hsl(from var(--bg) h s calc(l * 0.8));
-    --button-active-bg: hsl(from var(--bg) h s calc(l * 0.6));
+	--button-bg: var(--bg);
+	--button-color: var(--white);
+	--button-hover-bg: hsl(from var(--bg) h s calc(l * 0.8));
+	--button-active-bg: hsl(from var(--bg) h s calc(l * 0.6));
 }
 
 button:not(.no-style) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5em;
-    background-color: var(--button-bg);
-    color: var(--button-color);
-    border: none;
-    padding: 0.25rem 0.5rem;
-    font-size: inherit;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5em;
+	background-color: var(--button-bg);
+	color: var(--button-color);
+	border: none;
+	padding: 0.25rem 0.5rem;
+	font-size: inherit;
 
-    &:not(:disabled) {
-        cursor: pointer;
-    }
+	&:not(:disabled) {
+		cursor: pointer;
+	}
 
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
 
-    &:hover:not(:disabled) {
-        background-color: hsl(from var(--button-bg) h s calc(l * 0.8));
-    }
-    
-    &:active:not(:disabled) {
-        background-color: hsl(from var(--button-bg) h s calc(l * 0.6));
-    }
+	&:hover:not(:disabled) {
+		background-color: hsl(from var(--button-bg) h s calc(l * 0.8));
+	}
+
+	&:active:not(:disabled) {
+		background-color: hsl(from var(--button-bg) h s calc(l * 0.6));
+	}
 }
 
 button.no-style {
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: inherit;
-    color: inherit;
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: inherit;
+	color: inherit;
 
-    &:not(:disabled) {
-        cursor: pointer;
-    }
+	&:not(:disabled) {
+		cursor: pointer;
+	}
 
-    &:disabled {
-        cursor: not-allowed;
-    }
+	&:disabled {
+		cursor: not-allowed;
+	}
 }

@@ -77,6 +77,7 @@ def unpack_image(payload):
         for c in payload
     ]
 
+
 def add_generated_image(img_to_add, send_to_radio=True):
     """Adds a new generated image to the list, if it's not already present."""
     if img_to_add not in generated_images:
@@ -85,11 +86,13 @@ def add_generated_image(img_to_add, send_to_radio=True):
         if send_to_radio:
             send_radio_message("image_" + str(image_index) + "_" + img_to_add)
 
+
 def broadcast_images():
     """Flags that images should be broadcasted to all known micro:bits."""
     global should_broadcast_images, image_broadcast_debounce
     should_broadcast_images = True
     image_broadcast_debounce = time.ticks_ms()  # Reset the debounce timer
+
 
 def send_radio_message(message_to_send):
     """Sends a message over the radio and logs it."""
@@ -123,7 +126,9 @@ while True:
             code = uartmessage.split("_")[2]
             if code == "echo":  # Echo the message back to the computer
                 write_to_computer("echo_" + uartmessage.split("_")[3])
-            if code == "count":  # Get update on number of known micro:bits by the computer
+            if (
+                code == "count"
+            ):  # Get update on number of known micro:bits by the computer
                 for i, known in enumerate(known_microbits):
                     write_to_computer("nu_" + str(i) + "_" + str(known).split("'")[1])
             if code == "nmComp":  # If all of the message has been received
@@ -255,13 +260,19 @@ while True:
             )
             send_on_permitted = False
 
-        if should_broadcast_images and (time.ticks_ms() - image_broadcast_debounce) > 500:
+        if (
+            should_broadcast_images
+            and (time.ticks_ms() - image_broadcast_debounce) > 500
+        ):
             for i, generatedImage in enumerate(generated_images):
                 send_radio_message("image_" + str(i) + "_" + generatedImage)
-            image_broadcast_debounce = 0;
-            should_broadcast_images = False;
+            image_broadcast_debounce = 0
+            should_broadcast_images = False
 
-        if should_broadcast_settings and (time.ticks_ms() - settings_broadcast_debounce) > 500:
+        if (
+            should_broadcast_settings
+            and (time.ticks_ms() - settings_broadcast_debounce) > 500
+        ):
             # settings_| isEncryptable |_| autoEncrypt |_| allowRecipient |_| shouldBeep |
             send_radio_message(
                 "settings_"
@@ -273,8 +284,8 @@ while True:
                 + "_"
                 + ("1" if should_beep else "0")
             )
-            settings_broadcast_debounce = 0;
-            should_broadcast_settings = False;
+            settings_broadcast_debounce = 0
+            should_broadcast_settings = False
 
         if (time.ticks_ms() - last_ping_time) > PING_INTERVAL:
             send_radio_message("ping")
