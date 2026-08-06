@@ -254,7 +254,7 @@
 				height: 0.25rem;
 
 				&.correct {
-					background-color: var(--accent);
+					background-color: var(--electric-green);
 				}
 
 				&.incorrect {

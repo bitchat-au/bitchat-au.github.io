@@ -146,8 +146,8 @@
 			gap: 8px;
 
 			&:hover {
-				background-color: rgba(0, 0, 0, 0.2);
-				border-bottom-color: rgba(0, 0, 0, 0.2);
+				background-color: hsl(from var(--bg) h s calc(l * 0.4) / 30%);
+				border-bottom-color: hsl(from var(--bg) h s calc(l * 0.4) / 30%);
 			}
 		}
 

@@ -16,11 +16,11 @@
 	--bg: #1f1f1f;
 	--muted-grey: #717171;
 	--white: #e0e4dd;
-	--accent: #5bee4e;
+	--electric-green: #5bee4e;
+	--accent: var(--electric-green);
 	--danger: #ee4e4e;
-	--stroke: rgb(
-		from var(--muted-grey) r g b / 50%
-	); /* To be used for horizontal/vertical dividers */
+	--stroke: rgb(from var(--muted-grey) r g b / 50%);
+	/* To be used for horizontal/vertical dividers */
 
 	--sans: 'Momo Trust Sans', system-ui, sans-serif;
 	--sans-display: 'Momo Trust Display', system-ui, sans-serif;
@@ -32,8 +32,8 @@
 	color: var(--white);
 	background-color: var(--bg);
 	background-image:
-		linear-gradient(rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px),
-		linear-gradient(90deg, rgb(from var(--muted-grey) r g b / 3%) 2px, transparent 2px);
+		linear-gradient(rgb(from var(--stroke) r g b / 3%) 2px, transparent 2px),
+		linear-gradient(90deg, rgb(from var(--stroke) r g b / 3%) 2px, transparent 2px);
 	background-size: 25px 25px;
 
 	font-synthesis: none;
@@ -44,12 +44,18 @@
 	@media (max-width: 1724px) {
 		font-size: 16px;
 	}
+
+	&:has([data-hacker="true"]) {
+		--accent: #ee4e4e;
+		--bg: #231919;
+		--stroke: rgb(from var(--accent) r g b / 20%);
+	}
 }
 
 * {
 	box-sizing: border-box;
 	font-family: inherit;
-	outline-color: var(--accent);
+	outline-color: var(--electric-green);
 	outline-offset: 2px;
 }
 
@@ -118,7 +124,7 @@ code {
 }
 
 *:focus-visible {
-	outline: 2px solid var(--accent);
+	outline: 2px solid var(--electric-green);
 }
 
 [popover] {

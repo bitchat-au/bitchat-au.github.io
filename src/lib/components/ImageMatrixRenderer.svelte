@@ -75,7 +75,7 @@
 			height="28"
 			rx="4"
 			ry="4"
-			style="outline: 2px solid var(--accent); fill-opacity: 0;"
+			style="outline: 2px solid var(--electric-green); fill-opacity: 0;"
 		/>
 	{/if}
 </svg>

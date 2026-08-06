@@ -199,7 +199,7 @@
 		user-select: none;
 
 		.feature-checkbox:checked + & .true {
-			color: var(--accent);
+			color: var(--electric-green);
 		}
 		.feature-checkbox:not(:checked) + & .false {
 			color: var(--danger);

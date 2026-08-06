@@ -44,7 +44,6 @@
 				disabled={!showTranslator}
 				name="translator-toggle"
 				id="translator-{entryId}"
-				hidden
 			/>
 		</label>
 
@@ -66,6 +65,11 @@
 		&:disabled {
 			cursor: unset;
 		}
+
+		&:has(:focus-visible) {
+			outline-style: solid;
+			outline-width: 2px;
+		}
 	}
 
 	/* Only show translation if the toggle is turned on, and the translator isnt disabled */
@@ -85,6 +89,13 @@
 		.translated {
 			display: flex;
 		}
+	}
+
+	.translator-toggle {
+		position: fixed;
+		top: -100px;
+
+		clip: rect(0, 0, 0, 0);
 	}
 
 	.translated {

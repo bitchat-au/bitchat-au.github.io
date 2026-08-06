@@ -140,7 +140,7 @@
 			}
 
 			&:has(input:checked) {
-				border: 1px solid var(--accent);
+				border: 1px solid var(--electric-green);
 			}
 
 			:global(.image-matrix.candidate) {

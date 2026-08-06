@@ -94,7 +94,7 @@
 		position-anchor: --locale-anchor;
 		position-area: bottom span-left;
 		background-color: var(--bg);
-		border: 1px solid var(--muted-grey);
+		border: 1px solid var(--stroke);
 		color: var(--white);
 		padding: 0.5rem;
 		align-items: flex-start;

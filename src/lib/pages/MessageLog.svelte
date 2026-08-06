@@ -6,7 +6,7 @@
 </script>
 
 <div>
-	<samp>
+	<samp tabindex="-1">
 		{t('messageLogs.serverTitle')}
 		{#each friendlyLogService.logs as log, index (index)}
 			<LogEntryRenderer entry={log} />
