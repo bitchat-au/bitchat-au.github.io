@@ -132,20 +132,7 @@
 		"Encryption": "Kryptering",
 		"AutoEncryption": "Auto Kryptering",
 		"Hacker": "Hacker",
-		"Beep": "Beep",
-		"passwords": {
-			"Server": "server",
-			"Translator": "oversætter",
-			"ImageBuilder": "byg",
-			"KodeKnækkeren": "knæk",
-			"Router": "modtager",
-			"AutoRouter": "auto-modtager",
-			"Encryption": "krypter",
-			"AutoEncryption": "auto-krypter",
-			"Hacker": "hack",
-			"Beep": "beep",
-			"all": "meget hemmelig kode"
-		}
+		"Beep": "Beep"
 	},
 	"allMicrobits": "alle"
 }

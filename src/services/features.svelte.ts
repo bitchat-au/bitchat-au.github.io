@@ -1,5 +1,4 @@
 import { SvelteSet } from 'svelte/reactivity';
-import { scope } from '@i18n';
 import EventEmitter, { type EventMap } from '../helpers/event_emitter';
 import { registerOnWindow } from '../helpers/window';
 
@@ -65,22 +64,27 @@ const isFeature = (value: string): value is Features => {
 };
 
 // What passwords unlock which features
-const passwordT = scope('features.passwords');
 const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
-	{ features: [Features.Server], passwords: [passwordT('Server')] },
-	{ features: [Features.Translator], passwords: [passwordT('Translator')] },
-	{ features: [Features.ImageBuilder], passwords: [passwordT('ImageBuilder')] },
-	{ features: [Features.KodeKnækkeren], passwords: [passwordT('KodeKnækkeren')] },
-	{ features: [Features.Router], passwords: [passwordT('Router')] },
-	{ features: [Features.AutoRouter, Features.Router], passwords: [passwordT('AutoRouter')] },
-	{ features: [Features.Encryption], passwords: [passwordT('Encryption')] },
+	{ features: [Features.Server], passwords: ['server'] },
+	{ features: [Features.Translator], passwords: ['oversætter', 'translator'] },
+	{ features: [Features.ImageBuilder], passwords: ['byg', 'billede', 'build', 'image'] },
+	{ features: [Features.KodeKnækkeren], passwords: ['knæk', 'crack'] },
+	{ features: [Features.Router], passwords: ['modtager', 'receiver', 'recipient', 'router'] },
+	{
+		features: [Features.AutoRouter, Features.Router],
+		passwords: ['auto-modtager', 'auto-receiver', 'auto-recipient', 'auto-router']
+	},
+	{
+		features: [Features.Encryption],
+		passwords: ['krypter', 'kryptering', 'encrypt', 'encryption']
+	},
 	{
 		features: [Features.AutoEncryption, Features.Encryption],
-		passwords: [passwordT('AutoEncryption')]
+		passwords: ['auto-krypter', 'auto-encrypt', 'auto-kryptering', 'auto-encryption']
 	},
-	{ features: [Features.Hacker], passwords: [passwordT('Hacker')] },
-	{ features: [Features.Beep], passwords: [passwordT('Beep')] },
-	{ features: Object.values(Features), passwords: [passwordT('all')] }
+	{ features: [Features.Hacker], passwords: ['hack', 'hacker'] },
+	{ features: [Features.Beep], passwords: ['bip', 'beep'] },
+	{ features: Object.values(Features), passwords: ['meget hemmelig kode', 'very secret code'] }
 ];
 
 type Events = EventMap & {
