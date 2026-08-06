@@ -13,6 +13,7 @@
 	let decryptedImage: ImageMatrix = $state(COMMON_IMAGES.EMPTY);
 	let correctness = $state(0);
 	let showHint = $state(false);
+	let tries = $state(0);
 
 	function generateImage() {
 		const candidates =
@@ -41,9 +42,11 @@
 		correctness = 0;
 		decryptedImage = selectedImage;
 		showHint = false;
+		tries = 0;
 	}
 
 	function checkCode() {
+		tries++;
 		correctness = [...inputCode]
 			.map((char, index) => char === correctCode[index])
 			.filter(Boolean).length;
@@ -93,7 +96,11 @@
 	{:else}
 		{#if correctness === 5}
 			<h2>{scopedT('decrypted')}</h2>
-			<p class="subheading">{scopedT('decryptedDescription')}</p>
+			<p class="subheading">
+				{scopedT('decryptedDescription')} <br>
+				{scopedT(showHint ? 'triesWithHint' : 'triesWithoutHint', { tries })}
+			</p>
+
 			<button onclick={reset}>{scopedT('tryAgain')}</button>
 		{:else}
 			<div class="code-input">

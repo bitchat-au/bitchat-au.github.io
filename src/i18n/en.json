@@ -71,7 +71,9 @@
 		"tryAgain": "Try a new image",
 		"decrypted": "Decrypted image",
 		"decryptedDescription": "You have successfully decrypted the image. Good job!",
-		"showHint": "Show hint"
+		"showHint": "Show hint",
+		"triesWithHint": "{{tries}} tries, with hints",
+		"triesWithoutHint": "{{tries}} tries, without hints"
 	},
 	"imageBuilder": {
 		"ownImageCaption": "Own image",
