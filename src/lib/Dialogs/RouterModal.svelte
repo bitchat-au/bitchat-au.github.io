@@ -21,7 +21,7 @@
 	const requestedReceiver = microbitService.knownMicrobits.find(
 		(mb) => mb.name === data.requestedReceiver
 	);
-	const receivers = microbitService.knownMicrobits.filter((mb) => mb.name !== data.sender);
+	const receivers = microbitService.knownMicrobits;
 
 	let selectedReceiver: string | null = $state(null);
 	let receiverName = $derived(
