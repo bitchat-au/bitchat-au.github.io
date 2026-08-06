@@ -63,6 +63,8 @@ const isFeature = (value: string): value is Features => {
 	return Object.values<unknown>(Features).includes(value);
 };
 
+const defaultFeatures = [Features.Beep];
+
 // What passwords unlock which features
 const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
 	{ features: [Features.Server], passwords: ['server'] },
@@ -84,7 +86,17 @@ const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
 	},
 	{ features: [Features.Hacker], passwords: ['hack', 'hacker'] },
 	{ features: [Features.Beep], passwords: ['bip', 'beep'] },
-	{ features: Object.values(Features), passwords: ['meget hemmelig kode', 'very secret code'] }
+	{ features: Object.values(Features), passwords: ['meget hemmelig kode', 'very secret code'] },
+	{
+		features: [
+			Features.Server,
+			Features.Translator,
+			Features.ImageBuilder,
+			Features.Router,
+			Features.AutoRouter
+		],
+		passwords: ['pakke1', 'bundle1', 'package1']
+	}
 ];
 
 type Events = EventMap & {
@@ -145,12 +157,15 @@ class FeaturesService extends EventEmitter<Events> {
 		}
 
 		this.loadFromURLParams(); // Load features from URL parameters after loading from localStorage
+		this.setDefaultFeatures(); // Ensure default features are set if none are available
 	}
 
 	/**
 	 * Loads feature from the URL parameters and activates them if they are valid.
 	 */
 	private loadFromURLParams() {
+		// The urlParams are only ever used in this scope, so we can safely ignore the Svelte reactivity warning here.
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity
 		const urlParams = new URLSearchParams(window.location.search);
 		const featuresParam = decodeURIComponent(urlParams.get('features') || '');
 		if (featuresParam) {
@@ -160,6 +175,17 @@ class FeaturesService extends EventEmitter<Events> {
 					this.addAvailableFeature(f);
 				}
 			});
+
+			urlParams.delete('features');
+			const newQuery = urlParams.toString();
+			const newUrl = `${window.location.pathname}${newQuery ? `?${newQuery}` : ''}${window.location.hash}`;
+			window.history.replaceState({}, '', newUrl);
+		}
+	}
+
+	private setDefaultFeatures() {
+		if (this.availableFeatures.size === 0) {
+			defaultFeatures.forEach((f) => this.addAvailableFeature(f));
 		}
 	}
 
@@ -239,6 +265,7 @@ class FeaturesService extends EventEmitter<Events> {
 		this.enabledFeatures.clear();
 		this.availableFeatures.clear();
 		this.saveState();
+		this.setDefaultFeatures();
 	}
 
 	/**
