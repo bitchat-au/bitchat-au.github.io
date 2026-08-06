@@ -1,4 +1,6 @@
+import { t } from '@i18n';
 import EventEmitter, { type EventMap } from '../helpers/event_emitter';
+import { FriendlyError } from '../helpers/friendly_error';
 
 type Events = EventMap & {
 	message: (msg: string) => void;
@@ -24,9 +26,20 @@ export class MicrobitSerialConnection extends EventEmitter<Events> {
 	}
 
 	public async connect() {
-		this.port = await navigator.serial.requestPort({
-			filters: MicrobitSerialConnection.USB_FILTERS
-		});
+		try {
+			this.port = await navigator.serial.requestPort({
+				filters: MicrobitSerialConnection.USB_FILTERS
+			});
+		} catch (error) {
+			if (error instanceof DOMException && error.name === 'NotFoundError') {
+				throw FriendlyError.fromError(error, t('serial.noPortSelectedError'));
+			}
+		}
+
+		if (!this.port) {
+			throw FriendlyError.fromError(new Error('No port selected'), t('serial.noPortSelectedError'));
+		}
+
 		this.port.addEventListener('disconnect', () => this.emit('disconnected'));
 		this.port.addEventListener('connect', () => {
 			// The connect event is not fired the first time we connect to the port
@@ -40,17 +53,17 @@ export class MicrobitSerialConnection extends EventEmitter<Events> {
 
 	private async openPort() {
 		if (!this.port) {
-			throw new Error('No port selected');
+			throw FriendlyError.fromError(new Error('No port selected'), t('serial.noPortSelectedError'));
 		}
 
 		await this.port.open({ baudRate: MicrobitSerialConnection.BAUD_RATE });
 
 		if (!this.port.readable) {
-			throw new Error('Port is not readable');
+			throw FriendlyError.fromError(new Error('Port is not readable'), t('serial.noPortReadableError'));
 		}
 
 		if (!this.port.writable) {
-			throw new Error('Port is not writable');
+			throw FriendlyError.fromError(new Error('Port is not writable'), t('serial.noPortWritableError'));
 		}
 
 		this.writer = this.port.writable.getWriter();

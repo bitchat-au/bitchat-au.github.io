@@ -136,5 +136,11 @@
 		"Hacker": "Hacker",
 		"Beep": "Beep"
 	},
-	"allMicrobits": "alle"
+	"serial": {
+		"noPortSelectedError": "Ingen port valgt",
+		"noPortReadableError": "Porten kan ikke læses",
+		"noPortWritableError": "Porten kan ikke skrives til"
+	},
+	"allMicrobits": "alle",
+	"genericError": "Der opstod en fejl."
 }
