@@ -73,7 +73,9 @@
 		"decryptedDescription": "You have successfully decrypted the image. Good job!",
 		"showHint": "Show hint",
 		"triesWithHint": "{{tries}} tries, with hints",
-		"triesWithoutHint": "{{tries}} tries, without hints"
+		"triesWithoutHint": "{{tries}} tries, without hints",
+		"startHelper": "Click decrypt to start",
+		"tries": "{{tries}} tries"
 	},
 	"imageBuilder": {
 		"ownImageCaption": "Own image",

@@ -18,7 +18,7 @@
 	function generateImage() {
 		const candidates =
 			imageSelection == 'own'
-				? userImages
+				? [...userImages, COMMON_IMAGES.SAD, COMMON_IMAGES.HAPPY]
 				: [
 						COMMON_IMAGES.SAD,
 						COMMON_IMAGES.HAPPY,
@@ -97,7 +97,7 @@
 		{#if correctness === 5}
 			<h2>{scopedT('decrypted')}</h2>
 			<p class="subheading">
-				{scopedT('decryptedDescription')} <br>
+				{scopedT('decryptedDescription')} <br />
 				{scopedT(showHint ? 'triesWithHint' : 'triesWithoutHint', { tries })}
 			</p>
 
@@ -126,6 +126,10 @@
 		/>
 
 		{#if correctness < 5}
+			<p class="muted attempts">
+				{tries > 0 ? scopedT('tries', { tries }) : scopedT('startHelper')}
+			</p>
+
 			<div class="hint">
 				<hr />
 
@@ -182,6 +186,10 @@
 	.code-cracker :global(.image-matrix.image-preview) {
 		max-width: 300px;
 		margin-top: 2rem;
+	}
+
+	.attempts {
+		margin-top: 0.5rem;
 	}
 
 	.code-input {

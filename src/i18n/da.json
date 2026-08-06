@@ -73,7 +73,9 @@
 		"decryptedDescription": "Du har dekrypteret billedet korrekt. Godt arbejde!",
 		"showHint": "Vis et hint",
 		"triesWithHint": "{{tries}} forsøg, med hjælpemidler",
-		"triesWithoutHint": "{{tries}} forsøg, uden hjælpemidler"
+		"triesWithoutHint": "{{tries}} forsøg, uden hjælpemidler",
+		"startHelper": "Klik på dekrypter for at starte",
+		"tries": "{{tries}} forsøg"
 	},
 	"imageBuilder": {
 		"ownImageCaption": "Eget billede",
