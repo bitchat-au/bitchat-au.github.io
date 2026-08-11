@@ -172,12 +172,13 @@
 		"subtitle": "Here you can get an overview of all the features available in Bit:Chat.",
 		"selectedFeatures": "Selected features",
 		"selectedFeaturesDescription": "Share the following code or link with your students to give them access to the selected features.",
-		"getStarted": "Select some features to generate a code",
+		"getStarted": "Select some features to generate a link",
 		"copyCode": "Copy code",
 		"copyLink": "Copy link",
 		"copiedCode": "Code copied!",
 		"copiedLink": "Link copied!",
-		"allFeatures": "All features"
+		"allFeatures": "All features",
+		"featureCodePlaceholder": "Feature code"
 	},
 	"allMicrobits": "all",
 	"genericError": "An error occurred."

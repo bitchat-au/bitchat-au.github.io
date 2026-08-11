@@ -172,12 +172,13 @@
 		"subtitle": "Her kan du få en oversigt over alle de features, som er tilgængelige i Bit:Chat.",
 		"selectedFeatures": "Valgte features",
 		"selectedFeaturesDescription": "Del følgende kode eller link med dine elever for at give dem adgang til de valgte features.",
-		"getStarted": "Vælg nogle features for at generere en kode",
+		"getStarted": "Vælg nogle features for at generere et link",
 		"copyCode": "Kopier kode",
 		"copyLink": "Kopier link",
 		"copiedCode": "Kode kopieret!",
 		"copiedLink": "Link kopieret!",
-		"allFeatures": "Alle features"
+		"allFeatures": "Alle features",
+		"featureCodePlaceholder":"Feature kode"
 	},
 	"allMicrobits": "alle",
 	"genericError": "Der opstod en fejl."

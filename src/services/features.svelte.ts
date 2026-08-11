@@ -309,13 +309,9 @@ export function encodeFeatures(features: Features[]): string {
 	const string = number.toString(16);
 
 	// Add a random padding to the string to make it less predictable, it's completely unnessary and is removed when decoding, but it makes the URL look less like a simple number
+	// Use deterministic padding derived from the string to keep the same behavior
 	const padding =
-		string.length < 5
-			? '|' +
-				Math.random()
-					.toString(36)
-					.substring(2, 5 - string.length + 2)
-			: '';
+		string.length < 5 ? '|' + deterministicRandomString(5 - string.length, string) : '';
 
 	// Encode the string to base64 and remove any padding characters
 	const encoded = btoa(string + padding).replaceAll('=', '');
@@ -337,6 +333,12 @@ export function decodeFeatures(encoded: string): Features[] {
 		return [];
 	}
 }
+
+const deterministicRandomString = (length: number, string: string) => {
+	const seed = string.split('').reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) >>> 0, 0);
+	const alpha = seed.toString(36);
+	return alpha.substring(0, length);
+};
 
 registerOnWindow('encodeFeatures', encodeFeatures);
 registerOnWindow('decodeFeatures', decodeFeatures);

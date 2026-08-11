@@ -42,14 +42,17 @@
 	<h2>{scopedT('selectedFeatures')}</h2>
 	<p class="subheading">{scopedT('selectedFeaturesDescription')}</p>
 
-	<div class="code">
-		<p class="shareable-link" class:waiting={!hasSelectedFeatures}>
-			{hasSelectedFeatures ? shareableLink : scopedT('getStarted')}
+	<div class="feature-codes">
+		<p class="output code" class:waiting={!hasSelectedFeatures}>
+			{hasSelectedFeatures ? featureCode : scopedT('featureCodePlaceholder')}
 		</p>
-		<div class="vr"></div>
 		<button onclick={copyCode} disabled={!hasSelectedFeatures} class="large"
 			>{scopedT('copyCode')}</button
 		>
+		<div class="vr"></div>
+		<p class="output link" class:waiting={!hasSelectedFeatures}>
+			{hasSelectedFeatures ? shareableLink : scopedT('getStarted')}
+		</p>
 		<button onclick={copyLink} disabled={!hasSelectedFeatures} class="large"
 			>{scopedT('copyLink')}</button
 		>
@@ -120,7 +123,7 @@
 		accent-color: var(--accent);
 	}
 
-	.code {
+	.feature-codes {
 		display: flex;
 		gap: 1rem;
 
@@ -130,7 +133,7 @@
 		}
 	}
 
-	.shareable-link {
+	.output {
 		font-family: var(--mono);
 		background-color: hsl(from var(--bg) h s calc(l * 0.7));
 		border: 1px solid var(--stroke);
@@ -143,6 +146,11 @@
 
 		&.waiting {
 			color: var(--muted-grey);
+		}
+
+		&.code {
+			width: 200px;
+			flex-grow: 0;
 		}
 	}
 
