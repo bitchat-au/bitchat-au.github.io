@@ -20,17 +20,17 @@ export enum Features {
 
 const passwordT = scope('features.passwords');
 const featuresConfig: FeatureConfig = {
-	[Features.Server]: { passwords: [passwordT('Server')] },
-	[Features.Translator]: { passwords: [passwordT('Translator')] },
-	[Features.ImageBuilder]: { passwords: [passwordT('ImageBuilder')] },
-	[Features.KodeKnækkeren]: { passwords: [passwordT('KodeKnækkeren')] },
 	[Features.Router]: { passwords: [passwordT('Router')] },
 	[Features.AutoRouter]: { parent: Features.Router, passwords: [passwordT('AutoRouter')] },
+	[Features.Server]: { passwords: [passwordT('Server')] },
+	[Features.ImageBuilder]: { passwords: [passwordT('ImageBuilder')] },
+	[Features.Translator]: { passwords: [passwordT('Translator')] },
 	[Features.Encryption]: { passwords: [passwordT('Encryption')] },
 	[Features.AutoEncryption]: {
 		parent: Features.Encryption,
 		passwords: [passwordT('AutoEncryption')]
 	},
+	[Features.KodeKnækkeren]: { passwords: [passwordT('KodeKnækkeren')] },
 	[Features.Hacker]: { passwords: [passwordT('Hacker')] },
 	[Features.Beep]: { passwords: [passwordT('Beep')] }
 };
