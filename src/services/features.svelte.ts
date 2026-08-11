@@ -2,90 +2,51 @@ import { SvelteSet } from 'svelte/reactivity';
 import EventEmitter, { type EventMap } from '../helpers/event_emitter';
 import { registerOnWindow } from '../helpers/window';
 
-////////////////////////////////////////////////////////////////////////////
-/////// Helper shenanigans for creating a strongly type feature enum ///////
-////////////////////////////////////////////////////////////////////////////
-export type FeatItem = {
-	readonly key: string;
-	readonly children?: readonly FeatItem[];
-};
+type FeatureConfig = Record<Features, { parent?: Features; passwords: string[] }>;
 
-type ExtractKeys<T extends readonly FeatItem[]> = T[number] extends infer U
-	? U extends {
-			readonly key: infer K extends string;
-			readonly children: infer C extends readonly FeatItem[];
-		}
-		? K | ExtractKeys<C>
-		: U extends { readonly key: infer K extends string }
-			? K
-			: never
-	: never;
-
-type FeatureRecord<T extends readonly FeatItem[]> = {
-	[K in ExtractKeys<T>]: K;
-};
-
-export function createFeatureMap<T extends readonly FeatItem[]>(arr: T): FeatureRecord<T> {
-	const result = {} as Record<string, string>;
-
-	function traverse(nodes: readonly FeatItem[]) {
-		for (const node of nodes) {
-			result[node.key] = node.key;
-			if (node.children) {
-				traverse(node.children);
-			}
-		}
-	}
-
-	traverse(arr);
-	return Object.freeze(result) as FeatureRecord<T>;
+export enum Features {
+	Server = 'Server',
+	Translator = 'Translator',
+	ImageBuilder = 'ImageBuilder',
+	KodeKnækkeren = 'KodeKnækkeren',
+	Router = 'Router',
+	AutoRouter = 'AutoRouter',
+	Encryption = 'Encryption',
+	AutoEncryption = 'AutoEncryption',
+	Hacker = 'Hacker',
+	Beep = 'Beep'
 }
-///////////////////////////////////////////////
-///////////////////// END /////////////////////
-///////////////////////////////////////////////
 
-export const featureMap = [
-	{ key: 'Server' },
-	{ key: 'Translator' },
-	{ key: 'ImageBuilder' },
-	{ key: 'KodeKnækkeren' },
-	{ key: 'Router', children: [{ key: 'AutoRouter' }] },
-	{ key: 'Encryption', children: [{ key: 'AutoEncryption' }] },
-	{ key: 'Hacker' },
-	{ key: 'Beep' }
-] as const satisfies readonly FeatItem[];
-
-// Generate the features enum from the feature map. This will create a type-safe enum.
-export const Features = createFeatureMap(featureMap);
-export type Features = keyof typeof Features;
-
-const isFeature = (value: string): value is Features => {
-	return Object.values<unknown>(Features).includes(value);
+const featuresConfig: FeatureConfig = {
+	[Features.Server]: { passwords: ['server'] },
+	[Features.Translator]: { passwords: ['oversætter', 'translator'] },
+	[Features.ImageBuilder]: { passwords: ['byg', 'billede', 'build', 'image'] },
+	[Features.KodeKnækkeren]: { passwords: ['knæk', 'crack'] },
+	[Features.Router]: { passwords: ['modtager', 'receiver', 'recipient', 'router'] },
+	[Features.AutoRouter]: {
+		parent: Features.Router,
+		passwords: ['auto-modtager', 'auto-receiver', 'auto-recipient', 'auto-router']
+	},
+	[Features.Encryption]: { passwords: ['krypter', 'kryptering', 'encrypt', 'encryption'] },
+	[Features.AutoEncryption]: {
+		parent: Features.Encryption,
+		passwords: ['auto-krypter', 'auto-kryptering', 'auto-encrypt', 'auto-encryption']
+	},
+	[Features.Hacker]: { passwords: ['hack', 'hacker'] },
+	[Features.Beep]: { passwords: ['bip', 'beep'] }
 };
+
+export const featureList = Object.entries(featuresConfig).map(([key, config]) => ({
+	key: key as Features,
+	parent: config.parent,
+	depth: config.parent ? getAllParents(config.parent).length + 1 : 0,
+	passwords: config.passwords
+}));
 
 const defaultFeatures = [Features.Beep];
 
 // What passwords unlock which features
-const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
-	{ features: [Features.Server], passwords: ['server'] },
-	{ features: [Features.Translator], passwords: ['oversætter', 'translator'] },
-	{ features: [Features.ImageBuilder], passwords: ['byg', 'billede', 'build', 'image'] },
-	{ features: [Features.KodeKnækkeren], passwords: ['knæk', 'crack'] },
-	{ features: [Features.Router], passwords: ['modtager', 'receiver', 'recipient', 'router'] },
-	{
-		features: [Features.AutoRouter, Features.Router],
-		passwords: ['auto-modtager', 'auto-receiver', 'auto-recipient', 'auto-router']
-	},
-	{
-		features: [Features.Encryption],
-		passwords: ['krypter', 'kryptering', 'encrypt', 'encryption']
-	},
-	{
-		features: [Features.AutoEncryption, Features.Encryption],
-		passwords: ['auto-krypter', 'auto-encrypt', 'auto-kryptering', 'auto-encryption']
-	},
-	{ features: [Features.Hacker], passwords: ['hack', 'hacker'] },
-	{ features: [Features.Beep], passwords: ['bip', 'beep'] },
+const supplementalPasswords: Array<{ features: Features[]; passwords: string[] }> = [
 	{ features: Object.values(Features), passwords: ['meget hemmelig kode', 'very secret code'] },
 	{
 		features: [
@@ -98,6 +59,22 @@ const featurePasswords: Array<{ features: Features[]; passwords: string[] }> = [
 		passwords: ['pakke1', 'bundle1', 'package1']
 	}
 ];
+
+export function getAllParents(feature: Features | undefined): Features[] {
+	if (!feature) return [];
+
+	const parent = featuresConfig[feature].parent;
+
+	if (!parent) return [];
+
+	return [parent, ...getAllParents(parent)];
+}
+
+export function getAllChildren(feature: Features): Features[] {
+	const children = featureList.filter(({ parent }) => parent === feature).map(({ key }) => key);
+
+	return [...children, ...children.flatMap(getAllChildren)];
+}
 
 type Events = EventMap & {
 	enable: (feature: Features) => void;
@@ -164,23 +141,14 @@ class FeaturesService extends EventEmitter<Events> {
 	 * Loads feature from the URL parameters and activates them if they are valid.
 	 */
 	private loadFromURLParams() {
-		// The urlParams are only ever used in this scope, so we can safely ignore the Svelte reactivity warning here.
-		// eslint-disable-next-line svelte/prefer-svelte-reactivity
-		const urlParams = new URLSearchParams(window.location.search);
-		const featuresParam = decodeURIComponent(urlParams.get('features') || '');
-		if (featuresParam) {
-			const featuresToEnable = featuresParam.split(',') as Features[];
-			featuresToEnable.forEach((f) => {
-				if (isFeature(f)) {
-					this.addAvailableFeature(f);
-				}
-			});
+		if (typeof window === 'undefined') return;
 
-			urlParams.delete('features');
-			const newQuery = urlParams.toString();
-			const newUrl = `${window.location.pathname}${newQuery ? `?${newQuery}` : ''}${window.location.hash}`;
-			window.history.replaceState({}, '', newUrl);
-		}
+		const params = new URLSearchParams(window.location.search);
+		const encoded = params.get('features');
+		if (!encoded) return;
+
+		const features = decodeFeatures(encoded);
+		features.forEach((feature) => this.addAvailableFeature(feature));
 	}
 
 	private setDefaultFeatures() {
@@ -190,13 +158,17 @@ class FeaturesService extends EventEmitter<Events> {
 	}
 
 	/**
-	 * Generates a shareable URL that includes the currently enabled features as query parameters.
+	 * Generates a shareable URL that includes the specified features.
+	 * @param featuresToShare Optional array of features to include in the URL. If not provided, all currently enabled features will be included.
 	 * @returns A shareable URL that includes the currently enabled features as query parameters.
 	 */
-	private getFeatureShareURL() {
-		const baseUrl = window.location.origin + window.location.pathname;
-		const featuresParam = Array.from(this.enabledFeatures).join(',');
-		return `${baseUrl}?features=${encodeURIComponent(featuresParam)}`;
+	public getFeatureShareURL(
+		featuresToShare: Features[] = Array.from(this.enabledFeatures)
+	): string {
+		const url = new URL(window.location.origin);
+		const encoded = encodeFeatures(featuresToShare);
+		url.searchParams.set('features', encoded);
+		return url.toString();
 	}
 
 	/**
@@ -274,13 +246,25 @@ class FeaturesService extends EventEmitter<Events> {
 	 * @returns True if the password was correct, false otherwise
 	 */
 	public checkPassword(password: string): boolean {
-		const foundFeatures = featurePasswords
-			.filter((cur) => cur.passwords.includes(password))
+		const normalizedPassword = password.trim().toLowerCase();
+		const foundFeature = featureList.find((f) => f.passwords.includes(normalizedPassword));
+
+		const supplementalPackages = supplementalPasswords
+			.filter((cur) => cur.passwords.includes(normalizedPassword))
 			.flatMap((cur) => cur.features);
 
-		foundFeatures.forEach((f) => this.addAvailableFeature(f));
+		const featuresToUnlock = [
+			foundFeature?.key,
+			...getAllParents(foundFeature?.key as Features),
+			...supplementalPackages,
+			...decodeFeatures(password) // Dont use the normalized password as it may be base64 encoded and case sensitive
+		].filter(Boolean) as Features[];
 
-		return foundFeatures.length > 0;
+		console.log(password, decodeFeatures(password));
+
+		featuresToUnlock.forEach((feature) => this.addAvailableFeature(feature));
+
+		return featuresToUnlock.length > 0;
 	}
 
 	/**
@@ -310,3 +294,50 @@ export const features = FeaturesService.instance;
 // Expose the features service and enum to the global window object for easy access in the browser console
 registerOnWindow('featureService', features);
 registerOnWindow('Features', Features);
+
+export function encodeFeatures(features: Features[]): string {
+	if (features.length === 0) {
+		return '';
+	}
+	
+	// Convert the features to a number using bitwise operations
+	const number = Object.keys(Features).reduce(
+		(acc, key, index) => acc + (features.includes(key as Features) ? 1 : 0) * Math.pow(2, index),
+		0
+	);
+
+	// Convert the number to a base16 string
+	const string = number.toString(16);
+
+	// Add a random padding to the string to make it less predictable, it's completely unnessary and is removed when decoding, but it makes the URL look less like a simple number
+	const padding =
+		string.length < 5
+			? '|' +
+				Math.random()
+					.toString(36)
+					.substring(2, 5 - string.length + 2)
+			: '';
+
+	// Encode the string to base64 and remove any padding characters
+	const encoded = btoa(string + padding).replaceAll('=', '');
+
+	return encoded;
+}
+
+export function decodeFeatures(encoded: string): Features[] {
+	try {
+		const decoded = atob(encoded).split('|')[0]; // Remove any padding after the '|' character
+		const number = parseInt(decoded, 16);
+		const bitString = number.toString(2);
+		const features = Object.keys(Features).filter(
+			(_, index) => bitString[bitString.length - 1 - index] === '1'
+		) as Features[];
+		return features;
+	} catch (e) {
+		console.error('Failed to decode features from URL:', e);
+		return [];
+	}
+}
+
+registerOnWindow('encodeFeatures', encodeFeatures);
+registerOnWindow('decodeFeatures', decodeFeatures);

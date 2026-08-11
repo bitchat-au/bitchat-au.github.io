@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { scope, t } from '@i18n';
 	import { onEnter } from '../../helpers/on_enter.svelte';
-	import { featureMap, Features, features, type FeatItem } from '../../services/features.svelte';
+	import { featureList, features } from '../../services/features.svelte';
 	import Icon from './Icon.svelte';
 
 	const scopedT = scope('features.popup');
@@ -19,32 +19,13 @@
 	});
 
 	function submitcode() {
-		codeError = !features.checkPassword(codeInput.trim().toLowerCase());
+		codeError = !features.checkPassword(codeInput.trim());
 		codeInput = '';
 	}
 
-	/**
-	 * Traverse the feature map and return a flat list of features with their depth in the tree.
-	 * This is used to render the features in a flat list with indentation based on their depth
-	 * @param arr
-	 * @param depth
-	 */
-	const traverseFeatures = (
-		arr: readonly FeatItem[],
-		depth = 0
-	): Array<{ key: Features; depth: number }> => {
-		let result: Array<{ key: Features; depth: number }> = [];
-		for (const item of arr) {
-			result.push({ key: item.key as Features, depth });
-			if (item.children) {
-				result = result.concat(traverseFeatures(item.children, depth + 1));
-			}
-		}
-		return result;
-	};
-
-	const featureList = $derived(
-		traverseFeatures(featureMap).filter((cur) => features.availableFeatures.has(cur.key))
+	const activeFeatureList = $derived(
+		featureList
+			.filter(feature => features.isActive(feature.key))
 	);
 </script>
 
@@ -53,7 +34,7 @@
 		<h2>{scopedT('title')}</h2>
 		<button
 			class="transparent"
-			disabled={featureList.length === 0}
+			disabled={activeFeatureList.length === 0}
 			onclick={() => features.clearAll()}
 		>
 			<small>{scopedT('deleteAll')}</small>
@@ -61,7 +42,7 @@
 	</header>
 
 	<ul>
-		{#each featureList as { key, depth } (key)}
+		{#each activeFeatureList as { key, depth } (key)}
 			<li style:--indent={depth}>
 				<label>
 					{t(`features.${key}`)}
@@ -80,7 +61,7 @@
 				</label>
 			</li>
 		{/each}
-		{#if featureList.length === 0}
+		{#if activeFeatureList.length === 0}
 			<li class="no-features">
 				{scopedT('noneAvailable')} <br />
 				{scopedT('askTeacher')}
