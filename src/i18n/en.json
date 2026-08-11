@@ -134,12 +134,50 @@
 		"Encryption": "Encryption",
 		"AutoEncryption": "Auto Encryption",
 		"Hacker": "Hacker",
-		"Beep": "Beep"
+		"Beep": "Beep",
+		"descriptions": {
+			"Server": "Displays a log of all messages sent between micro:bits",
+			"Translator": "Makes it easier to understand the messages in the logs",
+			"ImageBuilder": "Allows students to create their own images and send them to each other",
+			"KodeKnækkeren": "Allows students to try their hand at cracking the code of an encrypted image",
+			"Router": "Allows students to choose the recipient of their messages, as well as control who receives messages through the server",
+			"AutoRouter": "Automatically sends messages to the correct recipient, without students needing to choose the recipient",
+			"Encryption": "Allows students to encrypt their messages, so they can only be read by the correct recipient",
+			"AutoEncryption": "Automatically encrypts messages",
+			"Hacker": "Allows students to modify messages through the server before they are sent to the recipient",
+			"Beep": "Controls whether the micro:bit should play a sound when it receives a message"
+		},
+		"passwords": {
+			"Server": "server",
+			"Translator": "translator",
+			"ImageBuilder": "build",
+			"KodeKnækkeren": "crack",
+			"Router": "router",
+			"AutoRouter": "auto-router",
+			"Encryption": "encrypt",
+			"AutoEncryption": "auto-encrypt",
+			"Hacker": "hack",
+			"Beep": "beep",
+			"all": "very secret code",
+			"bundle1": "bundle1"
+		}
 	},
 	"serial": {
 		"noPortSelectedError": "No port selected",
 		"noPortReadableError": "Port is not readable",
 		"noPortWritableError": "Port is not writable"
+	},
+	"teacher": {
+		"title": "Welcome teacher",
+		"subtitle": "Here you can get an overview of all the features available in Bit:Chat.",
+		"selectedFeatures": "Selected features",
+		"selectedFeaturesDescription": "Share the following code or link with your students to give them access to the selected features.",
+		"getStarted": "Select some features to generate a code",
+		"copyCode": "Copy code",
+		"copyLink": "Copy link",
+		"copiedCode": "Code copied!",
+		"copiedLink": "Link copied!",
+		"allFeatures": "All features"
 	},
 	"allMicrobits": "all",
 	"genericError": "An error occurred."

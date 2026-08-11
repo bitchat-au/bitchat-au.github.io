@@ -1,6 +1,7 @@
 import { SvelteSet } from 'svelte/reactivity';
 import EventEmitter, { type EventMap } from '../helpers/event_emitter';
 import { registerOnWindow } from '../helpers/window';
+import { scope } from '@i18n';
 
 type FeatureConfig = Record<Features, { parent?: Features; passwords: string[] }>;
 
@@ -17,23 +18,21 @@ export enum Features {
 	Beep = 'Beep'
 }
 
+const passwordT = scope('features.passwords');
 const featuresConfig: FeatureConfig = {
-	[Features.Server]: { passwords: ['server'] },
-	[Features.Translator]: { passwords: ['oversætter', 'translator'] },
-	[Features.ImageBuilder]: { passwords: ['byg', 'billede', 'build', 'image'] },
-	[Features.KodeKnækkeren]: { passwords: ['knæk', 'crack'] },
-	[Features.Router]: { passwords: ['modtager', 'receiver', 'recipient', 'router'] },
-	[Features.AutoRouter]: {
-		parent: Features.Router,
-		passwords: ['auto-modtager', 'auto-receiver', 'auto-recipient', 'auto-router']
-	},
-	[Features.Encryption]: { passwords: ['krypter', 'kryptering', 'encrypt', 'encryption'] },
+	[Features.Server]: { passwords: [passwordT('Server')] },
+	[Features.Translator]: { passwords: [passwordT('Translator')] },
+	[Features.ImageBuilder]: { passwords: [passwordT('ImageBuilder')] },
+	[Features.KodeKnækkeren]: { passwords: [passwordT('KodeKnækkeren')] },
+	[Features.Router]: { passwords: [passwordT('Router')] },
+	[Features.AutoRouter]: { parent: Features.Router, passwords: [passwordT('AutoRouter')] },
+	[Features.Encryption]: { passwords: [passwordT('Encryption')] },
 	[Features.AutoEncryption]: {
 		parent: Features.Encryption,
-		passwords: ['auto-krypter', 'auto-kryptering', 'auto-encrypt', 'auto-encryption']
+		passwords: [passwordT('AutoEncryption')]
 	},
-	[Features.Hacker]: { passwords: ['hack', 'hacker'] },
-	[Features.Beep]: { passwords: ['bip', 'beep'] }
+	[Features.Hacker]: { passwords: [passwordT('Hacker')] },
+	[Features.Beep]: { passwords: [passwordT('Beep')] }
 };
 
 export const featureList = Object.entries(featuresConfig).map(([key, config]) => ({
@@ -46,8 +45,8 @@ export const featureList = Object.entries(featuresConfig).map(([key, config]) =>
 const defaultFeatures = [Features.Beep];
 
 // What passwords unlock which features
-const supplementalPasswords: Array<{ features: Features[]; passwords: string[] }> = [
-	{ features: Object.values(Features), passwords: ['meget hemmelig kode', 'very secret code'] },
+export const supplementalPasswords: Array<{ features: Features[]; passwords: string[] }> = [
+	{ features: Object.values(Features), passwords: [passwordT('all')] },
 	{
 		features: [
 			Features.Server,
@@ -56,7 +55,7 @@ const supplementalPasswords: Array<{ features: Features[]; passwords: string[] }
 			Features.Router,
 			Features.AutoRouter
 		],
-		passwords: ['pakke1', 'bundle1', 'package1']
+		passwords: [passwordT('bundle1')]
 	}
 ];
 
@@ -299,7 +298,7 @@ export function encodeFeatures(features: Features[]): string {
 	if (features.length === 0) {
 		return '';
 	}
-	
+
 	// Convert the features to a number using bitwise operations
 	const number = Object.keys(Features).reduce(
 		(acc, key, index) => acc + (features.includes(key as Features) ? 1 : 0) * Math.pow(2, index),

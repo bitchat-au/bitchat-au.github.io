@@ -41,6 +41,10 @@ button:not(.no-style) {
 	&:active:not(:disabled) {
 		background-color: hsl(from var(--button-bg) h s calc(l * 0.6));
 	}
+
+	&.large {
+		padding: 0.5rem 1rem;
+	}
 }
 
 button.no-style {

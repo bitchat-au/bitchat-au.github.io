@@ -134,12 +134,50 @@
 		"Encryption": "Kryptering",
 		"AutoEncryption": "Auto Kryptering",
 		"Hacker": "Hacker",
-		"Beep": "Beep"
+		"Beep": "Beep",
+		"descriptions": {
+			"Server": "Viser en log over alle beskeder, der sendes mellem micro:bits",
+			"Translator": "Går det nemmere at forstå beskederne i logger",
+			"ImageBuilder": "Lader eleverne lave deres egne billeder og sende dem til hinanden",
+			"KodeKnækkeren": "Lader eleverne prøve krafter med at knække koden til et krypteret billede",
+			"Router": "Tillader eleverne at vælge modtager af deres beskeder, samt at styre hvem der modtager beskederne ved hjælp af serveren",
+			"AutoRouter": "Sender automatisk beskederne til den rigtige modtager, uden at eleverne skal vælge modtageren",
+			"Encryption": "Lader eleverne kryptere deres beskeder, så de kun kan læses af den rigtige modtager",
+			"AutoEncryption": "Krypterer automatisk beskederne",
+			"Hacker": "Lader eleverne ændre i beskederne ved hjælp af serveren inden de sendes videre til modtageren",
+			"Beep": "Styrer om micro:bit'en skal afspille en lyd, når den modtager en besked"
+		},
+		"passwords": {
+			"Server": "server",
+			"Translator": "oversætter",
+			"ImageBuilder": "byg",
+			"KodeKnækkeren": "knæk",
+			"Router": "modtager",
+			"AutoRouter": "auto-modtager",
+			"Encryption": "krypter",
+			"AutoEncryption": "auto-krypter",
+			"Hacker": "hack",
+			"Beep": "beep",
+			"all": "meget hemmelig kode",
+			"bundle1": "pakke1"
+		}
 	},
 	"serial": {
 		"noPortSelectedError": "Ingen port valgt",
 		"noPortReadableError": "Porten kan ikke læses",
 		"noPortWritableError": "Porten kan ikke skrives til"
+	},
+	"teacher": {
+		"title": "Velkommen lærer",
+		"subtitle": "Her kan du få en oversigt over alle de features, som er tilgængelige i Bit:Chat.",
+		"selectedFeatures": "Valgte features",
+		"selectedFeaturesDescription": "Del følgende kode eller link med dine elever for at give dem adgang til de valgte features.",
+		"getStarted": "Vælg nogle features for at generere en kode",
+		"copyCode": "Kopier kode",
+		"copyLink": "Kopier link",
+		"copiedCode": "Kode kopieret!",
+		"copiedLink": "Link kopieret!",
+		"allFeatures": "Alle features"
 	},
 	"allMicrobits": "alle",
 	"genericError": "Der opstod en fejl."
