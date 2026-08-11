@@ -2,21 +2,38 @@
 	import { t } from '@i18n';
 	import { microbitService } from '../../services/microbit.svelte';
 	import ImageMatrixRenderer from './ImageMatrixRenderer.svelte';
+	import { FriendlyError } from '../../helpers/friendly_error';
 
 	const devices = microbitService.knownMicrobits;
+
+	let error: string | undefined = $state();
+
+	function handleConnect() {
+		microbitService.connect().catch((err) => (error = err));
+	}
 </script>
 
-<ul>
-	{#each devices as device (device.name)}
-		<li>
-			<ImageMatrixRenderer matrix={device.image} />
-			<span class="name">{device.name}</span>
-		</li>
-	{/each}
-</ul>
+{#if microbitService.connected}
+	<h2>{t('devices.title')}</h2>
 
-{#if devices.length === 0}
-	<p class="muted no-devices">{t('devices.noDevices')}</p>
+	<ul>
+		{#each devices as device (device.name)}
+			<li>
+				<ImageMatrixRenderer matrix={device.image} />
+				<span class="name">{device.name}</span>
+			</li>
+		{/each}
+	</ul>
+
+	{#if devices.length === 0}
+		<p class="muted no-devices">{t('devices.noDevices')}</p>
+	{/if}
+{:else}
+	<div class="no-connection">
+		<span>{t('welcome.noConnection')}</span>
+		<button onclick={handleConnect} class="large">{t('welcome.connect')}</button>
+		<span class="error">{FriendlyError.getMessage(error)}</span>
+	</div>
 {/if}
 
 <style>
@@ -54,5 +71,19 @@
 		text-align: center;
 		margin-top: auto;
 		margin-bottom: auto;
+	}
+
+	.no-connection {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		margin-top: auto;
+		margin-bottom: auto;
+
+		span {
+			font-family: var(--heading);
+			font-size: 1.5rem;
+		}
 	}
 </style>

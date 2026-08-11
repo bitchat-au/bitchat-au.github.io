@@ -78,7 +78,6 @@
 	</section>
 
 	<section class="devices">
-		<h2>{t('devices.title')}</h2>
 		<Devices />
 	</section>
 </main>

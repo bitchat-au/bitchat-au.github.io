@@ -25,7 +25,7 @@
 
 	const activeFeatureList = $derived(
 		featureList
-			.filter(feature => features.isActive(feature.key))
+			.filter(feature => features.has(feature.key))
 	);
 </script>
 
