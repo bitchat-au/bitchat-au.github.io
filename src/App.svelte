@@ -4,7 +4,8 @@
 	import Default from './lib/Layouts/BaseLayout.svelte';
 	import { Features, features } from './services/features.svelte';
 
-	const isTeacherRoute = window.location.pathname.replace(/\/$/, '') === '/teacher';
+	const route = decodeURI(window.location.pathname.replace(/\/$/, ''));
+	const isTeacherRoute = route === '/teacher' || route === '/lærer' || route === '/laerer';
 
 	$effect(() => {
 		document.body.dataset.hacker = features.isActive(Features.Hacker) ? 'true' : 'false';
