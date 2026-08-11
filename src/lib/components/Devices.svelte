@@ -30,7 +30,7 @@
 	{/if}
 {:else}
 	<div class="no-connection">
-		<span>{t('welcome.noConnection')}</span>
+		<span class="title">{t('welcome.noConnection')}</span>
 		<button onclick={handleConnect} class="large">{t('welcome.connect')}</button>
 		<span class="error">{FriendlyError.getMessage(error)}</span>
 	</div>
@@ -81,9 +81,13 @@
 		margin-top: auto;
 		margin-bottom: auto;
 
-		span {
+		.title {
 			font-family: var(--heading);
 			font-size: 1.5rem;
+		}
+
+		.error {
+			color: var(--danger);
 		}
 	}
 </style>
