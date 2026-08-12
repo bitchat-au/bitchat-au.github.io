@@ -2,16 +2,25 @@
 	import type { Snippet } from 'svelte';
 	import Icon from './Icon.svelte';
 	import { t } from '@i18n';
+	import { closeNearestDialog } from '../../helpers/close_dialog';
 
 	interface Props {
 		children?: Snippet;
 		open: boolean;
-		onClose?: () => void;
 		ariaLabel: string;
 		class?: string;
+		onClose?: () => void;
+		id?: string;
 	}
 
-	const { children, open, onClose, ariaLabel, class: dialogClass }: Props = $props();
+	let {
+		children,
+		open = $bindable(false),
+		ariaLabel,
+		class: dialogClass,
+		onClose,
+		id
+	}: Props = $props();
 
 	let dialog: HTMLDialogElement;
 
@@ -22,16 +31,27 @@
 			dialog.close();
 		}
 	});
+
+	function handleDialogClose() {
+		open = false;
+		onClose?.();
+	}
 </script>
 
 <dialog
 	bind:this={dialog}
-	onclose={onClose}
+	onclose={handleDialogClose}
 	aria-label={ariaLabel}
 	tabindex="-1"
 	class={dialogClass}
+	{id}
 >
-	<button class="no-style close" onclick={onClose} aria-label={t('dialogs.close')} autofocus>
+	<button
+		class="no-style close"
+		use:closeNearestDialog
+		aria-label={t('dialogs.close')}
+		autofocus
+	>
 		<Icon name="times" />
 	</button>
 	{@render children?.()}
