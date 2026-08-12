@@ -180,6 +180,34 @@
 		"allFeatures": "All features",
 		"featureCodePlaceholder": "Feature code"
 	},
+	"flasher": {
+		"title": "Bit:Chat download tool",
+		"subtitle": "This tool helps you download the Bit:Chat program to one or more micro:bits",
+		"groupNumber": "Group number",
+		"start": "Start",
+		"pluginMicrobit": "Insert micro:bit",
+		"pluginNextMicrobit": "Insert next micro:bit",
+		"serverDescription": "This is your micro:bit that controls everything and must be connected to the computer again later.",
+		"clientDescription": "This is one of your client micro:bits that you can use to send messages back and forth",
+		"program": "Program micro:bit",
+		"programmingState": "Programming your micro:bit",
+		"programmingStateDescription": "Keep the micro:bit connected to the computer until it has finished being programmed.",
+		"removeMicrobit": "Remove the micro:bit",
+		"removeMicrobitDescription": "Unplug the micro:bit to continue",
+		"continue": "Continue",
+		"done": "Done",
+		"programNext": "Program next micro:bit",
+		"noDevicesSelected": "No micro:bits selected",
+		"noDevicesSelectedDescription": "Connect the micro:bit to the computer and select it in the list to be able to program it.",
+		"OK": "OK",
+		"doneDescription": "All micro:bits have been programmed.<br/>You can now proceed and use them to send messages back and forth.",
+		"backToStart": "Back to start",
+		"continueToBitchat": "Continue to Bit:Chat",
+		"duplicate": {
+			"title": "Download to micro:bit again?",
+			"description": "This micro:bit has already been programmed. Do you want to download the program to the micro:bit again? This will overwrite the existing program."
+		}
+	},
 	"allMicrobits": "all",
 	"genericError": "An error occurred."
 }

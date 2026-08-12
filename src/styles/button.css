@@ -1,5 +1,6 @@
 /* Button colors */
 button:not(.transparent),
+button:not(.secondary),
 button.default {
 	--button-bg: var(--accent);
 	--button-color: var(--bg);
@@ -14,6 +15,13 @@ button.transparent {
 	--button-active-bg: hsl(from var(--bg) h s calc(l * 0.6));
 }
 
+button.secondary {
+	--button-bg: hsl(from var(--bg) h s calc(l * 0.8));
+	--button-color: var(--white);
+	--button-hover-bg: hsl(from var(--button-bg) h s calc(l * 0.8));
+	--button-active-bg: hsl(from var(--button-bg) h s calc(l * 0.6));
+}
+
 button:not(.no-style) {
 	display: flex;
 	justify-content: center;
@@ -21,7 +29,7 @@ button:not(.no-style) {
 	gap: 0.5em;
 	background-color: var(--button-bg);
 	color: var(--button-color);
-	border: none;
+	border: 1px solid var(--button-bg);
 	padding: 0.25rem 0.5rem;
 	font-size: inherit;
 
@@ -36,10 +44,12 @@ button:not(.no-style) {
 
 	&:hover:not(:disabled) {
 		background-color: hsl(from var(--button-bg) h s calc(l * 0.8));
+		border-color: hsl(from var(--button-bg) h s calc(l * 0.8));
 	}
 
 	&:active:not(:disabled) {
 		background-color: hsl(from var(--button-bg) h s calc(l * 0.6));
+		border-color: hsl(from var(--button-bg) h s calc(l * 0.6));
 	}
 
 	&.large {
@@ -60,5 +70,14 @@ button.no-style {
 
 	&:disabled {
 		cursor: not-allowed;
+	}
+}
+
+.buttons {
+	display: flex;
+	gap: 1rem;
+
+	&.buttons-right {
+		justify-content: flex-end;
 	}
 }

@@ -110,6 +110,10 @@
 			"modify": "Send med ændringer",
 			"wantsToSend": "vil sende en besked til",
 			"changeMessage": "Lav om på beskeden"
+		},
+		"genericConfirmation": {
+			"cancel": "Annuller",
+			"confirm": "Okay"
 		}
 	},
 	"features": {
@@ -178,7 +182,35 @@
 		"copiedCode": "Kode kopieret!",
 		"copiedLink": "Link kopieret!",
 		"allFeatures": "Alle features",
-		"featureCodePlaceholder":"Feature kode"
+		"featureCodePlaceholder": "Feature kode"
+	},
+	"flasher": {
+		"title": "Bit:chat download værktøj",
+		"subtitle": "Dette værktøj hjælper dig med at downloade bit:chat programmet til en eller flere micro:bits",
+		"groupNumber": "Gruppe nummer",
+		"start": "Start",
+		"pluginMicrobit": "Indsæt micro:bit",
+		"pluginNextMicrobit": "Indsæt næste micro:bit",
+		"serverDescription": "Dette er din micro:bit, som styrer alting og som skal forbindes til computeren igen senere.",
+		"clientDescription": "Dette er en af dine klient micro:bits, som du kan bruge til at sende beskeder frem og tilbage",
+		"program": "Programmer micro:bit",
+		"programmingState": "Programmerer din micro:bit",
+		"programmingStateDescription": "Lad micro:bitten være tilsluttet computeren, indtil den er færdig med at blive programmeret.",
+		"removeMicrobit": "Fjern micro:bitten igen",
+		"removeMicrobitDescription": "Tag stikket ud af micro:bitten for at fortsætte",
+		"continue": "Fortsæt",
+		"done": "Færdig",
+		"programNext": "Programmer næste micro:bit",
+		"noDevicesSelected": "Ingen micro:bits valgt",
+		"noDevicesSelectedDescription": "Forbind micro:bitten til computeren og vælg den i listen for at kunne programmere den.",
+		"OK": "OK",
+		"doneDescription": "Alle micro:bits er blevet programmeret.<br/>Du kan nu gå videre og bruge dem til at sende beskeder frem og tilbage.",
+		"backToStart": "Tilbage til start",
+		"continueToBitchat": "Fortsæt til Bit:Chat",
+		"duplicate": {
+			"title": "Download til micro:bit igen?",
+			"description": "Denne micro:bit er allerede blevet programmeret. Vil du downloade programmet til micro:bit igen? Dette vil overskrive det eksisterende program."
+		}
 	},
 	"allMicrobits": "alle",
 	"genericError": "Der opstod en fejl."

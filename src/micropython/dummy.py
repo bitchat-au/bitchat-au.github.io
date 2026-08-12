@@ -1,4 +1,5 @@
-radioChannel = 1  # all microbits in a group should be on the same radio channel
+# All microbits in a group should be on the same radio channel
+radioChannel = 1 # If compiled through the web interface, this will be replaced with the value from the settings page.
 
 # Imports go at the top
 from microbit import *

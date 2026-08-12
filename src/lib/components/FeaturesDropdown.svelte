@@ -88,7 +88,7 @@
 	</div>
 </article>
 
-<button class="features" popovertarget="feature-popover">
+<button class="features transparent" popovertarget="feature-popover">
 	<Icon name="angle-down" />
 	{scopedT('title')}
 </button>

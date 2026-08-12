@@ -2,7 +2,7 @@
 	display: flex;
 	background-color: var(--bg);
 	color: var(--white);
-	font-size: 1.1em;
+	font-size: 1em;
 
 	input {
 		background-color: transparent;
@@ -32,6 +32,14 @@
 	.field-error {
 		color: var(--danger);
 		font: 0.8em/1 var(--sans);
+	}
+
+	& + .input-field {
+		margin-block-start: 1rem;
+	}
+
+	label {
+		font: 0.9em/1 var(--sans);
 	}
 }
 
