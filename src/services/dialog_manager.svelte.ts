@@ -2,6 +2,7 @@ import type { Component } from 'svelte';
 import RouterModal from '../lib/Dialogs/RouterModal.svelte';
 import HackerModal from '../lib/Dialogs/HackerModal.svelte';
 import { registerOnWindow } from '../helpers/window';
+import GenericConfirmation from '../lib/Dialogs/GenericConfirmation.svelte';
 
 type DialogResult<T> =
 	{ type: 'error'; error: string } | { type: 'success'; data: T } | { type: 'closed' };
@@ -37,7 +38,8 @@ type DialogPropsOf<K extends AvailableDialogs> =
 
 export const registeredDialogs = {
 	RouterModal,
-	HackerModal
+	HackerModal,
+	GenericConfirmation
 };
 
 export const openDialogs: Array<OpenDialog> = $state([]);
@@ -72,6 +74,9 @@ export function resolveDialog<K extends AvailableDialogs>(
 	dialog: OpenDialog<K>,
 	result: DialogResult<InferDialogReturn<K>>
 ): void {
+	console.log("Dialog resolved", dialog, result);
+	
+	
 	const promiseRef = promises[dialog.id];
 	if (!promiseRef) {
 		console.error(`No promise found for dialog with id ${dialog.id}`);
