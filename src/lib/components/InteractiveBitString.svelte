@@ -29,7 +29,7 @@
 			<span>{rowIndex + 1}:</span>
 			{#each row as pixel, colIndex (colIndex)}
 				<button
-					class="pixel"
+					class="pixel no-style"
 					class:active={pixel === 1}
 					aria-label={scopedT('pixelButtonAriaLabel', {
 						row: rowIndex + 1,
