@@ -61,6 +61,9 @@
 				Programmer server micro:bit
 			</button>
 		</div>
+		<button class="large transparent" onclick={() => (step = 'intro')}>
+			{scopedT('backToStart')}
+		</button>
 	{:else if step === 'flashMaster'}
 		<FlashMicrobit
 			{radioChannel}
@@ -68,6 +71,9 @@
 			onFlashComplete={() => (step = 'done')}
 			skipRemoveStep
 		/>
+		<button class="large transparent" onclick={() => (step = 'intro')}>
+			{scopedT('backToStart')}
+		</button>
 	{:else if step === 'done'}
 		<h2 class="m-0">{scopedT('done')}</h2>
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->

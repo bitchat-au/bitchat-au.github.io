@@ -219,6 +219,7 @@
 		"doneDescription": "All micro:bits have been programmed.<br/>You can now proceed and use them to send messages back and forth.",
 		"backToStart": "Back to start",
 		"continueToBitchat": "Continue to Bit:Chat",
+		"iHaveRemovedMicrobit": "I have removed the micro:bit",
 		"duplicate": {
 			"title": "Download to micro:bit again?",
 			"description": "This micro:bit has already been programmed. Do you want to download the program to the micro:bit again? This will overwrite the existing program."

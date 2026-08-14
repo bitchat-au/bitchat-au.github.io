@@ -219,9 +219,15 @@
 		"doneDescription": "Alle micro:bits er blevet programmeret.<br/>Du kan nu gå videre og bruge dem til at sende beskeder frem og tilbage.",
 		"backToStart": "Tilbage til start",
 		"continueToBitchat": "Fortsæt til Bit:Chat",
+		"iHaveRemovedMicrobit": "Jeg har fjernet micro:bitten",
 		"duplicate": {
 			"title": "Download til micro:bit igen?",
 			"description": "Denne micro:bit er allerede blevet programmeret. Vil du downloade programmet til micro:bit igen? Dette vil overskrive det eksisterende program."
+		},
+		"errors": {
+			"title": "Der er sket en fejl",
+			"tryAgain": "Prøv igen",
+			"disconnected": "Micro:bitten er blevet frakoblet under programmeringen. Sørg for at micro:bitten er tilsluttet computeren, og prøv igen."
 		}
 	},
 	"allMicrobits": "alle",
