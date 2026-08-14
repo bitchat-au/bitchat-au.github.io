@@ -1,3 +1,4 @@
+import { t } from '@i18n';
 import {
 	COMMON_IMAGES,
 	createImageWithCaption,
@@ -5,6 +6,7 @@ import {
 	unpackImage,
 	type ImageMatrix
 } from '../helpers/images';
+import { alert } from '../helpers/popup';
 import { registerOnWindow } from '../helpers/window';
 import { showPrompt, unpackDialogResult } from './dialog_manager.svelte';
 import { Features, features } from './features.svelte';
@@ -40,11 +42,15 @@ class MicrobitService {
 		return MicrobitService._instance;
 	}
 
+	public static VERSION = 1;
+
 	private microbitSerial: MicrobitSerialConnection = new MicrobitSerialConnection();
 	private logService = friendlyLogService;
 
 	public knownMicrobits: Array<{ name: string; index: number; image: ImageMatrix }> = $state([]);
 	public connected: boolean = $state(false);
+
+	private hasRepliedToStart: boolean = false;
 
 	private constructor() {
 		this.microbitSerial
@@ -88,7 +94,38 @@ class MicrobitService {
 
 		const messageCode = message.split('_')[0];
 
+		if (messageCode === 'dummy') {
+			alert(
+				t('serial.clientMicrobitDetected.title'),
+				t('serial.clientMicrobitDetected.text')
+			)
+			this.microbitSerial.disconnect();
+			return;
+		}
+
+		if (!this.hasRepliedToStart && messageCode != 'start') {
+			alert(
+				t('serial.unknownConnection.title'),
+				t('serial.unknownConnection.text')
+			)
+			console.warn('Microbit has not replied to start message yet, ignoring message:', message);
+			this.microbitSerial.disconnect();
+			return;
+		}
+
 		switch (messageCode) {
+			case 'start': {
+				this.hasRepliedToStart = true;
+				const communicationVersion = message.split('_')[1];
+				if (communicationVersion != MicrobitService.VERSION.toString()) {
+					alert(
+						t('serial.outdatedVersion.title'),
+						t('serial.outdatedVersion.text', { version: MicrobitService.VERSION })
+					)
+					this.microbitSerial.disconnect();
+				}
+				break;
+			}
 			case 'nu': {
 				const mbID = message.split('_')[2];
 				this.checkForNewUser(mbID);

@@ -8,6 +8,7 @@ import time
 
 uart.init()
 
+VERSION = 1  # Version of the micro:bit code, used for compatibility checks, should be the same as src/services/microbit.svelte.ts::VERSION
 
 known_microbits = []  # list of active micro:bits
 generated_images = []  # Images created by students, packed images
@@ -106,6 +107,7 @@ def log(message_to_log):
     write_to_computer("debug_" + message_to_log)  # debug: log message
 
 
+write_to_computer("start_" + str(VERSION))  # Indicate that the micro:bit is ready
 write_to_computer("lc")  # Lost connection
 ###################################################
 ## Loop

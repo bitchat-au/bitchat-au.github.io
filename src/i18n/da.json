@@ -169,7 +169,19 @@
 	"serial": {
 		"noPortSelectedError": "Ingen port valgt",
 		"noPortReadableError": "Porten kan ikke læses",
-		"noPortWritableError": "Porten kan ikke skrives til"
+		"noPortWritableError": "Porten kan ikke skrives til",
+		"clientMicrobitDetected": {
+			"title": "Klient micro:bit fundet",
+			"text": "Det ser ud til at du har tilsluttet en klient micro:bit. For at kunne bruge dette program skal du tilslutte en micro:bit, som er programmeret til at være en server."
+		},
+		"unknownConnection": {
+			"title": "Ukendt forbindelse",
+			"text": "Bit:chat kan ikke genkende den micro:bit, som du har tilsluttet. For at kunne bruge dette program skal du tilslutte en micro:bit, som er programmeret til at være en server."
+		},
+		"outdatedVersion": {
+			"title": "Forældet micro:bit kode",
+			"text": "Den micro:bit kode, som du har tilsluttet, er forældet. For at kunne bruge dette program skal du opdatere micro:bit koden til den nyeste version ({{version}})."
+		}
 	},
 	"teacher": {
 		"title": "Velkommen lærer",

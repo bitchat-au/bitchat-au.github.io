@@ -51,6 +51,25 @@ export class MicrobitSerialConnection extends EventEmitter<Events> {
 		await this.openPort();
 	}
 
+	public async disconnect() {
+		if (this.reader) {
+			await this.reader.cancel();
+			this.reader = undefined;
+		}
+
+		if (this.writer) {
+			await this.writer.close();
+			this.writer = undefined;
+		}
+
+		if (this.port) {
+			await this.port.close();
+			this.port = undefined;
+		}
+
+		this.emit('disconnected');
+	}
+
 	private async openPort() {
 		if (!this.port) {
 			throw FriendlyError.fromError(new Error('No port selected'), t('serial.noPortSelectedError'));

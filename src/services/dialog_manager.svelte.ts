@@ -74,9 +74,6 @@ export function resolveDialog<K extends AvailableDialogs>(
 	dialog: OpenDialog<K>,
 	result: DialogResult<InferDialogReturn<K>>
 ): void {
-	console.log("Dialog resolved", dialog, result);
-	
-	
 	const promiseRef = promises[dialog.id];
 	if (!promiseRef) {
 		console.error(`No promise found for dialog with id ${dialog.id}`);

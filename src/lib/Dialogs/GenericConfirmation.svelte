@@ -15,7 +15,7 @@
 	const confirmText = $derived(data.confirmText ?? t('dialogs.genericConfirmation.confirm'));
 </script>
 
-<Dialog open {onClose} ariaLabel={data.title}>
+<Dialog open {onClose} ariaLabel={data.title} class="generic-confirmation">
 	<header>
 		<h1>{data.title}</h1>
 	</header>
@@ -31,5 +31,9 @@
 <style>
 	footer {
 		margin-top: 1rem;
+	}
+
+	:global(.generic-confirmation) {
+		max-width: 800px;
 	}
 </style>

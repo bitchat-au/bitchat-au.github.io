@@ -110,6 +110,10 @@
 			"modify": "Send with changes",
 			"wantsToSend": "wants to send a message to",
 			"changeMessage": "Change message"
+		},
+		"genericConfirmation": {
+			"cancel": "Cancel",
+			"confirm": "Okay"
 		}
 	},
 	"features": {
@@ -165,7 +169,19 @@
 	"serial": {
 		"noPortSelectedError": "No port selected",
 		"noPortReadableError": "Port is not readable",
-		"noPortWritableError": "Port is not writable"
+		"noPortWritableError": "Port is not writable",
+		"clientMicrobitDetected": {
+			"title": "Client microbit detected",
+			"text": "It appears that you are using a client micro:bit. Please make sure you using the micro:bit that is programmed with the server code."
+		},
+		"unknownConnection": {
+			"title": "Unknown microbit",
+			"text": "Are you sure this micro:bit is running the correct code?"
+		},
+		"outdatedVersion": {
+			"title": "Outdated micro:bit code",
+			"text": "The micro:bit code is outdated. Please update the micro:bit code to newest version ({{version}})."
+		}
 	},
 	"teacher": {
 		"title": "Welcome teacher",

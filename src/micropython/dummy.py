@@ -10,6 +10,9 @@ import random
 import music
 import time
 
+uart.init()
+print("#dummy&") # Indicate that this is a dummy micro:bit, so that the computer doesn't try to send messages to it
+
 id_number = "0"
 device_name = ""
 message_number = 0
