@@ -48,7 +48,8 @@
 	},
 	"welcome": {
 		"noConnection": "No device connected",
-		"connect": "Connect micro:bit"
+		"connect": "Connect micro:bit",
+		"programMicrobits": "Program micro:bits"
 	},
 	"widgets": {
 		"interactiveBitString": {

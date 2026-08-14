@@ -1,4 +1,7 @@
 /* Button colors */
+.button:not(.transparent),
+.button:not(.secondary),
+.button.default,
 button:not(.transparent),
 button:not(.secondary),
 button.default {
@@ -8,6 +11,7 @@ button.default {
 	--button-active-bg: hsl(from var(--accent) h s calc(l * 0.6));
 }
 
+.button.transparent,
 button.transparent {
 	--button-bg: var(--bg);
 	--button-color: var(--white);
@@ -15,6 +19,7 @@ button.transparent {
 	--button-active-bg: hsl(from var(--bg) h s calc(l * 0.6));
 }
 
+.button.secondary,
 button.secondary {
 	--button-bg: hsl(from var(--bg) h s calc(l * 0.8));
 	--button-color: var(--white);
@@ -22,6 +27,7 @@ button.secondary {
 	--button-active-bg: hsl(from var(--button-bg) h s calc(l * 0.6));
 }
 
+.button:not(.no-style),
 button:not(.no-style) {
 	display: flex;
 	justify-content: center;
@@ -71,6 +77,10 @@ button.no-style {
 	&:disabled {
 		cursor: not-allowed;
 	}
+}
+
+a.button {
+	text-decoration: none;
 }
 
 .buttons {

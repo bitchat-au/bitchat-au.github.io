@@ -149,4 +149,8 @@ hr {
 	&.large {
 		margin: 2rem 0;
 	}
+
+	&.m-0 {
+		margin: 0;
+	}
 }

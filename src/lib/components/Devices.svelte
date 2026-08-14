@@ -34,6 +34,9 @@
 		<button onclick={handleConnect} class="large">{t('welcome.connect')}</button>
 		<span class="error">{FriendlyError.getMessage(error)}</span>
 	</div>
+	<a class="button program-microbits secondary" href="/flash">
+		{t('welcome.programMicrobits')}
+	</a>
 {/if}
 
 <style>
@@ -76,10 +79,11 @@
 	.no-connection {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: stretch;
 		gap: 1rem;
 		margin-top: auto;
 		margin-bottom: auto;
+		text-align: center;
 
 		.title {
 			font-family: var(--heading);

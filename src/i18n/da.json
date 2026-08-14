@@ -48,7 +48,8 @@
 	},
 	"welcome": {
 		"noConnection": "Ingen enhed forbundet",
-		"connect": "Forbind micro:bit"
+		"connect": "Forbind micro:bit",
+		"programMicrobits": "Programmer micro:bits"
 	},
 	"widgets": {
 		"interactiveBitString": {
