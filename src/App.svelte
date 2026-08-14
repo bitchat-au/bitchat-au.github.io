@@ -3,10 +3,15 @@
 	import ChatLayout from './lib/Layouts/ChatLayout.svelte';
 	import Default from './lib/Layouts/BaseLayout.svelte';
 	import { Features, features } from './services/features.svelte';
+	import UnsupportedBrowser from './lib/Pages/UnsupportedBrowser.svelte';
 
 	const route = decodeURI(window.location.pathname.replace(/\/$/, ''));
 
 	const page = $derived.by(() => {
+		if (!navigator.serial) {
+			return 'unsupportedBrowser';
+		}
+		
 		switch (route) {
 			case '/teacher':
 			case '/lærer':
@@ -33,6 +38,8 @@
 		{#await import('./lib/Pages/FlashPage.svelte') then { default: FlashPage }}
 			<FlashPage />
 		{/await}
+	{:else if page === 'unsupportedBrowser'}
+		<UnsupportedBrowser />
 	{:else}
 		<ChatLayout />
 	{/if}

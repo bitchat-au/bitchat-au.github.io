@@ -229,7 +229,16 @@
 			"title": "Der er sket en fejl",
 			"tryAgain": "Prøv igen",
 			"disconnected": "Micro:bitten er blevet frakoblet under programmeringen. Sørg for at micro:bitten er tilsluttet computeren, og prøv igen."
+		},
+		"noWebUSBSupport": {
+			"title": "Browseren understøttes ikke",
+			"description": "Din browser understøtter ikke WebUSB. Prøv at bruge en anden browser, for eksempel Google Chrome eller Microsoft Edge.",
+			"backToBitchat": "Tilbage til Bit:Chat"
 		}
+	},
+	"unsupportedBrowser": {
+		"title": "Browseren understøttes ikke",
+		"description": "Din browser understøtter ikke WebSerial. Prøv at bruge en anden browser, for eksempel Google Chrome eller Firefox."
 	},
 	"allMicrobits": "alle",
 	"genericError": "Der opstod en fejl."

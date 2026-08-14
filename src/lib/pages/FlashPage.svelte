@@ -4,7 +4,7 @@
 
 	const scopedT = scope('flasher');
 
-	let step: 'intro' | 'flashMaster' | 'flashDummy' | 'done' = $state('intro');
+	let step: 'intro' | 'flashMaster' | 'flashDummy' | 'done' | 'unsupportedBrowser' = $state('intro');
 	let radioChannel = $state(1);
 	let flashing = $state(false);
 	let hasFlashedFirstDummy = $state(false);
@@ -12,6 +12,12 @@
 	function goToBitChat() {
 		location.pathname = '';
 	}
+
+	$effect(() => {
+		if (!navigator.usb) {
+			step = 'unsupportedBrowser';
+		}
+	})
 </script>
 
 <main>
@@ -87,6 +93,12 @@
 				{scopedT('continueToBitchat')}
 			</button>
 		</div>
+	{:else if step === 'unsupportedBrowser'}
+		<h2 class="m-0">{scopedT('noWebUSBSupport.title')}</h2>
+		<p class="text-center">{scopedT('noWebUSBSupport.description')}</p>
+		<a href="/" class="button large">
+			{scopedT('noWebUSBSupport.backToBitchat')}
+		</a>
 	{/if}
 </main>
 

@@ -224,7 +224,16 @@
 		"duplicate": {
 			"title": "Download to micro:bit again?",
 			"description": "This micro:bit has already been programmed. Do you want to download the program to the micro:bit again? This will overwrite the existing program."
+		},
+		"noWebUSBSupport": {
+			"title": "Unsupported browser",
+			"description": "Your browser does not support WebUSB. Please try using a different browser, such as Google Chrome or Microsoft Edge.",
+			"backToBitchat": "Back to Bit:Chat"
 		}
+	},
+	"unsupportedBrowser": {
+		"title": "Unsupported browser",
+		"description": "Your browser does not support WebSerial. Please try using a different browser, such as Google Chrome or Firefox."
 	},
 	"allMicrobits": "all",
 	"genericError": "An error occurred."
