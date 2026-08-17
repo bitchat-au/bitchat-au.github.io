@@ -28,7 +28,7 @@ button.secondary {
 }
 
 .button:not(.no-style),
-button:not(.no-style) {
+button:not(.no-style):not(.inline) {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -63,7 +63,8 @@ button:not(.no-style) {
 	}
 }
 
-button.no-style {
+button.no-style,
+button.inline {
 	background: none;
 	border: none;
 	padding: 0;
@@ -77,6 +78,10 @@ button.no-style {
 	&:disabled {
 		cursor: not-allowed;
 	}
+}
+
+button.inline {
+	color: var(--electric-green)
 }
 
 a.button {

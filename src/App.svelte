@@ -11,7 +11,7 @@
 		if (!navigator.serial) {
 			return 'unsupportedBrowser';
 		}
-		
+
 		switch (route) {
 			case '/teacher':
 			case '/lærer':
@@ -19,10 +19,12 @@
 				return 'teacher';
 			case '/flash':
 				return 'flash';
+			case '/classroom-flasher':
+				return 'classroomFlasher';
 			default:
 				return 'chat';
 		}
-	})
+	});
 
 	$effect(() => {
 		document.body.dataset.hacker = features.isActive(Features.Hacker) ? 'true' : 'false';
@@ -37,6 +39,10 @@
 	{:else if page === 'flash'}
 		{#await import('./lib/Pages/FlashPage.svelte') then { default: FlashPage }}
 			<FlashPage />
+		{/await}
+	{:else if page === 'classroomFlasher'}
+		{#await import('./lib/Pages/ClassroomFlasher.svelte') then { default: ClassroomFlasher }}
+			<ClassroomFlasher />
 		{/await}
 	{:else if page === 'unsupportedBrowser'}
 		<UnsupportedBrowser />
