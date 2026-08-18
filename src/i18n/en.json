@@ -1,0 +1,240 @@
+{
+	"title": "Bit:Chat",
+	"locales": {
+		"en": "English",
+		"da": "Danish"
+	},
+	"knownImages": {
+		"HAPPY": "Happy smiley",
+		"SAD": "Sad smiley",
+		"FULL": "5x5 image fully lit",
+		"EMPTY": "5x5 image empty",
+		"1": "Number 1",
+		"2": "Number 2",
+		"3": "Number 3",
+		"4": "Number 4",
+		"5": "Number 5",
+		"6": "Number 6",
+		"7": "Number 7",
+		"8": "Number 8",
+		"9": "Number 9",
+		"0": "Number 0",
+		"HEART": "Heart",
+		"DUCK": "Duck",
+		"HOUSE": "House",
+		"GHOST": "Ghost",
+		"GIRAFFE": "Giraffe",
+		"UMBRELLA": "Umbrella",
+		"SNAKE": "Snake",
+		"RABBIT": "Rabbit",
+		"COW": "Cow",
+		"PITCHFORK": "Pitchfork",
+		"SWORD": "Sword",
+		"QUESTION_MARK": "Question mark",
+		"defaultCaption": "5x5 LED matrix"
+	},
+	"header": {
+		"logoAriaLabel": "Bit:Chat logo"
+	},
+	"nav": {
+		"log": "Message traffic",
+		"image-builder": "Image builder",
+		"code-cracker": "Code cracker",
+		"empty": "Wait for instructions from your teacher"
+	},
+	"devices": {
+		"title": "Devices",
+		"noDevices": "No Micro:bits connected"
+	},
+	"welcome": {
+		"noConnection": "No device connected",
+		"connect": "Connect micro:bit",
+		"programMicrobits": "Program micro:bits"
+	},
+	"widgets": {
+		"interactiveBitString": {
+			"bitStringInteractiveAriaLabel": "Image control panel",
+			"pixelButtonAriaLabel": "Control for pixel {row} {col}",
+			"bitStringAriaLabel": "Bit string for the current image",
+			"bitStringLabel": "Bit string"
+		}
+	},
+	"codeCracker": {
+		"title": "Code cracker",
+		"instructions": "Can you crack an encrypted image? <br /> Try one of your own images, or generate a random image",
+		"ownImage": "Own image",
+		"randomImage": "Random image",
+		"generate": "Generate an encrypted image",
+		"decrypt": "Decrypt",
+		"code": "Code",
+		"imageRenderAriaLabel": "Preview of encrypted image",
+		"correctness": "{{correctness}} out of 5 correct",
+		"tryAgain": "Try a new image",
+		"decrypted": "Decrypted image",
+		"decryptedDescription": "You have successfully decrypted the image. Good job!",
+		"showHint": "Show hint",
+		"triesWithHint": "{{tries}} tries, with hints",
+		"triesWithoutHint": "{{tries}} tries, without hints",
+		"startHelper": "Click decrypt to start",
+		"tries": "{{tries}} tries"
+	},
+	"imageBuilder": {
+		"ownImageCaption": "Own image",
+		"imageRenderAriaLabel": "Image preview",
+		"clearImage": "Clear image",
+		"saveImage": "Save image",
+		"savedImages": "Saved images",
+		"savedImagesAriaLabel": "List of saved images",
+		"deleteImageAriaLabel": "Delete image"
+	},
+	"messageLogs": {
+		"serverTitle": "Bit:Chat server",
+		"clearLog": "Clear log"
+	},
+	"imageMatrixRenderer": {
+		"pixelTitle": "Pixel ({row}, {col})",
+		"highlightedPixelAriaLabel": "Highlighted pixel ({row}, {col})"
+	},
+	"dialogs": {
+		"close": "Close popup",
+		"routerModal": {
+			"title": "Router",
+			"dialogAriaLabel": "Router dialog",
+			"wantsToSend": "wants to send a message to",
+			"chooseReceipient": "Choose recipient",
+			"deleteMessage": "Delete message",
+			"sendMessage": "Send"
+		},
+		"hackerModal": {
+			"title": "Hacker",
+			"cancel": "Send without changes",
+			"modify": "Send with changes",
+			"wantsToSend": "wants to send a message to",
+			"changeMessage": "Change message"
+		},
+		"genericConfirmation": {
+			"cancel": "Cancel",
+			"confirm": "Okay"
+		}
+	},
+	"features": {
+		"popup": {
+			"title": "Features",
+			"deleteAll": "Delete all",
+			"noneAvailable": "No features available",
+			"askTeacher": "Ask your teacher for access to new features",
+			"featureCodePlaceholder": "Feature code",
+			"featureCodeInputAriaLabel": "Enter feature code",
+			"featureCodeSubmitAriaLabel": "Check feature code",
+			"wrongCode": "Wrong code",
+			"true": "On",
+			"false": "Off"
+		},
+		"Server": "Server",
+		"Translator": "Translator",
+		"ImageBuilder": "Image builder",
+		"KodeKnækkeren": "Code cracker",
+		"Router": "Router",
+		"AutoRouter": "Auto Router",
+		"Encryption": "Encryption",
+		"AutoEncryption": "Auto Encryption",
+		"Hacker": "Hacker",
+		"Beep": "Beep",
+		"descriptions": {
+			"Server": "Displays a log of all messages sent between micro:bits",
+			"Translator": "Makes it easier to understand the messages in the logs",
+			"ImageBuilder": "Allows students to create their own images and send them to each other",
+			"KodeKnækkeren": "Allows students to try their hand at cracking the code of an encrypted image",
+			"Router": "Allows students to choose the recipient of their messages, as well as control who receives messages through the server",
+			"AutoRouter": "Automatically sends messages to the correct recipient, without students needing to choose the recipient",
+			"Encryption": "Allows students to encrypt their messages, so they can only be read by the correct recipient",
+			"AutoEncryption": "Automatically encrypts messages",
+			"Hacker": "Allows students to modify messages through the server before they are sent to the recipient",
+			"Beep": "Controls whether the micro:bit should play a sound when it receives a message"
+		},
+		"passwords": {
+			"Server": "server",
+			"Translator": "translator",
+			"ImageBuilder": "build",
+			"KodeKnækkeren": "crack",
+			"Router": "router",
+			"AutoRouter": "auto-router",
+			"Encryption": "encrypt",
+			"AutoEncryption": "auto-encrypt",
+			"Hacker": "hack",
+			"Beep": "beep",
+			"all": "very secret code",
+			"bundle1": "bundle1"
+		}
+	},
+	"serial": {
+		"noPortSelectedError": "No port selected",
+		"noPortReadableError": "Port is not readable",
+		"noPortWritableError": "Port is not writable",
+		"clientMicrobitDetected": {
+			"title": "Client microbit detected",
+			"text": "It appears that you are using a client micro:bit. Please make sure you using the micro:bit that is programmed with the server code."
+		},
+		"unknownConnection": {
+			"title": "Unknown microbit",
+			"text": "Are you sure this micro:bit is running the correct code?"
+		},
+		"outdatedVersion": {
+			"title": "Outdated micro:bit code",
+			"text": "The micro:bit code is outdated. Please update the micro:bit code to newest version ({{version}})."
+		}
+	},
+	"teacher": {
+		"title": "Welcome teacher",
+		"subtitle": "Here you can get an overview of all the features available in Bit:Chat.",
+		"selectedFeatures": "Selected features",
+		"selectedFeaturesDescription": "Share the following code or link with your students to give them access to the selected features.",
+		"getStarted": "Select some features to generate a link",
+		"copyCode": "Copy code",
+		"copyLink": "Copy link",
+		"copiedCode": "Code copied!",
+		"copiedLink": "Link copied!",
+		"allFeatures": "All features",
+		"featureCodePlaceholder": "Feature code"
+	},
+	"flasher": {
+		"title": "Bit:Chat download tool",
+		"subtitle": "This tool helps you download the Bit:Chat program to one or more micro:bits",
+		"groupNumber": "Group number",
+		"start": "Start",
+		"pluginMicrobit": "Insert micro:bit",
+		"pluginNextMicrobit": "Insert next micro:bit",
+		"serverDescription": "This is your micro:bit that controls everything and must be connected to the computer again later.",
+		"clientDescription": "This is one of your client micro:bits that you can use to send messages back and forth",
+		"program": "Program micro:bit",
+		"programmingState": "Programming your micro:bit",
+		"programmingStateDescription": "Keep the micro:bit connected to the computer until it has finished being programmed.",
+		"removeMicrobit": "Remove the micro:bit",
+		"removeMicrobitDescription": "Unplug the micro:bit to continue",
+		"continue": "Continue",
+		"done": "Done",
+		"programNext": "Program next micro:bit",
+		"noDevicesSelected": "No micro:bits selected",
+		"noDevicesSelectedDescription": "Connect the micro:bit to the computer and select it in the list to be able to program it.",
+		"OK": "OK",
+		"doneDescription": "All micro:bits have been programmed.<br/>You can now proceed and use them to send messages back and forth.",
+		"backToStart": "Back to start",
+		"continueToBitchat": "Continue to Bit:Chat",
+		"iHaveRemovedMicrobit": "I have removed the micro:bit",
+		"duplicate": {
+			"title": "Download to micro:bit again?",
+			"description": "This micro:bit has already been programmed. Do you want to download the program to the micro:bit again? This will overwrite the existing program."
+		},
+		"noWebUSBSupport": {
+			"title": "Unsupported browser",
+			"description": "Your browser does not support WebUSB. Please try using a different browser, such as Google Chrome or Microsoft Edge.",
+			"backToBitchat": "Back to Bit:Chat"
+		}
+	},
+	"unsupportedBrowser": {
+		"title": "Unsupported browser",
+		"description": "Your browser does not support WebSerial. Please try using a different browser, such as Google Chrome or Firefox."
+	},
+	"allMicrobits": "all",
+	"genericError": "An error occurred."
+}

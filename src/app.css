@@ -1,0 +1,156 @@
+@import './styles/input.css';
+@import './styles/button.css';
+@import './styles/dialog.css';
+
+@font-face {
+	font-family: 'OffBit';
+	src: url('/fonts/OffBit-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'OffBit Bold';
+	src: url('/fonts/OffBit-Bold.ttf') format('truetype');
+}
+
+:root {
+	--bg: #1f1f1f;
+	--muted-grey: #717171;
+	--white: #e0e4dd;
+	--electric-green: #5bee4e;
+	--accent: var(--electric-green);
+	--danger: #ee4e4e;
+	--stroke: rgb(from var(--muted-grey) r g b / 50%);
+	/* To be used for horizontal/vertical dividers */
+
+	--sans: 'Momo Trust Sans', system-ui, sans-serif;
+	--sans-display: 'Momo Trust Display', system-ui, sans-serif;
+	--heading: 'OffBit Bold', system-ui, sans-serif;
+	--mono: 'Cascadia Code', ui-monospace, monospace;
+
+	font: 18px/145% var(--sans);
+	letter-spacing: 0.18px;
+	color: var(--white);
+	background-color: var(--bg);
+	background-image:
+		linear-gradient(rgb(from var(--stroke) r g b / 3%) 2px, transparent 2px),
+		linear-gradient(90deg, rgb(from var(--stroke) r g b / 3%) 2px, transparent 2px);
+	background-size: 25px 25px;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	@media (max-width: 1724px) {
+		font-size: 16px;
+	}
+
+	&:has([data-hacker="true"]) {
+		--accent: #ee4e4e;
+		--bg: #231919;
+		--stroke: rgb(from var(--accent) r g b / 20%);
+	}
+}
+
+* {
+	box-sizing: border-box;
+	font-family: inherit;
+	outline-color: var(--electric-green);
+	outline-offset: 2px;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	font-family: var(--sans);
+}
+
+p {
+	margin: 0;
+	font-family: var(--sans);
+	font-weight: 400;
+	text-wrap: pretty;
+
+	&.muted {
+		color: var(--muted-grey);
+	}
+
+	&.text-center {
+		text-align: center;
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--heading);
+	line-height: 1;
+	font-weight: 400;
+	margin-top: 0;
+
+	&:has(+ .subheading) {
+		margin-bottom: 0.2em;
+	}
+
+	&.m-0 {
+		margin: 0;
+	}
+}
+
+.subheading {
+	color: var(--muted-grey);
+	margin-top: 0;
+
+	&:has(+ *) {
+		margin-bottom: 1em;
+	}
+}
+
+pre,
+samp,
+code {
+	font-family: var(--mono);
+	font-size: 16px;
+	line-height: 1.5;
+	margin: 0;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+*:focus-visible {
+	outline: 2px solid var(--electric-green);
+}
+
+[popover] {
+	border: none;
+}
+
+hr {
+	border: none;
+	border-top: 1px solid var(--stroke);
+	margin: 1rem 0;
+	width: 100%;
+
+	&.large {
+		margin: 2rem 0;
+	}
+
+	&.m-0 {
+		margin: 0;
+	}
+}

@@ -1,0 +1,245 @@
+{
+	"title": "Bit:Chat",
+	"locales": {
+		"en": "Engelsk",
+		"da": "Dansk"
+	},
+	"knownImages": {
+		"HAPPY": "Glad smiley",
+		"SAD": "Trist smiley",
+		"FULL": "5x5 billede helt tændt",
+		"EMPTY": "5x5 billede tomt",
+		"1": "Tal 1",
+		"2": "Tal 2",
+		"3": "Tal 3",
+		"4": "Tal 4",
+		"5": "Tal 5",
+		"6": "Tal 6",
+		"7": "Tal 7",
+		"8": "Tal 8",
+		"9": "Tal 9",
+		"0": "Tal 0",
+		"HEART": "Hjerte",
+		"DUCK": "And",
+		"HOUSE": "Hus",
+		"GHOST": "Spøgelse",
+		"GIRAFFE": "Giraf",
+		"UMBRELLA": "Paraply",
+		"SNAKE": "Slange",
+		"RABBIT": "Kanin",
+		"COW": "Ko",
+		"PITCHFORK": "Gaffel",
+		"SWORD": "Sværd",
+		"QUESTION_MARK": "Spørgsmålstegn",
+		"defaultCaption": "5x5  LED-matrix"
+	},
+	"header": {
+		"logoAriaLabel": "Bit:Chat logo"
+	},
+	"nav": {
+		"log": "Besked trafik",
+		"image-builder": "Billed byggeren",
+		"code-cracker": "Kode knækkeren",
+		"empty": "Vent på instruktioner fra din lærer"
+	},
+	"devices": {
+		"title": "Enheder",
+		"noDevices": "Ingen Micro:bits forbundet"
+	},
+	"welcome": {
+		"noConnection": "Ingen enhed forbundet",
+		"connect": "Forbind micro:bit",
+		"programMicrobits": "Programmer micro:bits"
+	},
+	"widgets": {
+		"interactiveBitString": {
+			"bitStringInteractiveAriaLabel": "Billed kontrol panel",
+			"pixelButtonAriaLabel": "Kontrol for pixel {row} {col}",
+			"bitStringAriaLabel": "Bit string for det aktuelle billede",
+			"bitStringLabel": "Bit streng"
+		}
+	},
+	"codeCracker": {
+		"title": "Kode knækkeren",
+		"instructions": "Kan du knække et krypteret billede? <br /> Prøv et af dine egne billeder, eller generer et tilfældigt billede",
+		"ownImage": "Eget billede",
+		"randomImage": "Tilfældigt billede",
+		"generate": "Generer et krypteret billede",
+		"decrypt": "Dekrypter",
+		"code": "Kode",
+		"imageRenderAriaLabel": "Forhåndsvisning af krypteret billede",
+		"correctness": "{{correctness}} ud af 5 korrekt",
+		"tryAgain": "Prøv et nyt billede",
+		"decrypted": "Dekrypteret!",
+		"decryptedDescription": "Du har dekrypteret billedet korrekt. Godt arbejde!",
+		"showHint": "Vis et hint",
+		"triesWithHint": "{{tries}} forsøg, med hjælpemidler",
+		"triesWithoutHint": "{{tries}} forsøg, uden hjælpemidler",
+		"startHelper": "Klik på dekrypter for at starte",
+		"tries": "{{tries}} forsøg"
+	},
+	"imageBuilder": {
+		"ownImageCaption": "Eget billede",
+		"imageRenderAriaLabel": "Forhåndsvisning af billede",
+		"clearImage": "Ryd billede",
+		"saveImage": "Gem billede",
+		"savedImages": "Gemte billede",
+		"savedImagesAriaLabel": "Liste over gemte billeder",
+		"deleteImageAriaLabel": "Slet billede"
+	},
+	"messageLogs": {
+		"serverTitle": "Bit:Chat server",
+		"clearLog": "Ryd log"
+	},
+	"imageMatrixRenderer": {
+		"pixelTitle": "Pixel ({row}, {col})",
+		"highlightedPixelAriaLabel": "Markeret pixel ({row}, {col})"
+	},
+	"dialogs": {
+		"close": "Luk popup",
+		"routerModal": {
+			"title": "Router",
+			"dialogAriaLabel": "Router dialog",
+			"wantsToSend": "vil sende en besked til",
+			"chooseReceipient": "Vælg modtager",
+			"deleteMessage": "Slet besked",
+			"sendMessage": "Send"
+		},
+		"hackerModal": {
+			"title": "Hacker",
+			"cancel": "Send uden ændringer",
+			"modify": "Send med ændringer",
+			"wantsToSend": "vil sende en besked til",
+			"changeMessage": "Lav om på beskeden"
+		},
+		"genericConfirmation": {
+			"cancel": "Annuller",
+			"confirm": "Okay"
+		}
+	},
+	"features": {
+		"popup": {
+			"title": "Features",
+			"deleteAll": "Slet alle",
+			"noneAvailable": "Ingen features tilgængelige",
+			"askTeacher": "Spørg din lærer om adgagn til nye features",
+			"featureCodePlaceholder": "Feature kode",
+			"featureCodeInputAriaLabel": "Indtast feature kode",
+			"featureCodeSubmitAriaLabel": "Tjek feature kode",
+			"wrongCode": "Forkert kode",
+			"true": "Til",
+			"false": "Fra"
+		},
+		"Server": "Server",
+		"Translator": "Oversætter",
+		"ImageBuilder": "Billed bygger",
+		"KodeKnækkeren": "Kode knækker",
+		"Router": "Modtager",
+		"AutoRouter": "Auto Modtager",
+		"Encryption": "Kryptering",
+		"AutoEncryption": "Auto Kryptering",
+		"Hacker": "Hacker",
+		"Beep": "Beep",
+		"descriptions": {
+			"Server": "Viser en log over alle beskeder, der sendes mellem micro:bits",
+			"Translator": "Går det nemmere at forstå beskederne i logger",
+			"ImageBuilder": "Lader eleverne lave deres egne billeder og sende dem til hinanden",
+			"KodeKnækkeren": "Lader eleverne prøve krafter med at knække koden til et krypteret billede",
+			"Router": "Tillader eleverne at vælge modtager af deres beskeder, samt at styre hvem der modtager beskederne ved hjælp af serveren",
+			"AutoRouter": "Sender automatisk beskederne til den rigtige modtager, uden at eleverne skal vælge modtageren",
+			"Encryption": "Lader eleverne kryptere deres beskeder, så de kun kan læses af den rigtige modtager",
+			"AutoEncryption": "Krypterer automatisk beskederne",
+			"Hacker": "Lader eleverne ændre i beskederne ved hjælp af serveren inden de sendes videre til modtageren",
+			"Beep": "Styrer om micro:bit'en skal afspille en lyd, når den modtager en besked"
+		},
+		"passwords": {
+			"Server": "server",
+			"Translator": "oversætter",
+			"ImageBuilder": "byg",
+			"KodeKnækkeren": "knæk",
+			"Router": "modtager",
+			"AutoRouter": "auto-modtager",
+			"Encryption": "krypter",
+			"AutoEncryption": "auto-krypter",
+			"Hacker": "hack",
+			"Beep": "beep",
+			"all": "meget hemmelig kode",
+			"bundle1": "pakke1"
+		}
+	},
+	"serial": {
+		"noPortSelectedError": "Ingen port valgt",
+		"noPortReadableError": "Porten kan ikke læses",
+		"noPortWritableError": "Porten kan ikke skrives til",
+		"clientMicrobitDetected": {
+			"title": "Klient micro:bit fundet",
+			"text": "Det ser ud til at du har tilsluttet en klient micro:bit. For at kunne bruge dette program skal du tilslutte en micro:bit, som er programmeret til at være en server."
+		},
+		"unknownConnection": {
+			"title": "Ukendt forbindelse",
+			"text": "Bit:chat kan ikke genkende den micro:bit, som du har tilsluttet. For at kunne bruge dette program skal du tilslutte en micro:bit, som er programmeret til at være en server."
+		},
+		"outdatedVersion": {
+			"title": "Forældet micro:bit kode",
+			"text": "Den micro:bit kode, som du har tilsluttet, er forældet. For at kunne bruge dette program skal du opdatere micro:bit koden til den nyeste version ({{version}})."
+		}
+	},
+	"teacher": {
+		"title": "Velkommen lærer",
+		"subtitle": "Her kan du få en oversigt over alle de features, som er tilgængelige i Bit:Chat.",
+		"selectedFeatures": "Valgte features",
+		"selectedFeaturesDescription": "Del følgende kode eller link med dine elever for at give dem adgang til de valgte features.",
+		"getStarted": "Vælg nogle features for at generere et link",
+		"copyCode": "Kopier kode",
+		"copyLink": "Kopier link",
+		"copiedCode": "Kode kopieret!",
+		"copiedLink": "Link kopieret!",
+		"allFeatures": "Alle features",
+		"featureCodePlaceholder": "Feature kode"
+	},
+	"flasher": {
+		"title": "Bit:chat download værktøj",
+		"subtitle": "Dette værktøj hjælper dig med at downloade bit:chat programmet til en eller flere micro:bits",
+		"groupNumber": "Gruppe nummer",
+		"start": "Start",
+		"pluginMicrobit": "Indsæt micro:bit",
+		"pluginNextMicrobit": "Indsæt næste micro:bit",
+		"serverDescription": "Dette er din micro:bit, som styrer alting og som skal forbindes til computeren igen senere.",
+		"clientDescription": "Dette er en af dine klient micro:bits, som du kan bruge til at sende beskeder frem og tilbage",
+		"program": "Programmer micro:bit",
+		"programmingState": "Programmerer din micro:bit",
+		"programmingStateDescription": "Lad micro:bitten være tilsluttet computeren, indtil den er færdig med at blive programmeret.",
+		"removeMicrobit": "Fjern micro:bitten igen",
+		"removeMicrobitDescription": "Tag stikket ud af micro:bitten for at fortsætte",
+		"continue": "Fortsæt",
+		"done": "Færdig",
+		"programNext": "Programmer næste micro:bit",
+		"noDevicesSelected": "Ingen micro:bits valgt",
+		"noDevicesSelectedDescription": "Forbind micro:bitten til computeren og vælg den i listen for at kunne programmere den.",
+		"OK": "OK",
+		"doneDescription": "Alle micro:bits er blevet programmeret.<br/>Du kan nu gå videre og bruge dem til at sende beskeder frem og tilbage.",
+		"backToStart": "Tilbage til start",
+		"continueToBitchat": "Fortsæt til Bit:Chat",
+		"iHaveRemovedMicrobit": "Jeg har fjernet micro:bitten",
+		"duplicate": {
+			"title": "Download til micro:bit igen?",
+			"description": "Denne micro:bit er allerede blevet programmeret. Vil du downloade programmet til micro:bit igen? Dette vil overskrive det eksisterende program."
+		},
+		"errors": {
+			"title": "Der er sket en fejl",
+			"tryAgain": "Prøv igen",
+			"disconnected": "Micro:bitten er blevet frakoblet under programmeringen. Sørg for at micro:bitten er tilsluttet computeren, og prøv igen."
+		},
+		"noWebUSBSupport": {
+			"title": "Browseren understøttes ikke",
+			"description": "Din browser understøtter ikke WebUSB. Prøv at bruge en anden browser, for eksempel Google Chrome eller Microsoft Edge.",
+			"backToBitchat": "Tilbage til Bit:Chat"
+		}
+	},
+	"unsupportedBrowser": {
+		"title": "Browseren understøttes ikke",
+		"description": "Din browser understøtter ikke WebSerial. Prøv at bruge en anden browser, for eksempel Google Chrome eller Firefox."
+	},
+	"allMicrobits": "alle",
+	"genericError": "Der opstod en fejl."
+}

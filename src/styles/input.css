@@ -1,0 +1,94 @@
+.input-container {
+	display: flex;
+	background-color: var(--bg);
+	color: var(--white);
+	font-size: 1em;
+
+	input {
+		background-color: transparent;
+		border: 1px solid var(--muted-grey);
+		color: currentColor;
+		padding: 0.25rem 0.5rem;
+		min-width: 0;
+		flex-grow: 1;
+		font-size: inherit;
+		outline: none;
+
+		&:focus {
+			border-color: var(--white);
+		}
+	}
+
+	&:has(button) input {
+		border-right: 0;
+	}
+}
+
+.input-field {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	.field-error {
+		color: var(--danger);
+		font: 0.8em/1 var(--sans);
+	}
+
+	& + .input-field {
+		margin-block-start: 1rem;
+	}
+
+	label {
+		font: 0.9em/1 var(--sans);
+	}
+}
+
+label:has(input[type='radio']) {
+	&:has(input:focus-visible) {
+		outline: 2px solid var(--electric-green);
+	}
+
+	input {
+		margin: 0;
+	}
+
+	&.hide-input input {
+		position: absolute;
+		opacity: 0;
+	}
+
+	&.as-button {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.25rem 0.5rem;
+		background-color: var(--bg);
+		color: var(--white);
+		box-sizing: border-box;
+		user-select: none;
+
+		&:not(:disabled) {
+			cursor: pointer;
+		}
+
+		&:not(:has(input:checked)) {
+			border: 1px solid var(--muted-grey);
+			&:hover {
+				background-color: hsl(from var(--bg) h s calc(l * 1.4));
+			}
+		}
+
+		&:has(input:checked) {
+			background-color: var(--accent);
+			color: var(--bg);
+
+			&:hover {
+				background-color: hsl(from var(--accent) h calc(s * 0.8) calc(l * 0.8));
+			}
+		}
+	}
+}
+
+.radio-group {
+	display: flex;
+}

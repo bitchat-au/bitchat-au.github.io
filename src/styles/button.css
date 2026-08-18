@@ -1,0 +1,98 @@
+/* Button colors */
+.button:not(.transparent),
+.button:not(.secondary),
+.button.default,
+button:not(.transparent),
+button:not(.secondary),
+button.default {
+	--button-bg: var(--accent);
+	--button-color: var(--bg);
+	--button-hover-bg: hsl(from var(--accent) h s calc(l * 0.8));
+	--button-active-bg: hsl(from var(--accent) h s calc(l * 0.6));
+}
+
+.button.transparent,
+button.transparent {
+	--button-bg: var(--bg);
+	--button-color: var(--white);
+	--button-hover-bg: hsl(from var(--bg) h s calc(l * 0.8));
+	--button-active-bg: hsl(from var(--bg) h s calc(l * 0.6));
+}
+
+.button.secondary,
+button.secondary {
+	--button-bg: hsl(from var(--bg) h s calc(l * 0.8));
+	--button-color: var(--white);
+	--button-hover-bg: hsl(from var(--button-bg) h s calc(l * 0.8));
+	--button-active-bg: hsl(from var(--button-bg) h s calc(l * 0.6));
+}
+
+.button:not(.no-style),
+button:not(.no-style):not(.inline) {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5em;
+	background-color: var(--button-bg);
+	color: var(--button-color);
+	border: 1px solid var(--button-bg);
+	padding: 0.25rem 0.5rem;
+	font-size: inherit;
+
+	&:not(:disabled) {
+		cursor: pointer;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	&:hover:not(:disabled) {
+		background-color: hsl(from var(--button-bg) h s calc(l * 0.8));
+		border-color: hsl(from var(--button-bg) h s calc(l * 0.8));
+	}
+
+	&:active:not(:disabled) {
+		background-color: hsl(from var(--button-bg) h s calc(l * 0.6));
+		border-color: hsl(from var(--button-bg) h s calc(l * 0.6));
+	}
+
+	&.large {
+		padding: 0.5rem 1rem;
+	}
+}
+
+button.no-style,
+button.inline {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: inherit;
+	color: inherit;
+
+	&:not(:disabled) {
+		cursor: pointer;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+	}
+}
+
+button.inline {
+	color: var(--electric-green)
+}
+
+a.button {
+	text-decoration: none;
+}
+
+.buttons {
+	display: flex;
+	gap: 1rem;
+
+	&.buttons-right {
+		justify-content: flex-end;
+	}
+}
