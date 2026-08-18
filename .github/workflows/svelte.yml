@@ -1,6 +1,4 @@
-# Sample workflow for building and deploying an Astro site to GitHub Pages
-#
-# To get started with Astro see: https://docs.astro.build/en/getting-started/
+# Sample workflow for building and deploying an Svelte site to GitHub Pages
 #
 name: Deploy Svelte site to Pages
 
@@ -69,6 +67,7 @@ jobs:
       - name: Build with Svelte
         run: |
           ${{ steps.detect-package-manager.outputs.runner }} vite build
+          cp dist/index.html dist/404.html
         working-directory: ${{ env.BUILD_PATH }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
