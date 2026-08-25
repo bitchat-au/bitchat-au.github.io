@@ -120,6 +120,7 @@ while True:
         if "start" in uartmessage:
             display.show(Image.SQUARE)
             radiostart = True
+            write_to_computer("start_" + str(VERSION))  # Indicate that the micro:bit is ready
 
     while radiostart:
         # Listen for serial input

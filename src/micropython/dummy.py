@@ -369,6 +369,10 @@ def input_code():
 ###################################################
 # Code in a 'while True:' loop repeats forever
 while True:
+    if uart.any():
+        print("#dummy&") # Indicate that this is a dummy micro:bit, so that the computer doesn't try to send messages to it
+		
+	
     # Listen for radio input
     message = radio.receive()
     if message:
