@@ -132,8 +132,8 @@ class FeaturesService extends EventEmitter<Events> {
 			}
 		}
 
-		this.loadFromURLParams(); // Load features from URL parameters after loading from localStorage
 		this.setDefaultFeatures(); // Ensure default features are set if none are available
+		this.loadFromURLParams(); // Load features from URL parameters after loading from localStorage
 	}
 
 	/**
