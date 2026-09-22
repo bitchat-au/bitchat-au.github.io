@@ -79,7 +79,7 @@
 						<div class="passwords">
 							<span>Kodeord: </span>
 							<ul>
-								{#each passwords as password (password)}
+								{#each passwords as password, idx (password + idx)}
 									<li><code>{password}</code></li>
 								{/each}
 							</ul>
