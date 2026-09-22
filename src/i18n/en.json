@@ -229,6 +229,11 @@
 			"title": "Unsupported browser",
 			"description": "Your browser does not support WebUSB. Please try using a different browser, such as Google Chrome or Microsoft Edge.",
 			"backToBitchat": "Back to Bit:Chat"
+		},
+		"errors": {
+			"title": "An error occurred",
+			"tryAgain": "Try again",
+			"disconnected": "The micro:bit has been disconnected during programming. Please ensure the micro:bit is connected to the computer and try again."
 		}
 	},
 	"unsupportedBrowser": {
