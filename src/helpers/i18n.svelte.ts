@@ -1,7 +1,7 @@
 import danishTranslations from '../i18n/da.json';
 import englishTranslations from '../i18n/en.json';
 
-const availableTranslations = {
+const availableTranslations: Record<string, Record<string, string>> = {
 	da: flattenTranslations(danishTranslations),
 	en: flattenTranslations(englishTranslations),
 	...(import.meta.env.DEV && {
@@ -81,14 +81,9 @@ export const locale = getLocale();
 const translations = loadTranslations(locale);
 export function t(path: string | string[], variables?: Record<string, string | number>): string {
 	const translationKey = Array.isArray(path) ? path.join('.') : path;
-	let translation = translations[translationKey] || translationKey;
-	if (variables) {
-		translation = Object.entries(variables).reduce((acc, [varName, varValue]) => {
-			return acc.replace(new RegExp(`\\{\\{${varName}\\}\\}`, 'g'), String(varValue));
-		}, translation);
-	}
+	const translation = translations[translationKey] || translationKey;
 
-	return translation;
+	return replaceVariables(translation, variables);
 }
 
 export function scope(prefix: string): typeof t {
@@ -98,6 +93,16 @@ export function scope(prefix: string): typeof t {
 	};
 }
 
+export function getAllTranslations(path: string | string[], variables?: Record<string, string | number>): string[] {
+	const translationKey = Array.isArray(path) ? path.join('.') : path;
+	const translations = Object.values(availableTranslations).map((localeTranslations) => {
+		const translation = localeTranslations[translationKey] || translationKey;
+		return replaceVariables(translation, variables);
+	});
+
+	return translations;
+}
+
 export function changeLocale(newLocale: AvailableLocales): void {
 	if (!(newLocale in availableTranslations)) {
 		throw new Error(`Translations for locale '${newLocale}' not found`);
@@ -105,4 +110,14 @@ export function changeLocale(newLocale: AvailableLocales): void {
 
 	localStorage.setItem(storageKey, newLocale);
 	window.location.reload();
+}
+
+function replaceVariables(translation: string, variables?: Record<string, string | number>): string {
+	if (!variables) {
+		return translation;
+	}
+
+	return Object.entries(variables).reduce((acc, [varName, varValue]) => {
+		return acc.replace(new RegExp(`\\{\\{${varName}\\}\\}`, 'g'), String(varValue));
+	}, translation);
 }

@@ -1,7 +1,7 @@
 import { SvelteSet } from 'svelte/reactivity';
 import EventEmitter, { type EventMap } from '../helpers/event_emitter';
 import { registerOnWindow } from '../helpers/window';
-import { scope } from '@i18n';
+import { getAllTranslations } from '@i18n';
 
 type FeatureConfig = Record<Features, { parent?: Features; passwords: string[] }>;
 
@@ -18,21 +18,21 @@ export enum Features {
 	Beep = 'Beep'
 }
 
-const passwordT = scope('features.passwords');
+const passwords = (feature: string) => getAllTranslations(['features.passwords', feature]);
 const featuresConfig: FeatureConfig = {
-	[Features.Router]: { passwords: [passwordT('Router')] },
-	[Features.AutoRouter]: { parent: Features.Router, passwords: [passwordT('AutoRouter')] },
-	[Features.Server]: { passwords: [passwordT('Server')] },
-	[Features.ImageBuilder]: { passwords: [passwordT('ImageBuilder')] },
-	[Features.Translator]: { passwords: [passwordT('Translator')] },
-	[Features.Encryption]: { passwords: [passwordT('Encryption')] },
+	[Features.Router]: { passwords: passwords('Router') },
+	[Features.AutoRouter]: { parent: Features.Router, passwords: passwords('AutoRouter') },
+	[Features.Server]: { passwords: passwords('Server') },
+	[Features.ImageBuilder]: { passwords: [...passwords('ImageBuilder'), 'billedbygger'] }, // Add 'billedbygger' as a quick fix to conform to password presented on workshop powerpoint.
+	[Features.Translator]: { passwords: passwords('Translator') },
+	[Features.Encryption]: { passwords: passwords('Encryption') },
 	[Features.AutoEncryption]: {
 		parent: Features.Encryption,
-		passwords: [passwordT('AutoEncryption')]
+		passwords: passwords('AutoEncryption')
 	},
-	[Features.KodeKnækkeren]: { passwords: [passwordT('KodeKnækkeren')] },
-	[Features.Hacker]: { passwords: [passwordT('Hacker')] },
-	[Features.Beep]: { passwords: [passwordT('Beep')] }
+	[Features.KodeKnækkeren]: { passwords: passwords('KodeKnækkeren') },
+	[Features.Hacker]: { passwords: passwords('Hacker') },
+	[Features.Beep]: { passwords: passwords('Beep') }
 };
 
 export const featureList = Object.entries(featuresConfig).map(([key, config]) => ({
@@ -46,7 +46,7 @@ const defaultFeatures = [Features.Beep];
 
 // What passwords unlock which features
 export const supplementalPasswords: Array<{ features: Features[]; passwords: string[] }> = [
-	{ features: Object.values(Features), passwords: [passwordT('all')] },
+	{ features: Object.values(Features), passwords: passwords('all') },
 	{
 		features: [
 			Features.Server,
@@ -55,7 +55,7 @@ export const supplementalPasswords: Array<{ features: Features[]; passwords: str
 			Features.Router,
 			Features.AutoRouter
 		],
-		passwords: [passwordT('bundle1')]
+		passwords: passwords('bundle1')
 	}
 ];
 
