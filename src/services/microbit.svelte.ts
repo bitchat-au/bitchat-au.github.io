@@ -165,10 +165,7 @@ class MicrobitService {
 		let messageImage = unpackImage(messageParts[3]);
 		const encryptionCode = messageParts[4] || null;
 
-		console.log('New message received', messageImage);
-
-		this.logService.addLog(LogType.Message, sender, receiver, messageImage, !!encryptionCode);
-		console.log({ sender, receiver, messageImage });
+		console.log('New message: ', { sender, receiver, messageImage });
 
 		if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
 			this.writeToMB('nmComp');
@@ -208,6 +205,7 @@ class MicrobitService {
 			messageImage = unpackDialogResult(result)?.newMessage || messageImage;
 		}
 
+		this.logService.addLog(LogType.Message, sender, receiver, messageImage, !!encryptionCode);
 		this.writeToMB('sendMessage', sender, receiver, packImage(messageImage));
 	}
 
