@@ -73,6 +73,16 @@ class MicrobitService {
 		if (message.startsWith('debug') || message.startsWith('echo')) {
 			console.debug(message);
 
+			if (features.isActive(Features.Debug)) {
+				if (message.startsWith('debug_rm')) {
+					const debugMessage = message.substring(9); // Remove the "debug_rm_" prefix
+					this.logService.addLog(LogType.DebugRadioRX, debugMessage);
+				} else if (message.startsWith('debug_sm') && !message.includes('ping')) {
+					const debugMessage = message.substring(9); // Remove the "debug_sm_" prefix
+					this.logService.addLog(LogType.DebugRadioTX, debugMessage);
+				}
+			}
+
 			return;
 		}
 

@@ -2,7 +2,9 @@ import type { ImageMatrix } from '../helpers/images';
 
 export enum LogType {
 	Device,
-	Message
+	Message,
+	DebugRadioRX,
+	DebugRadioTX
 }
 
 export interface FriendLogs {
@@ -13,6 +15,8 @@ export interface FriendLogs {
 		message: ImageMatrix,
 		encrypted: boolean
 	];
+	[LogType.DebugRadioRX]: [message: string];
+	[LogType.DebugRadioTX]: [message: string];
 }
 
 export type LogEntry<K extends keyof FriendLogs = keyof FriendLogs> = {

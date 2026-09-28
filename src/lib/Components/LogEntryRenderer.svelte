@@ -53,6 +53,10 @@
 			<ImageMatrixRenderer matrix={getDeviceImage(recipientName)} class="recipient" />
 			<ImageMatrixRenderer matrix={message} class="message" />
 		</div>
+	{:else if entry.type === LogType.DebugRadioRX}
+		<span class="debug-rx">&lt;&lt; {entry.message}</span>
+	{:else if entry.type === LogType.DebugRadioTX}
+		<span class="debug-tx">&gt;&gt; {entry.message}</span>
 	{/if}
 </code>
 
@@ -133,5 +137,13 @@
 				left: calc(37ch + 2px);
 			}
 		}
+	}
+
+	.debug-rx {
+		color: #ffa0a0;
+	}
+
+	.debug-tx {
+		color: #a0ffa0;
 	}
 </style>
