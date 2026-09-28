@@ -30,6 +30,7 @@ interface MessagesToMicrobit {
 	forgetAll: [];
 	start: [];
 	sendRadioMessage: [message: string];
+	known: [numberOfKnownMicrobits: number];
 }
 
 class MicrobitService {
@@ -211,9 +212,9 @@ class MicrobitService {
 		
 		await this.sendRadioMessage(`${newMicrobitName}_number_${index}_${this.knownMicrobits.length}`);
 
+		await this.broadcastKnown();
 		await this.broadcastSettings();
 		await this.broadcastImages();
-		await this.writeToMB('sendRadioMessage', `known_${this.knownMicrobits.length}`);
 	}
 
 	public async rebuildConnection() {
@@ -266,6 +267,10 @@ class MicrobitService {
 			await this.writeToMB('knownImg', packImage(image));
 			await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100ms to avoid overwhelming the micro:bit
 		}
+	}
+
+	public async broadcastKnown() {
+		await this.writeToMB('known', this.knownMicrobits.length);
 	}
 
 	public async sendRadioMessage(message: string) {

@@ -26,10 +26,7 @@ should_beep = False
 encryption_code = ""
 receive_from_known = []
 packed_image = ""
-image_broadcast_debounce = 0
-should_broadcast_images = False
-settings_broadcast_debounce = 0
-should_broadcast_settings = False
+debounced_broadcasts = {}
 last_ping_time = 0
 PING_INTERVAL = 5000  # 5 seconds
 
@@ -51,13 +48,6 @@ radiostart = False
 def write_to_computer(message_to_write):
     """Write a message to the computer in a format that can be parsed."""
     print("#" + str(message_to_write) + "&")
-
-
-def broadcast_settings():
-    """Flags that settings should be broadcasted to all known micro:bits."""
-    global should_broadcast_settings, settings_broadcast_debounce
-    should_broadcast_settings = True
-    settings_broadcast_debounce = time.ticks_ms()  # Reset the debounce timer
 
 
 def pack_image(matrix):
@@ -88,11 +78,30 @@ def add_generated_image(img_to_add, send_to_radio=True):
             send_radio_message("image_" + str(image_index) + "_" + img_to_add)
 
 
+def broadcast_debounced(debounce_key, wait, message):
+    """Schedules a debounced broadcast to run after the wait period."""
+    debounced_broadcasts[debounce_key] = {
+        "time": time.ticks_ms(),
+        "wait": wait,
+        "message": message,
+    }
+
+
+def check_debounced_broadcasts():
+    """Runs any debounced broadcasts whose wait period has elapsed."""
+    for debounce_key, debounce in list(debounced_broadcasts.items()):
+        if (time.ticks_ms() - debounce["time"]) > debounce["wait"]:
+            message = debounce["message"]
+            if callable(message):
+                message()
+            else:
+                send_radio_message(message)
+            del debounced_broadcasts[debounce_key]
+
 def broadcast_images():
-    """Flags that images should be broadcasted to all known micro:bits."""
-    global should_broadcast_images, image_broadcast_debounce
-    should_broadcast_images = True
-    image_broadcast_debounce = time.ticks_ms()  # Reset the debounce timer
+    """Broadcasts all generated images to the radio."""
+    for i, generated_image in enumerate(generated_images):
+        send_radio_message("image_" + str(i) + "_" + generated_image)
 
 
 def send_radio_message(message_to_send):
@@ -141,7 +150,7 @@ while True:
                 add_generated_image(uartmessage.split("_")[3])
             if code == "knownImg":
                 add_generated_image(uartmessage.split("_")[3], send_to_radio=False)
-                broadcast_images()
+                broadcast_debounced("images", 700, broadcast_images)
             if code == "removeImg":
                 img_to_remove = uartmessage.split("_")[3]
                 if img_to_remove in generated_images:
@@ -152,14 +161,32 @@ while True:
                 auto_encryptable = uartmessage.split("_")[4] == "1"
                 allow_recipient = uartmessage.split("_")[5] == "1"
                 should_beep = uartmessage.split("_")[6] == "1"
-                broadcast_settings()
 
+                broadcast_debounced(
+                    "settings",
+                    700,
+                    "settings_"
+						+ ("1" if encryptable else "0")
+						+ "_"
+						+ ("1" if auto_encryptable else "0")
+						+ "_"
+						+ ("1" if allow_recipient else "0")
+						+ "_"
+						+ ("1" if should_beep else "0")
+                )
+            if code == "known":
+                number_of_known_microbits = int(uartmessage.split("_")[3])
+                broadcast_debounced(
+                    "amount_of_known_microbits",
+                    700,
+                    "known_" + str(number_of_known_microbits)
+                )
             if code == "forgetAll":
                 generated_images = []
                 send_radio_message("reintroduce")
 
             if code == "sendRadioMessage":
-                message_to_send = uartmessage.split("sendRadioMessage_")[1][0:-4]; # Remove the trailing '_\n'
+                message_to_send = uartmessage.split("sendRadioMessage_")[1][0:-4] # Remove the trailing '_\n'
                 send_radio_message(message_to_send)
 
         # Listen for radio input
@@ -209,32 +236,7 @@ while True:
             )
             send_on_permitted = False
 
-        if (
-            should_broadcast_images
-            and (time.ticks_ms() - image_broadcast_debounce) > 500
-        ):
-            for i, generatedImage in enumerate(generated_images):
-                send_radio_message("image_" + str(i) + "_" + generatedImage)
-            image_broadcast_debounce = 0
-            should_broadcast_images = False
-
-        if (
-            should_broadcast_settings
-            and (time.ticks_ms() - settings_broadcast_debounce) > 500
-        ):
-            # settings_| isEncryptable |_| autoEncrypt |_| allowRecipient |_| shouldBeep |
-            send_radio_message(
-                "settings_"
-                + ("1" if encryptable else "0")
-                + "_"
-                + ("1" if auto_encryptable else "0")
-                + "_"
-                + ("1" if allow_recipient else "0")
-                + "_"
-                + ("1" if should_beep else "0")
-            )
-            settings_broadcast_debounce = 0
-            should_broadcast_settings = False
+        check_debounced_broadcasts()
 
         if (time.ticks_ms() - last_ping_time) > PING_INTERVAL:
             send_radio_message("ping")
