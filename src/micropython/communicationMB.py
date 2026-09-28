@@ -8,14 +8,13 @@ import time
 
 uart.init()
 
-VERSION = 1  # Version of the micro:bit code, used for compatibility checks, should be the same as src/services/microbit.svelte.ts::VERSION
+VERSION = 2  # Version of the micro:bit code, used for compatibility checks, should be the same as src/services/microbit.svelte.ts::VERSION
 
-known_microbits = []  # list of active micro:bits
 generated_images = []  # Images created by students, packed images
 # constructingImage = [[False, ""], [False, ""], [False, ""], [False, ""], [False, ""]]
 display.show(Image.SQUARE_SMALL)
 message_under_construction = False
-sender_name = ""
+sender_id = 0
 recipient_name = ""
 message_complete = False
 uart_over = False
@@ -130,23 +129,16 @@ while True:
             code = uartmessage.split("_")[2]
             if code == "echo":  # Echo the message back to the computer
                 write_to_computer("echo_" + uartmessage.split("_")[3])
-            if (
-                code == "count"
-            ):  # Get update on number of known micro:bits by the computer
-                for i, known in enumerate(known_microbits):
-                    write_to_computer("nu_" + str(i) + "_" + str(known).split("'")[1])
             if code == "nmComp":  # If all of the message has been received
                 uart_over = True
             if code == "sendMessage":
-                sender_name = uartmessage.split("_")[3]
+                sender_id = uartmessage.split("_")[3]
                 recipient_name = uartmessage.split("_")[4]
                 packed_image = uartmessage.split("_")[5]
                 send_on_permitted = True
                 uart_over = True
             if code == "newImg":
                 add_generated_image(uartmessage.split("_")[3])
-            if code == "known":
-                known_microbits.append([uartmessage.split("_")[3]])
             if code == "knownImg":
                 add_generated_image(uartmessage.split("_")[3], send_to_radio=False)
                 broadcast_images()
@@ -163,10 +155,12 @@ while True:
                 broadcast_settings()
 
             if code == "forgetAll":
-                known_microbits = []
                 generated_images = []
                 send_radio_message("reintroduce")
-                write_to_computer("mbc_0")  # mbc: micro:bit count
+
+            if code == "sendRadioMessage":
+                message_to_send = uartmessage.split("sendRadioMessage_")[1][0:-4]; # Remove the trailing '_\n'
+                send_radio_message(message_to_send)
 
         # Listen for radio input
         message = radio.receive()
@@ -174,92 +168,43 @@ while True:
             log("rm_" + message)  # rm: received message
 
             if "hello" in message:
-                microbit_id = str(message.split("_")[0])  # get the id of the microbit
-                # Check if microbit is already known by system
-                microbit_index = 0
-                microbit_unknown = True
-                for i, microbit in enumerate(known_microbits):
-                    if microbit[0] == microbit_id:  # If known, update the value locally
-                        microbit_index = i
-                        microbit_unknown = False
-                        send_radio_message(
-                            str(microbit_id)
-                            + "_number_"
-                            + str(microbit_index)
-                            + "_"
-                            + str(len(known_microbits))
-                        )
+                microbit_name = str(message.split("_")[0])  # get the id of the microbit
 
-                if microbit_unknown:  # If this is a new microbit
-                    microbit_index = len(known_microbits)
-                    known_microbits.append(
-                        [microbit_id]
-                    )  # We add the microbit information locally
-                    # Finally, we update the computer with any new information
-                    write_to_computer(
-                        "nu_" + str(microbit_index) + "_" + microbit_id
-                    )  # nu: new user
-                    write_to_computer(
-                        "mbc_" + str(len(known_microbits))
-                    )  # mbc: micro:bit count
-                    send_radio_message(
-                        str(microbit_id)
-                        + "_number_"
-                        + str(microbit_index)
-                        + "_"
-                        + str(len(known_microbits))
-                    )
-                    send_radio_message("known_" + str(len(known_microbits)))
-
-                broadcast_images()
-                broadcast_settings()
+                write_to_computer("hello_" + microbit_name)  # hello: new micro:bit
 
             if "send" in message:
                 messageComponents = message.split("_")
 
-                # [0] = id; [1] = message code; [2] = recipient id; [3] = packed image index; [4] = code
+                # [0] = sender name; [1] = message code; [2] = recipient id; [3] = packed image index; [4] = code
 
-                sender_id = str(messageComponents[0])
-                sender_name = sender_id
+                sender_name = str(messageComponents[0])
                 recipient_id = int(messageComponents[2])
-                recipient_name = (
-                    str(known_microbits[recipient_id]).split("'")[1]
-                    if recipient_id != -1
-                    else "ALL"
-                )
                 packed_image = str(messageComponents[3])
-                receivedImage = unpack_image(str(messageComponents[3]))
-
-                display.show("!")
-                sleep(200)
-                display.clear()
 
                 if encryptable:
                     encryption_code = messageComponents[4]
 
                 write_to_computer(
                     "nm_"
-                    + sender_id
+                    + sender_name
                     + "_"
-                    + str(recipient_name)
+                    + str(recipient_id)
                     + "_"
                     + packed_image
                     + ("_" + encryption_code if encryptable else "")
                 )  # nm: new message
-                write_to_computer("mbc_" + str(len(known_microbits)))
+
+                display.show("!")
+                sleep(200)
+                display.clear()
 
         if send_on_permitted:
-            sender_number = 0
-            for i, microbit in enumerate(known_microbits):
-                if microbit[0] == sender_name:
-                    sender_number = i
-
             send_radio_message(
                 str(recipient_name)
                 + "_receive_"
                 + packed_image
                 + "_"
-                + str(sender_number)
+                + str(sender_id)
                 + ("_" + encryption_code if encryptable else "")
             )
             send_on_permitted = False

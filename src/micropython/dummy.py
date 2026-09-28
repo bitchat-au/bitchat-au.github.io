@@ -377,6 +377,7 @@ while True:
     message = radio.receive()
     if message:
         if device_name in message:
+            last_ping_received = time.ticks_ms()
             known = True
             if "number" in message:
                 id_number = message.split("_")[2]

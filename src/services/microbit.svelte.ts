@@ -17,9 +17,8 @@ import { userImages } from './user_images.svelte';
 type BooleanInt = 0 | 1;
 interface MessagesToMicrobit {
 	nmComp: [];
-	sendMessage: [senderName: string, recipientName: string, packedImage: string];
+	sendMessage: [senderId: number, recipientName: string, packedImage: string];
 	newImg: [packedImage: string];
-	known: [microbitName: string];
 	knownImg: [packedImage: string];
 	removeImg: [packedImage: string];
 	settings: [
@@ -30,7 +29,7 @@ interface MessagesToMicrobit {
 	];
 	forgetAll: [];
 	start: [];
-	count: [];
+	sendRadioMessage: [message: string];
 }
 
 class MicrobitService {
@@ -42,7 +41,7 @@ class MicrobitService {
 		return MicrobitService._instance;
 	}
 
-	public static VERSION = 1;
+	public static VERSION = 2;
 
 	private microbitSerial: MicrobitSerialConnection = new MicrobitSerialConnection();
 	private logService = friendlyLogService;
@@ -66,21 +65,6 @@ class MicrobitService {
 	public async connect() {
 		await this.microbitSerial.connect();
 		await this.writeToMB('start');
-	}
-
-	private checkForNewUser(newUser: string) {
-		const exists = !!this.knownMicrobits.find((mb) => mb.name === newUser);
-		if (exists) return;
-
-		const mbIndex = this.knownMicrobits.length + 1;
-		this.knownMicrobits.push({
-			name: newUser,
-			index: mbIndex,
-			image: createImageWithCaption(
-				COMMON_IMAGES[mbIndex as unknown as keyof typeof COMMON_IMAGES],
-				`Microbit ${mbIndex}`
-			)
-		});
 	}
 
 	public checkMessage(message: string) {
@@ -126,24 +110,13 @@ class MicrobitService {
 				}
 				break;
 			}
-			case 'nu': {
-				const mbID = message.split('_')[2];
-				this.checkForNewUser(mbID);
-				this.logService.addLog(LogType.Device, mbID, 'join');
+			case 'hello': {
+				const mbName = message.split('_')[1];
+				this.handleHello(mbName);
 				break;
 			}
 			case 'nm':
 				this.handleNewMessage(message);
-				break;
-			case 'mbc':
-				if (this.knownMicrobits.length != Number(message.split('_')[1])) {
-					console.log(
-						'microbit count mismatch, rebuilding connection',
-						this.knownMicrobits.length,
-						Number(message.split('_')[1])
-					);
-					this.writeToMB('count');
-				}
 				break;
 			case 'lc':
 				console.log('Lost connection!');
@@ -157,22 +130,24 @@ class MicrobitService {
 	}
 
 	private async handleNewMessage(message: string) {
-		// "nm_" + senderId + "_" + str(recipientName) + "_" + packedImage + ("_" + encryptionCode if encryptable else "")
+		// "nm_" + senderName + "_" + str(recipientId) + "_" + packedImage + ("_" + encryptionCode if encryptable else "")
 		const messageParts = message.split('_');
 
-		const sender = messageParts[1];
-		let receiver = messageParts[2];
+		const senderName = messageParts[1];
+		const senderId = this.knownMicrobits.find((mb) => mb.name === senderName)?.index ?? -1;
+		const receiverId = Number(messageParts[2]);
+		let receiver = this.knownMicrobits.find((mb) => mb.index === receiverId)?.name || 'ALL';
 		let messageImage = unpackImage(messageParts[3]);
 		const encryptionCode = messageParts[4] || null;
 
-		console.log('New message: ', { sender, receiver, messageImage });
+		console.log('New message: ', { sender: senderName, receiver, messageImage });
 
 		if (features.isActive(Features.Router) && !features.isActive(Features.AutoRouter)) {
 			this.writeToMB('nmComp');
 			const result = await showPrompt(
 				'RouterModal',
 				{
-					sender,
+					sender: senderName,
 					requestedReceiver: receiver,
 					message: messageImage
 				},
@@ -196,7 +171,7 @@ class MicrobitService {
 				'HackerModal',
 				{
 					message: messageImage,
-					sender,
+					sender: senderName,
 					receiver
 				},
 				{ timeout: 30000 }
@@ -205,16 +180,35 @@ class MicrobitService {
 			messageImage = unpackDialogResult(result)?.newMessage || messageImage;
 		}
 
-		this.logService.addLog(LogType.Message, sender, receiver, messageImage, !!encryptionCode);
-		this.writeToMB('sendMessage', sender, receiver, packImage(messageImage));
+		this.logService.addLog(LogType.Message, senderName, receiver, messageImage, !!encryptionCode);
+		this.writeToMB('sendMessage', senderId, receiver, packImage(messageImage));
+	}
+
+	private async handleHello(newMicrobitName: string) {
+		let index = this.knownMicrobits.findIndex((mb) => mb.name === newMicrobitName);
+		if (index === -1) {
+			index = this.knownMicrobits.length;
+			this.knownMicrobits.push({
+				name: newMicrobitName,
+				index,
+				image: createImageWithCaption(
+					COMMON_IMAGES[(index + 1) as unknown as keyof typeof COMMON_IMAGES],
+					`Microbit ${index + 1}`
+				)
+			});
+			this.logService.addLog(LogType.Device, newMicrobitName, 'join');
+		}
+		
+		await this.sendRadioMessage(`${newMicrobitName}_number_${index}_${this.knownMicrobits.length}`);
+
+		await this.broadcastSettings();
+		await this.broadcastImages();
+		await this.writeToMB('sendRadioMessage', `known_${this.knownMicrobits.length}`);
 	}
 
 	public async rebuildConnection() {
 		console.log('rebuilding');
 
-		for await (const mb of this.knownMicrobits) {
-			await this.writeToMB('known', mb.name);
-		}
 		if (this.knownMicrobits.length == 0) {
 			await this.writeToMB('forgetAll');
 		}
@@ -262,7 +256,10 @@ class MicrobitService {
 			await this.writeToMB('knownImg', packImage(image));
 			await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100ms to avoid overwhelming the micro:bit
 		}
-		// userImages.forEach(image => this.writeToMB("knownImg", packImage(image)));
+	}
+
+	public async sendRadioMessage(message: string) {
+		await this.writeToMB('sendRadioMessage', message);
 	}
 }
 
