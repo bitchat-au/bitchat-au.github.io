@@ -3,7 +3,7 @@ import EventEmitter, { type EventMap } from '../helpers/event_emitter';
 import { registerOnWindow } from '../helpers/window';
 import { getAllTranslations } from '@i18n';
 
-type FeatureConfig = Record<Features, { parent?: Features; passwords: string[] }>;
+type FeatureConfig = Record<Features, { parent?: Features; passwords: string[], hidden?: boolean }>;
 
 export enum Features {
 	Server = 'Server',
@@ -15,7 +15,8 @@ export enum Features {
 	Encryption = 'Encryption',
 	AutoEncryption = 'AutoEncryption',
 	Hacker = 'Hacker',
-	Beep = 'Beep'
+	Beep = 'Beep',
+	Debug = 'Debug'
 }
 
 const passwords = (feature: string) => getAllTranslations(['features.passwords', feature]);
@@ -32,14 +33,16 @@ const featuresConfig: FeatureConfig = {
 	},
 	[Features.KodeKnækkeren]: { passwords: passwords('KodeKnækkeren') },
 	[Features.Hacker]: { passwords: passwords('Hacker') },
-	[Features.Beep]: { passwords: passwords('Beep') }
+	[Features.Beep]: { passwords: passwords('Beep') },
+	[Features.Debug]: { passwords: ['debug'], hidden: true } // Hidden feature for debugging purposes
 };
 
 export const featureList = Object.entries(featuresConfig).map(([key, config]) => ({
 	key: key as Features,
 	parent: config.parent,
 	depth: config.parent ? getAllParents(config.parent).length + 1 : 0,
-	passwords: config.passwords
+	passwords: config.passwords,
+	hidden: config.hidden || false
 }));
 
 const defaultFeatures = [Features.Beep];

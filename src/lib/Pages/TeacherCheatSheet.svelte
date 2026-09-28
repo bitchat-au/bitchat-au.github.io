@@ -18,6 +18,7 @@
 	const hasSelectedFeatures = $derived(selectedFeatures.size > 0);
 	const featureCode = $derived(encodeFeatures(Array.from(selectedFeatures)));
 	const shareableLink = $derived(features.getFeatureShareURL(Array.from(selectedFeatures)));
+	const featuresToShow = $derived(featureList.filter(feature => !feature.hidden));
 
 	const copyCode = () => copyToClipboard(featureCode).then(() => alert(scopedT('copiedCode')));
 	const copyLink = () => copyToClipboard(shareableLink).then(() => alert(scopedT('copiedLink')));
@@ -63,7 +64,7 @@
 	<h2>{scopedT('allFeatures')}</h2>
 
 	<ul>
-		{#each featureList as { key, depth, passwords } (key)}
+		{#each featuresToShow as { key, depth, passwords } (key)}
 			<li style="margin-left: {depth * 16}px">
 				<label for={key}>
 					<input

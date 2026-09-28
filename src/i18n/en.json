@@ -140,6 +140,7 @@
 		"AutoEncryption": "Auto Encryption",
 		"Hacker": "Hacker",
 		"Beep": "Beep",
+		"Debug": "Log RX/TX messages",
 		"descriptions": {
 			"Server": "Displays a log of all messages sent between micro:bits",
 			"Translator": "Makes it easier to understand the messages in the logs",
@@ -150,7 +151,8 @@
 			"Encryption": "Allows students to encrypt their messages, so they can only be read by the correct recipient",
 			"AutoEncryption": "Automatically encrypts messages",
 			"Hacker": "Allows students to modify messages through the server before they are sent to the recipient",
-			"Beep": "Controls whether the micro:bit should play a sound when it receives a message"
+			"Beep": "Controls whether the micro:bit should play a sound when it receives a message",
+			"Debug": "Enables debug logging for development purposes"
 		},
 		"passwords": {
 			"Server": "server",
