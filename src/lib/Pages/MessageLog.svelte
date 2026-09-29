@@ -3,10 +3,27 @@
 	import { friendlyLogService } from '../../services/friendly_log.svelte';
 	import Icon from '../Components/Icon.svelte';
 	import LogEntryRenderer from '../Components/LogEntryRenderer.svelte';
+	import { tick } from 'svelte';
+
+	let scrollContainer: HTMLElement;
+
+	$effect(() => {
+		if (!scrollContainer) return;
+
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		friendlyLogService.logs.length; // Reference the logs to trigger this effect when they change
+
+		tick().then(() => {
+			scrollContainer.scroll({
+				top: scrollContainer.scrollHeight,
+				behavior: 'smooth'
+			});
+		});
+	});
 </script>
 
 <div>
-	<samp tabindex="-1">
+	<samp tabindex="-1" bind:this={scrollContainer} class="log-scroll-container">
 		{t('messageLogs.serverTitle')}
 		{#each friendlyLogService.logs as log, index (index)}
 			<LogEntryRenderer entry={log} />

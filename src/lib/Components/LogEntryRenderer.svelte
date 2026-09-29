@@ -13,6 +13,7 @@
 	const { entry }: Props = $props();
 	const entryId = $props.id();
 	const showTranslator = $derived(features.isActive(Features.Translator));
+	let entryRow: HTMLElement;
 
 	function getDeviceImage(name: string) {
 		if (name === 'ALL') {
@@ -22,9 +23,18 @@
 		const device = microbitService.knownMicrobits.find((mb) => mb.name === name);
 		return device?.image ?? COMMON_IMAGES.QUESTION_MARK;
 	}
+
+	function scrollTranslatorIntoView() {
+		if (!entryRow) return;
+
+		entryRow.scrollIntoView({
+			behavior: 'smooth',
+			block: 'nearest',
+		});
+	}
 </script>
 
-<code>
+<code bind:this={entryRow}>
 	{#if entry.type === LogType.Device}
 		{entry.message[0]} joined
 	{:else if entry.type === LogType.Message}
@@ -44,6 +54,7 @@
 				disabled={!showTranslator}
 				name="translator-toggle"
 				id="translator-{entryId}"
+				onclick={scrollTranslatorIntoView}
 			/>
 		</label>
 
