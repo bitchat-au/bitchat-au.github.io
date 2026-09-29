@@ -2,8 +2,9 @@ import { SvelteSet } from 'svelte/reactivity';
 import EventEmitter, { type EventMap } from '../helpers/event_emitter';
 import { registerOnWindow } from '../helpers/window';
 import { getAllTranslations } from '@i18n';
+import { levenshteinDistance } from '../helpers/levenshtein';
 
-type FeatureConfig = Record<Features, { parent?: Features; passwords: string[], hidden?: boolean }>;
+type FeatureConfig = Record<Features, { parent?: Features; passwords: string[]; hidden?: boolean }>;
 
 export enum Features {
 	Server = 'Server',
@@ -249,7 +250,9 @@ class FeaturesService extends EventEmitter<Events> {
 	 */
 	public checkPassword(password: string): boolean {
 		const normalizedPassword = password.trim().toLowerCase();
-		const foundFeature = featureList.find((f) => f.passwords.includes(normalizedPassword));
+		const foundFeature = featureList.find((f) =>
+			isPasswordSimilar(normalizedPassword, f.passwords)
+		);
 
 		const supplementalPackages = supplementalPasswords
 			.filter((cur) => cur.passwords.includes(normalizedPassword))
@@ -261,8 +264,6 @@ class FeaturesService extends EventEmitter<Events> {
 			...supplementalPackages,
 			...decodeFeatures(password) // Dont use the normalized password as it may be base64 encoded and case sensitive
 		].filter(Boolean) as Features[];
-
-		console.log(password, decodeFeatures(password));
 
 		featuresToUnlock.forEach((feature) => this.addAvailableFeature(feature));
 
@@ -331,8 +332,8 @@ export function decodeFeatures(encoded: string): Features[] {
 			(_, index) => bitString[bitString.length - 1 - index] === '1'
 		) as Features[];
 		return features;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	} catch (e) {
-		console.error('Failed to decode features from URL:', e);
 		return [];
 	}
 }
@@ -342,6 +343,16 @@ const deterministicRandomString = (length: number, string: string) => {
 	const alpha = seed.toString(36);
 	return alpha.substring(0, length);
 };
+
+function isPasswordSimilar(input: string, passwords: string[]): boolean {
+	for (const password of passwords) {
+		if (levenshteinDistance(input, password) <= 1) {
+			return true;
+		}
+	}
+
+	return false;
+}
 
 registerOnWindow('encodeFeatures', encodeFeatures);
 registerOnWindow('decodeFeatures', decodeFeatures);
