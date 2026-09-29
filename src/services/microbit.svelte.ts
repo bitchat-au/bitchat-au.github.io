@@ -119,6 +119,8 @@ class MicrobitService {
 					)
 					this.microbitSerial.disconnect();
 				}
+	
+				this.writeToMB('start');
 				break;
 			}
 			case 'hello': {
@@ -128,11 +130,6 @@ class MicrobitService {
 			}
 			case 'nm':
 				this.handleNewMessage(message);
-				break;
-			case 'lc':
-				console.log('Lost connection!');
-				this.writeToMB('start');
-				this.rebuildConnection();
 				break;
 			default:
 				console.log('Unknown message: ' + message);

@@ -27,6 +27,7 @@ encryption_code = ""
 receive_from_known = []
 packed_image = ""
 debounced_broadcasts = {}
+uart_rx_buffer = ""
 last_ping_time = 0
 PING_INTERVAL = 5000  # 5 seconds
 
@@ -36,7 +37,6 @@ PING_INTERVAL = 5000  # 5 seconds
 radio.config(
     group=radioChannel, power=7, data_rate=radio.RATE_1MBIT, queue=10, channel=42
 )
-radio.on()
 radiostart = False
 
 ###################################################
@@ -78,12 +78,12 @@ def add_generated_image(img_to_add, send_to_radio=True):
             send_radio_message("image_" + str(image_index) + "_" + img_to_add)
 
 
-def broadcast_debounced(debounce_key, wait, message):
+def broadcast_debounced(debounce_key, wait, broadcast_message):
     """Schedules a debounced broadcast to run after the wait period."""
     debounced_broadcasts[debounce_key] = {
         "time": time.ticks_ms(),
         "wait": wait,
-        "message": message,
+        "message": broadcast_message,
     }
 
 
@@ -91,12 +91,51 @@ def check_debounced_broadcasts():
     """Runs any debounced broadcasts whose wait period has elapsed."""
     for debounce_key, debounce in list(debounced_broadcasts.items()):
         if (time.ticks_ms() - debounce["time"]) > debounce["wait"]:
-            message = debounce["message"]
-            if callable(message):
-                message()
+            pending_broadcast = debounce["message"]
+            if callable(pending_broadcast):
+                pending_broadcast()
             else:
-                send_radio_message(message)
+                send_radio_message(pending_broadcast)
             del debounced_broadcasts[debounce_key]
+
+
+def read_uart_messages():
+    """Reads and splits all complete UART messages from the input buffer."""
+    global uart_rx_buffer
+
+    while uart.any():
+        chunk = uart.read()
+        if chunk:
+            uart_rx_buffer += str(chunk, "utf-8")
+
+    messages = []
+
+    while True:
+        start_index = uart_rx_buffer.find("__")
+        if start_index == -1:
+            uart_rx_buffer = ""
+            break
+
+        if start_index > 0:
+            uart_rx_buffer = uart_rx_buffer[start_index:]
+
+        newline_index = uart_rx_buffer.find("\n", 2)
+        next_start_index = uart_rx_buffer.find("__", 2)
+
+        if newline_index == -1 and next_start_index == -1:
+            break
+
+        if newline_index != -1 and (next_start_index == -1 or newline_index < next_start_index):
+            raw_message = uart_rx_buffer[2:newline_index].rstrip("_")
+            uart_rx_buffer = uart_rx_buffer[newline_index + 1 :]
+        else:
+            raw_message = uart_rx_buffer[2:next_start_index].rstrip("_")
+            uart_rx_buffer = uart_rx_buffer[next_start_index:]
+
+        if raw_message:
+            messages.append(raw_message)
+
+    return messages
 
 def broadcast_images():
     """Broadcasts all generated images to the radio."""
@@ -116,66 +155,64 @@ def log(message_to_log):
 
 
 write_to_computer("start_" + str(VERSION))  # Indicate that the micro:bit is ready
-write_to_computer("lc")  # Lost connection
+
 ###################################################
 ## Loop
 ###################################################
 while True:
     # Listen for input from computer before listening for radio input
-    if uart.any():
-        sleep(300)  # Give time for the full message to be received
-        uartmessage = str(uart.readline())
+    for uartmessage in read_uart_messages():
         if "start" in uartmessage:
             display.show(Image.SQUARE)
             radiostart = True
             write_to_computer("start_" + str(VERSION))  # Indicate that the micro:bit is ready
+            send_radio_message("reintroduce")
+            radio.on()
 
     while radiostart:
-        # Listen for serial input
-        if uart.any():
-            sleep(300)  # Give time for the full message to be received
-            uartmessage = str(uart.readline())
-            code = uartmessage.split("_")[2]
+        for uartmessage in read_uart_messages():
+            code = uartmessage.split("_")[0]
+
             if code == "echo":  # Echo the message back to the computer
-                write_to_computer("echo_" + uartmessage.split("_")[3])
+                write_to_computer("echo_" + uartmessage.split("_")[1])
             if code == "nmComp":  # If all of the message has been received
                 uart_over = True
             if code == "sendMessage":
-                sender_id = uartmessage.split("_")[3]
-                recipient_name = uartmessage.split("_")[4]
-                packed_image = uartmessage.split("_")[5]
+                sender_id = uartmessage.split("_")[1]
+                recipient_name = uartmessage.split("_")[2]
+                packed_image = uartmessage.split("_")[3]
                 send_on_permitted = True
                 uart_over = True
             if code == "newImg":
-                add_generated_image(uartmessage.split("_")[3])
+                add_generated_image(uartmessage.split("_")[1])
             if code == "knownImg":
-                add_generated_image(uartmessage.split("_")[3], send_to_radio=False)
+                add_generated_image(uartmessage.split("_")[1], send_to_radio=False)
                 broadcast_debounced("images", 700, broadcast_images)
             if code == "removeImg":
-                img_to_remove = uartmessage.split("_")[3]
+                img_to_remove = uartmessage.split("_")[1]
                 if img_to_remove in generated_images:
                     generated_images.remove(img_to_remove)
                     send_radio_message("removeImg_" + img_to_remove)
             if code == "settings":
-                encryptable = uartmessage.split("_")[3] == "1"
-                auto_encryptable = uartmessage.split("_")[4] == "1"
-                allow_recipient = uartmessage.split("_")[5] == "1"
-                should_beep = uartmessage.split("_")[6] == "1"
-
+                encryptable = uartmessage.split("_")[1] == "1"
+                auto_encryptable = uartmessage.split("_")[2] == "1"
+                allow_recipient = uartmessage.split("_")[3] == "1"
+                should_beep = uartmessage.split("_")[4] == "1"
+        
                 broadcast_debounced(
                     "settings",
                     700,
                     "settings_"
-						+ ("1" if encryptable else "0")
-						+ "_"
-						+ ("1" if auto_encryptable else "0")
-						+ "_"
-						+ ("1" if allow_recipient else "0")
-						+ "_"
-						+ ("1" if should_beep else "0")
+                    + ("1" if encryptable else "0")
+                    + "_"
+                    + ("1" if auto_encryptable else "0")
+                    + "_"
+                    + ("1" if allow_recipient else "0")
+                    + "_"
+                    + ("1" if should_beep else "0")
                 )
             if code == "known":
-                number_of_known_microbits = int(uartmessage.split("_")[3])
+                number_of_known_microbits = int(uartmessage.split("_")[1])
                 broadcast_debounced(
                     "amount_of_known_microbits",
                     700,
@@ -186,7 +223,7 @@ while True:
                 send_radio_message("reintroduce")
 
             if code == "sendRadioMessage":
-                message_to_send = uartmessage.split("sendRadioMessage_")[1][0:-4] # Remove the trailing '_\n'
+                message_to_send = uartmessage.split("sendRadioMessage_")[1]
                 send_radio_message(message_to_send)
 
         # Listen for radio input
@@ -196,7 +233,6 @@ while True:
 
             if "hello" in message:
                 microbit_name = str(message.split("_")[0])  # get the id of the microbit
-
                 write_to_computer("hello_" + microbit_name)  # hello: new micro:bit
 
             if "send" in message:
