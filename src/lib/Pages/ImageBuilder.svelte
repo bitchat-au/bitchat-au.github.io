@@ -101,7 +101,7 @@
 		}
 
 		:global(.image-preview) {
-			max-width: 400px;
+			max-width: min(40vh, 400px);
 			cursor: not-allowed;
 		}
 	}
@@ -126,6 +126,7 @@
 			width: 100%;
 			overflow-x: auto;
 			scrollbar-width: thin;
+			scrollbar-color: var(--stroke) var(--bg);
 			padding: 4px 0; /* Allows for the focus outline of the saved-image buttons */
 
 			:global(.saved-image) {
