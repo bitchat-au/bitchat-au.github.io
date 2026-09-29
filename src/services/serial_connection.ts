@@ -78,11 +78,17 @@ export class MicrobitSerialConnection extends EventEmitter<Events> {
 		await this.port.open({ baudRate: MicrobitSerialConnection.BAUD_RATE });
 
 		if (!this.port.readable) {
-			throw FriendlyError.fromError(new Error('Port is not readable'), t('serial.noPortReadableError'));
+			throw FriendlyError.fromError(
+				new Error('Port is not readable'),
+				t('serial.noPortReadableError')
+			);
 		}
 
 		if (!this.port.writable) {
-			throw FriendlyError.fromError(new Error('Port is not writable'), t('serial.noPortWritableError'));
+			throw FriendlyError.fromError(
+				new Error('Port is not writable'),
+				t('serial.noPortWritableError')
+			);
 		}
 
 		this.writer = this.port.writable.getWriter();

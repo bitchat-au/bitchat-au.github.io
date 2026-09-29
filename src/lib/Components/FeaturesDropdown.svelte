@@ -23,10 +23,7 @@
 		codeInput = '';
 	}
 
-	const activeFeatureList = $derived(
-		featureList
-			.filter(feature => features.has(feature.key))
-	);
+	const activeFeatureList = $derived(featureList.filter((feature) => features.has(feature.key)));
 </script>
 
 <article popover="auto" id="feature-popover">

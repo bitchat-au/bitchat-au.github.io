@@ -1,4 +1,4 @@
-import { t } from "@i18n";
+import { t } from '@i18n';
 
 export class FriendlyError extends Error {
 	public static fromError(error: Error | string, friendlyMessage: string): FriendlyError {
@@ -17,7 +17,7 @@ export class FriendlyError extends Error {
 		if (!error) {
 			return undefined;
 		}
-		
+
 		if (error instanceof FriendlyError) {
 			return error.friendlyMessage;
 		}

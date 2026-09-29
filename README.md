@@ -22,7 +22,7 @@ There are three main ways of flashing the micro:bits
 
 - **Manually flashing:** the code for both the communication and dummy micro:bits can be located in `src/micropython`, and can be manually flashed using tools such as <https://python.microbit.org/>
 - **Group flasher:** the website contains a built in tool for flashing a set of dummy microbits, and a single communication microbit. The tool is designed to be used by students, allowing them to flash the micro:bits they will be using in their group. The tool can be found at <https://bitchat-au.github.io/flash>
-- **Bulk flasher:** The last way of flashing is the bulk/classroom flasher, designed to quickly flash multiple sets of micro:bits. *!! This tool is the most advanced, and requires manually configuring chrome to allow for unrestricted access to WebUSB, drastically reducing the time and steps it takes to flash the micro:bits. !!* This tool can be found at <https://bitchat-au.github.io/classroom-flasher>
+- **Bulk flasher:** The last way of flashing is the bulk/classroom flasher, designed to quickly flash multiple sets of micro:bits. _!! This tool is the most advanced, and requires manually configuring chrome to allow for unrestricted access to WebUSB, drastically reducing the time and steps it takes to flash the micro:bits. !!_ This tool can be found at <https://bitchat-au.github.io/classroom-flasher>
 
 ## Code overview
 
@@ -32,7 +32,7 @@ This repository combines a browser app with the MicroPython logic used by the mi
 bitchat/
 ├── public/
 ├── src/
-│   ├── helpers/                    
+│   ├── helpers/
 │   ├── i18n/
 │   │   ├── da.json
 │   │   └── en.json

@@ -90,19 +90,13 @@ class MicrobitService {
 		const messageCode = message.split('_')[0];
 
 		if (messageCode === 'dummy') {
-			alert(
-				t('serial.clientMicrobitDetected.title'),
-				t('serial.clientMicrobitDetected.text')
-			)
+			alert(t('serial.clientMicrobitDetected.title'), t('serial.clientMicrobitDetected.text'));
 			this.microbitSerial.disconnect();
 			return;
 		}
 
 		if (!this.hasRepliedToStart && messageCode != 'start') {
-			alert(
-				t('serial.unknownConnection.title'),
-				t('serial.unknownConnection.text')
-			)
+			alert(t('serial.unknownConnection.title'), t('serial.unknownConnection.text'));
 			console.warn('Microbit has not replied to start message yet, ignoring message:', message);
 			this.microbitSerial.disconnect();
 			return;
@@ -116,10 +110,10 @@ class MicrobitService {
 					alert(
 						t('serial.outdatedVersion.title'),
 						t('serial.outdatedVersion.text', { version: MicrobitService.VERSION })
-					)
+					);
 					this.microbitSerial.disconnect();
 				}
-	
+
 				this.writeToMB('start');
 				break;
 			}
@@ -206,7 +200,7 @@ class MicrobitService {
 			});
 			this.logService.addLog(LogType.Device, newMicrobitName, 'join');
 		}
-		
+
 		await this.sendRadioMessage(`${newMicrobitName}_number_${index}_${this.knownMicrobits.length}`);
 
 		await this.broadcastKnown();

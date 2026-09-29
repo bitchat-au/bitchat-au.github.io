@@ -93,7 +93,10 @@ export function scope(prefix: string): typeof t {
 	};
 }
 
-export function getAllTranslations(path: string | string[], variables?: Record<string, string | number>): string[] {
+export function getAllTranslations(
+	path: string | string[],
+	variables?: Record<string, string | number>
+): string[] {
 	const translationKey = Array.isArray(path) ? path.join('.') : path;
 	const translations = Object.values(availableTranslations).map((localeTranslations) => {
 		const translation = localeTranslations[translationKey] || translationKey;
@@ -112,7 +115,10 @@ export function changeLocale(newLocale: AvailableLocales): void {
 	window.location.reload();
 }
 
-function replaceVariables(translation: string, variables?: Record<string, string | number>): string {
+function replaceVariables(
+	translation: string,
+	variables?: Record<string, string | number>
+): string {
 	if (!variables) {
 		return translation;
 	}

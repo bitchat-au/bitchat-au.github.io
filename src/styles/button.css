@@ -81,7 +81,7 @@ button.inline {
 }
 
 button.inline {
-	color: var(--electric-green)
+	color: var(--electric-green);
 }
 
 a.button {

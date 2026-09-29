@@ -4,7 +4,8 @@
 
 	const scopedT = scope('flasher');
 
-	let step: 'intro' | 'flashMaster' | 'flashDummy' | 'done' | 'unsupportedBrowser' = $state('intro');
+	let step: 'intro' | 'flashMaster' | 'flashDummy' | 'done' | 'unsupportedBrowser' =
+		$state('intro');
 	let radioChannel = $state(1);
 	let flashing = $state(false);
 	let hasFlashedFirstDummy = $state(false);
@@ -17,7 +18,7 @@
 		if (!navigator.usb) {
 			step = 'unsupportedBrowser';
 		}
-	})
+	});
 </script>
 
 <main>

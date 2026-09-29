@@ -4,4 +4,4 @@ export async function copyToClipboard(text: string) {
 	} catch (err) {
 		console.error(`Failed to copy ${text}: `, err);
 	}
-};
+}

@@ -1,7 +1,7 @@
 <script>
-	import { t } from "@i18n";
-
+	import { t } from '@i18n';
 </script>
+
 <main>
 	<h1>{t('unsupportedBrowser.title')}</h1>
 	<p class="text-center">{t('unsupportedBrowser.description')}</p>

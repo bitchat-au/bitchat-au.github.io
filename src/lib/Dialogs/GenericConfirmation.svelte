@@ -4,7 +4,13 @@
 	import { t } from '@i18n';
 
 	type Props = DialogProps<
-		{ title: string, text: string, showCancelButton?: boolean, cancelText?: string, confirmText?: string },
+		{
+			title: string;
+			text: string;
+			showCancelButton?: boolean;
+			cancelText?: string;
+			confirmText?: string;
+		},
 		boolean
 	>;
 

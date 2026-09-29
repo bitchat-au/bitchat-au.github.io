@@ -29,7 +29,7 @@
 
 		entryRow.scrollIntoView({
 			behavior: 'smooth',
-			block: 'nearest',
+			block: 'nearest'
 		});
 	}
 </script>

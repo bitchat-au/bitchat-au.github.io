@@ -18,7 +18,7 @@
 	const hasSelectedFeatures = $derived(selectedFeatures.size > 0);
 	const featureCode = $derived(encodeFeatures(Array.from(selectedFeatures)));
 	const shareableLink = $derived(features.getFeatureShareURL(Array.from(selectedFeatures)));
-	const featuresToShow = $derived(featureList.filter(feature => !feature.hidden));
+	const featuresToShow = $derived(featureList.filter((feature) => !feature.hidden));
 
 	const copyCode = () => copyToClipboard(featureCode).then(() => alert(scopedT('copiedCode')));
 	const copyLink = () => copyToClipboard(shareableLink).then(() => alert(scopedT('copiedLink')));

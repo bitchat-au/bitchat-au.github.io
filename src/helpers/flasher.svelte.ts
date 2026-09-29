@@ -15,7 +15,10 @@ async function flashMicrobit(fs: MicropythonFsHex, progress: ProgressCallback): 
 	const deviceId = usb.getDeviceId();
 
 	if (flashedMicrobits.has(deviceId)) {
-		const overwrite = await confirm(t('flasher.duplicate.title'), t('flasher.duplicate.description'));
+		const overwrite = await confirm(
+			t('flasher.duplicate.title'),
+			t('flasher.duplicate.description')
+		);
 
 		if (!overwrite) {
 			return;

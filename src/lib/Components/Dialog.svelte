@@ -46,12 +46,7 @@
 	class={dialogClass}
 	{id}
 >
-	<button
-		class="no-style close"
-		use:closeNearestDialog
-		aria-label={t('dialogs.close')}
-		autofocus
-	>
+	<button class="no-style close" use:closeNearestDialog aria-label={t('dialogs.close')} autofocus>
 		<Icon name="times" />
 	</button>
 	{@render children?.()}

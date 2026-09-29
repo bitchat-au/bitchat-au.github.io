@@ -4,6 +4,6 @@
  */
 export function closeNearestDialog(element: HTMLButtonElement): void {
 	const dialog = element.closest('dialog');
-	element.command = "close";
+	element.command = 'close';
 	element.commandForElement = dialog as HTMLDialogElement;
 }
