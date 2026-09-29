@@ -15,7 +15,7 @@
 		{ newReceiver: string }
 	>;
 
-	const { data, onClose, onResult }: Props = $props();
+	const { data, onClose, onResult, id }: Props = $props();
 
 	const sender = microbitService.knownMicrobits.find((mb) => mb.name === data.sender);
 	const requestedReceiver = microbitService.knownMicrobits.find(
@@ -51,12 +51,12 @@
 
 	<div class="receivers">
 		{#each receivers as receiver (receiver.name)}
-			<label class="hide-input" for={receiver.name}>
+			<label class="hide-input" for={receiver.name + id}>
 				<input
 					type="radio"
 					value={receiver.name}
 					bind:group={selectedReceiver}
-					id={receiver.name}
+					id={receiver.name + id}
 					name="receiver"
 				/>
 				<ImageMatrixRenderer matrix={receiver.image} class="candidate" />
