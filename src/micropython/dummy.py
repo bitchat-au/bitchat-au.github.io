@@ -341,25 +341,33 @@ def reset_button_states():
 def input_code():
     reset_button_states()
     current_input = []
+    flash_char = None
+    flash_until = 0
 
     while len(current_input) < 5:
+        check_radio()
+        now = time.ticks_ms()
+
         if button_a_was_released():
-            display.clear()
-            display.show("A")
             current_input.append("0")
-            sleep(500)
-            display.clear()
-            display_code_input(current_input)
+            flash_char = "A"
+            flash_until = time.ticks_add(now, 500)
+            display.show(flash_char)
             continue
 
         if button_b_was_released():
-            display.clear()
-            display.show("B")
             current_input.append("1")
-            sleep(500)
-            display.clear()
-            display_code_input(current_input)
+            flash_char = "B"
+            flash_until = time.ticks_add(now, 500)
+            display.show(flash_char)
             continue
+
+        if flash_char:
+            if time.ticks_diff(flash_until, now) > 0:
+                display.show(flash_char)
+            else:
+                flash_char = None
+                display_code_input(current_input)
 
     return current_input
 
